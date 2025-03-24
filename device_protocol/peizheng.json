@@ -1,0 +1,15 @@
+{
+    "endianness": "BE",
+    "control_type": "MODBUS",
+    "slave_id": 2,
+    "read_command": 3,
+    "write_command": 6,
+    "register_total_length": 13,
+    "register_start_address": 0,
+    "registers": {
+      "0x00": {"name": "slave_address", "type": "UINT16", "scale": 1, "access": "R"},
+      "0x01": {"name": "device_type", "type": "UINT16", "scale": 1, "access": "R"},
+      "0x04": {"name": "system_set_charge_voltage", "type": "UINT16", "scale": 0.1, "access": "RW"},
+      "0x12": {"name": "generated_power", "type": "UINT32", "scale": 1, "access": "R"}
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "domain": "solar_manager",
+  "name": "Solar Manager",
+  "version": "0.0.1",
+  "codeowners": [
+    "@maybetaken"
+  ],
+  "config_flow": true,
+  "documentation": "https://www.home-assistant.io/integrations/solar_manager",
+  "quality_scale": "bronze",
+  "requirements": ["paho-mqtt==2.1.0", "crcmod==1.7"]
+}

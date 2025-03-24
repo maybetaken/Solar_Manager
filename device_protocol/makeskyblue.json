@@ -1,0 +1,1158 @@
+{
+    "endianness": "BE",
+    "control_type": "MODBUS",
+    "slave_id": 1,
+    "read_command": 3,
+    "write_command": 6,
+    "register_total_length": 217,
+    "register_start_address": 0,
+    "registers": {
+        "0x00": {
+            "name": "work_mode",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "SUB (Solar-Grid-Storage Mode)",
+                "1": "UTI (Grid Priority Mode)",
+                "2": "SBU (Solar-Storage-Grid Mode)",
+                "3": "NBU (No Battery AC Coupling Mode)",
+                "4": "ONI (Pure Inverter Mode)"
+            }
+        },
+        "0x01": {
+            "name": "grid_voltage_range",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "WID (90~270VAC)",
+                "1": "NOR (160~240VAC)"
+            }
+        },
+        "0x02": {
+            "name": "inverter_ac_voltage",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "110V",
+                "1": "120V",
+                "2": "208V",
+                "3": "220V",
+                "4": "230V",
+                "5": "240V"
+            }
+        },
+        "0x03": {
+            "name": "ac_frequency",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "50Hz",
+                "1": "60Hz"
+            }
+        },
+        "0x04": {
+            "name": "energy_saving_mode",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "Off",
+                "1": "On"
+            }
+        },
+        "0x05": {
+            "name": "charge_priority",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "CSO (Solar Priority Charging)",
+                "1": "CUT (Grid Priority Charging)",
+                "2": "SNU (Solar and Grid Charging Together)",
+                "3": "OSO (Solar Only Charging)"
+            }
+        },
+        "0x06": {
+            "name": "battery_type",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "Pb (Lead-Acid Battery)",
+                "1": "Li (Lithium Battery)"
+            }
+        },
+        "0x07": {
+            "name": "battery_rated_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "enum": {
+                "72": "72V",
+                "48": "48V",
+                "24": "24V",
+                "12": "12V"
+            }
+        },
+        "0x08": {
+            "name": "battery_discharge_min_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "RW",
+            "range": {
+                "72V_platform": "60V-70.5V",
+                "48V_platform": "40V-47V",
+                "24V_platform": "20V-23.5V",
+                "12V_platform": "10V-11.7V"
+            }
+        },
+        "0x09": {
+            "name": "battery_start_discharge_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "RW",
+            "range": {
+                "72V_platform": "72V-84V",
+                "48V_platform": "48V-56V",
+                "24V_platform": "24V-28V",
+                "12V_platform": "12V-14V"
+            }
+        },
+        "0x0A": {
+            "name": "grid_to_battery_max_charge_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "RW",
+            "range": "0~100A"
+        },
+        "0x0B": {
+            "name": "pv_to_battery_max_charge_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "RW",
+            "range": "0~100A"
+        },
+        "0x0C": {
+            "name": "inverter_max_grid_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "RW",
+            "range": "0~30A"
+        },
+        "0x0D": {
+            "name": "inverter_output_max_power",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~rated_power"
+        },
+        "0x0E": {
+            "name": "charge_soc",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "range": "0~100%"
+        },
+        "0x0F": {
+            "name": "discharge_soc",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "range": "0~90%"
+        },
+        "0x10": {
+            "name": "anti_backflow_mode",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "Off",
+                "1": "On"
+            }
+        },
+        "0x11": {
+            "name": "system_switch",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "Off",
+                "1": "On"
+            }
+        },
+        "0x12": {
+            "name": "communication_address",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "range": "0~128"
+        },
+        "0x13": {
+            "name": "reset_energy_meter",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "No Reset",
+                "1": "Reset"
+            }
+        },
+        "0x14": {
+            "name": "force_charge_discharge_control",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "Normal Charging",
+                "1": "Force Charging",
+                "2": "Force Discharging"
+            }
+        },
+        "0x15": {
+            "name": "remote_anti_backflow_switch",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "Off",
+                "1": "On"
+            }
+        },
+        "0x16": {
+            "name": "anti_backflow_grid_power",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "range": "20W~200W"
+        },
+        "0x17": {
+            "name": "battery_cutoff_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "RW",
+            "range": {
+                "72V_platform": "76V~84V",
+                "48V_platform": "51V~59V",
+                "24V_platform": "25.5V~29.5V",
+                "12V_platform": "12.7V~14V"
+            }
+        },
+        "0x1E": {
+            "name": "network_time_h",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "range": "2024-01-01 00:00:00 ~ 2087-12-31 23:59:59"
+        },
+        "0x1F": {
+            "name": "network_time_l",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "range": "2024-01-01 00:00:00 ~ 2087-12-31 23:59:59"
+        },
+        "0x20": {
+            "name": "scheduled_force_charge_start_time",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "range": "00:00~23:59"
+        },
+        "0x21": {
+            "name": "scheduled_force_charge_end_time",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "range": "00:00~23:59"
+        },
+        "0x22": {
+            "name": "scheduled_force_discharge_start_time",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "range": "00:00~23:59"
+        },
+        "0x23": {
+            "name": "scheduled_force_discharge_end_time",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "range": "00:00~23:59"
+        },
+        "0x24": {
+            "name": "scheduled_force_charge_discharge_enable",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "Disabled",
+                "1": "Enable Scheduled Force Charging Only",
+                "2": "Enable Scheduled Force Discharging Only",
+                "3": "Enable Both Scheduled Force Charging and Discharging"
+            }
+        },
+        "0x64": {
+            "name": "machine_model",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "enum": {
+                "0": "2.2kW Platform",
+                "1": "3.5kW Platform",
+                "2": "5.0kW Platform",
+                "3": "7.5kW Platform",
+                "4": "8.0kW Platform",
+                "5": "10.0kW Platform",
+                "6": "12.0kW Platform"
+            }
+        },
+        "0x65": {
+            "name": "inverter_status",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "enum": {
+                "0": "Shutdown",
+                "1": "Inverting",
+                "2": "Charging",
+                "3": "Anti-Backflow",
+                "4": "Bypass",
+                "5": "Off-Grid"
+            }
+        },
+        "0x66": {
+            "name": "mppt_status",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "enum": {
+                "0": "Constant Voltage",
+                "1": "Full Load",
+                "2": "Current Limiting",
+                "3": "Tracking"
+            }
+        },
+        "0x67": {
+            "name": "bus_voltage",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "0~750V"
+        },
+        "0x68": {
+            "name": "grid_frequency",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "45Hz~65Hz"
+        },
+        "0x69": {
+            "name": "grid_voltage",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "0~300V"
+        },
+        "0x6A": {
+            "name": "inverter_output_voltage",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "0~300V"
+        },
+        "0x6B": {
+            "name": "inverter_off_grid_load_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~60A"
+        },
+        "0x6C": {
+            "name": "inverter_grid_port_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "-100~100A"
+        },
+        "0x6D": {
+            "name": "inverter_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "-100~100A"
+        },
+        "0x6E": {
+            "name": "power_factor",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~1.00"
+        },
+        "0x6F": {
+            "name": "grid_power",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "-30000~30000W"
+        },
+        "0x70": {
+            "name": "load_power",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "-30000~30000W"
+        },
+        "0x71": {
+            "name": "inverter_input_output_power",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "-30000~30000W"
+        },
+        "0x72": {
+            "name": "battery_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~80V"
+        },
+        "0x73": {
+            "name": "battery_charge_discharge_current",
+            "type": "INT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "-100~100A"
+        },
+        "0x74": {
+            "name": "grid_rs_voltage",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "0~460V"
+        },
+        "0x75": {
+            "name": "grid_st_voltage",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "0~460V"
+        },
+        "0x76": {
+            "name": "grid_tr_voltage",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "0~460V"
+        },
+        "0x77": {
+            "name": "grid_rs_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~60A"
+        },
+        "0x78": {
+            "name": "grid_st_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~60A"
+        },
+        "0x79": {
+            "name": "grid_tr_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~60A"
+        },
+        "0x7A": {
+            "name": "mppt1_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~450V"
+        },
+        "0x7B": {
+            "name": "mppt2_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~450V"
+        },
+        "0x7C": {
+            "name": "mppt3_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~450V"
+        },
+        "0x7D": {
+            "name": "mppt1_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~60A"
+        },
+        "0x7E": {
+            "name": "mppt2_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~60A"
+        },
+        "0x7F": {
+            "name": "mppt3_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~60A"
+        },
+        "0x80": {
+            "name": "mppt1_power",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "0~30000W"
+        },
+        "0x81": {
+            "name": "mppt2_power",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "0~30000W"
+        },
+        "0x82": {
+            "name": "mppt3_power",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "0~30000W"
+        },
+        "0x83": {
+            "name": "mppt_daily_generation",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~1000kWh"
+        },
+        "0x84": {
+            "name": "mppt_cumulative_generation_h",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~36500000kWh"
+        },
+        "0x85": {
+            "name": "mppt_cumulative_generation_l",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~36500000kWh"
+        },
+        "0x86": {
+            "name": "system_fault",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "enum": {
+                "0": "Min Input Voltage Protection",
+                "1": "Max Input Voltage Protection",
+                "2": "Input Overfrequency Protection",
+                "3": "Input Underfrequency Protection",
+                "4": "Grid Switchover",
+                "5": "Inverter Short Circuit",
+                "6": "Input Overcurrent",
+                "7": "Inverter Bus Overvoltage",
+                "8": "PV1 Input Overvoltage",
+                "9": "PV2 Input Overvoltage",
+                "10": "PV1 Overcurrent Protection",
+                "11": "PV2 Overcurrent Protection",
+                "12": "Charging Overcurrent Protection",
+                "13": "Charging Overvoltage Protection",
+                "14": "Battery Voltage Protection",
+                "15": "INV Over-Temperature Protection",
+                "16": "MPP1 Over-Temperature Protection",
+                "17": "MPP2 Over-Temperature Protection",
+                "18": "BMS Fault",
+                "99": "No Fault"
+            }
+        },
+        "0x87": {
+            "name": "dc_dc_temperature",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "-40~100°C"
+        },
+        "0x88": {
+            "name": "inverter_temperature",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "-40~100°C"
+        },
+        "0x89": {
+            "name": "mppt1_temperature",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "-40~100°C"
+        },
+        "0x8A": {
+            "name": "mppt2_temperature",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "-40~100°C"
+        },
+        "0x8B": {
+            "name": "mppt3_temperature",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "-40~100°C"
+        },
+        "0x8C": {
+            "name": "relay_status",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "bitfield": {
+                "Bit0": "Grid Pre-Charge Relay",
+                "Bit1": "Grid Relay",
+                "Bit2": "Load Relay",
+                "Bit3": "Bidirectional DCDC Enable",
+                "Bit4": "Bidirectional DCDC Drive Enable",
+                "Bit5": "Bidirectional DCDC Sync Drive Enable",
+                "Bit6": "MPPT Enable"
+            }
+        },
+        "0x8D": {
+            "name": "pv_energy_flow_direction",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "enum": {
+                "0": "No PV",
+                "1": "PV Present",
+                "2": "PV Generating"
+            }
+        },
+        "0x8E": {
+            "name": "battery_energy_flow_direction",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "enum": {
+                "0": "No Battery",
+                "1": "Battery Present",
+                "2": "Charging",
+                "3": "Discharging"
+            }
+        },
+        "0x8F": {
+            "name": "grid_energy_flow_direction",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "enum": {
+                "0": "No Grid",
+                "1": "Grid Present",
+                "2": "Grid to Inverter (Forward)",
+                "3": "Inverter to Grid (Reverse)"
+            }
+        },
+        "0x90": {
+            "name": "load_energy_flow_direction",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "enum": {
+                "0": "No Load",
+                "1": "Load Present"
+            }
+        },
+        "0x91": {
+            "name": "software_version",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "bitfield": {
+                "Bit0-Bit5": "Minor Version",
+                "Bit6-Bit9": "Middle Version",
+                "Bit10-Bit15": "Major Version"
+            }
+        },
+        "0x97": {
+            "name": "mppt_fault_status",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "enum": {
+                "0": "Battery Undervoltage",
+                "1": "Battery Overvoltage",
+                "2": "Machine Over-Temperature",
+                "3": "Input PV Overvoltage",
+                "4": "Output Overcurrent Protection",
+                "5": "Output Short Circuit",
+                "99": "Normal Status"
+            }
+        },
+        "0x98": {
+            "name": "current_mppt_battery_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~60V"
+        },
+        "0x99": {
+            "name": "current_mppt_charge_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~200A"
+        },
+        "0x9A": {
+            "name": "current_mppt_pv_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~60V"
+        },
+        "0x9B": {
+            "name": "mppt_charge_power",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "range": "0~rated_power"
+        },
+        "0x9C": {
+            "name": "mppt_temperature",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "-40~100°C"
+        },
+        "0x9D": {
+            "name": "mppt_cumulative_generation",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "0~65535kWh"
+        },
+        "0x9E": {
+            "name": "mppt_output_current",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~200A"
+        },
+        "0x9F": {
+            "name": "mppt_work_status",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "enum": {
+                "0": "Shutdown",
+                "1": "Pre-Charging",
+                "2": "Constant Current Charging",
+                "3": "Constant Voltage Charging",
+                "4": "MPPT Tracking",
+                "5": "Bus Constant Voltage",
+                "6": "Float Charging"
+            }
+        },
+        "0xA6": {
+            "name": "12v_battery_charge_current_setting",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "RW",
+            "range": "0~90A"
+        },
+        "0xA7": {
+            "name": "12v_battery_discharge_current_setting",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "RW",
+            "range": "0~90A"
+        },
+        "0xA8": {
+            "name": "12v_battery_charge_discharge_voltage_setting",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "RW",
+            "range": "12.5~16V"
+        },
+        "0xA9": {
+            "name": "48v_battery_charge_cutoff_voltage_setting",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "RW",
+            "range": "40~60V"
+        },
+        "0xAA": {
+            "name": "48v_battery_discharge_cutoff_voltage_setting",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "RW",
+            "range": "40~60V"
+        },
+        "0xAB": {
+            "name": "vehicle_48v_generator_current_setting",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "RW",
+            "range": "0~80A"
+        },
+        "0xAC": {
+            "name": "12v_relay_switch",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "Off",
+                "1": "On"
+            }
+        },
+        "0xAD": {
+            "name": "dc_switch",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "Off",
+                "1": "On"
+            }
+        },
+        "0xAE": {
+            "name": "dc_reset",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "No Reset",
+                "1": "Reset"
+            }
+        },
+        "0xAF": {
+            "name": "vehicle_48v_generator_switch",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "Off",
+                "1": "On"
+            }
+        },
+        "0xB0": {
+            "name": "vehicle_48v_generator_reset",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "RW",
+            "enum": {
+                "0": "No Reset",
+                "1": "Reset"
+            }
+        },
+        "0xB1": {
+            "name": "vehicle_dcdc_program_version",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R"
+        },
+        "0xB2": {
+            "name": "12v_battery_current",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~90A"
+        },
+        "0xB3": {
+            "name": "vehicle_48v_generator_current",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~80A"
+        },
+        "0xB4": {
+            "name": "12v_battery_voltage",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~16V"
+        },
+        "0xB5": {
+            "name": "vehicle_48v_generator_voltage",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~100V"
+        },
+        "0xB6": {
+            "name": "system_temperature",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "-40~150°C"
+        },
+        "0xB7": {
+            "name": "48v_battery_current",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~40A"
+        },
+        "0xB8": {
+            "name": "48v_battery_voltage",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~60V"
+        },
+        "0xB9": {
+            "name": "external_generator_temperature",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "-40~150°C"
+        },
+        "0xBA": {
+            "name": "fault",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "enum": {
+                "0x0000": "No Fault",
+                "0x0001": "12V Battery Side Input Overvoltage",
+                "0x0002": "12V Battery Side Input Undervoltage",
+                "0x0004": "Vehicle 48V Generator Side Input Overvoltage",
+                "0x0008": "Vehicle 48V Generator Side Input Undervoltage",
+                "0x0010": "48V Battery Side Input Overvoltage",
+                "0x0020": "48V Battery Side Input Undervoltage",
+                "0x0040": "System Over-Temperature",
+                "0x0080": "Vehicle 48V Generator Side Input Overcurrent",
+                "0x0100": "12V Battery Charge Current Overcurrent",
+                "0x0200": "12V Battery Discharge Current Overcurrent",
+                "0x0400": "External Generator Over-Temperature"
+            }
+        },
+        "0xBB": {
+            "name": "machine_current_status",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "enum": {
+                "0x0000": "Not Working",
+                "0x0001": "Forward Constant Current",
+                "0x0002": "Reverse Constant Current",
+                "0x0005": "Vehicle 48V Generator Constant Current",
+                "0x0006": "Vehicle 48V Generator Constant Current",
+                "0x0008": "Vehicle 48V Generator Constant Current"
+            }
+        },
+        "0xBC": {
+            "name": "protection_parameter_modify_switch",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R"
+        },
+        "0xBD": {
+            "name": "12v_battery_charge_protection_current",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~90A"
+        },
+        "0xBE": {
+            "name": "12v_battery_discharge_protection_current",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~90A"
+        },
+        "0xBF": {
+            "name": "12v_battery_input_max_voltage",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~16V"
+        },
+        "0xC0": {
+            "name": "48v_charge_cutoff_protection_voltage",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "40~60V"
+        },
+        "0xC1": {
+            "name": "48v_discharge_cutoff_protection_voltage",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "40~60V"
+        },
+        "0xC2": {
+            "name": "vehicle_48v_generator_protection_current",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~80A"
+        },
+        "0xC9": {
+            "name": "charge_limit_voltage",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~60V"
+        },
+        "0xCA": {
+            "name": "charge_limit_current",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~200A"
+        },
+        "0xCB": {
+            "name": "discharge_limit_voltage",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~60V"
+        },
+        "0xCC": {
+            "name": "discharge_limit_current",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~200A"
+        },
+        "0xCD": {
+            "name": "battery_total_voltage",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~60V"
+        },
+        "0xCE": {
+            "name": "battery_total_current",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~200A"
+        },
+        "0xCF": {
+            "name": "max_temperature",
+            "type": "UINT16",
+            "scale": 0.1,
+            "access": "R",
+            "range": "0~100°C"
+        },
+        "0xD0": {
+            "name": "soc",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "0~100%"
+        },
+        "0xD1": {
+            "name": "soh",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "0~100%"
+        },
+        "0xD2": {
+            "name": "remaining_capacity",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~rated_capacity"
+        },
+        "0xD3": {
+            "name": "full_charge_capacity",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~rated_capacity"
+        },
+        "0xD4": {
+            "name": "design_capacity",
+            "type": "UINT16",
+            "scale": 0.01,
+            "access": "R",
+            "range": "0~rated_capacity"
+        },
+        "0xD5": {
+            "name": "cycle_count",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "range": "0~100000"
+        },
+        "0xD6": {
+            "name": "alarm_flag",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "bitfield": {
+                "Bit0": "Cell Overvoltage Alarm",
+                "Bit1": "Cell Undervoltage Alarm",
+                "Bit2": "Group Overvoltage Alarm",
+                "Bit3": "Group Undervoltage Alarm",
+                "Bit4": "Charge Overcurrent Alarm",
+                "Bit5": "Discharge Overcurrent Alarm",
+                "Bit8": "Charge High Temperature Alarm",
+                "Bit9": "Discharge High Temperature Alarm",
+                "Bit10": "Charge Low Temperature Alarm",
+                "Bit11": "Discharge Low Temperature Alarm",
+                "Bit12": "Ambient High Temperature Alarm",
+                "Bit13": "Ambient Low Temperature Alarm",
+                "Bit14": "MOSFET High Temperature Alarm",
+                "Bit15": "SOC Too Low Alarm"
+            }
+        },
+        "0xD7": {
+            "name": "protection_flag",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "bitfield": {
+                "Bit0": "Cell Overvoltage Protection",
+                "Bit1": "Cell Undervoltage Protection",
+                "Bit2": "Group Overvoltage Protection",
+                "Bit3": "Group Undervoltage Protection",
+                "Bit4": "Charge Overcurrent Protection",
+                "Bit5": "Discharge Overcurrent Protection",
+                "Bit6": "Short Circuit Protection",
+                "Bit8": "Charge High Temperature Protection",
+                "Bit9": "Discharge High Temperature Protection",
+                "Bit10": "Charge Low Temperature Protection",
+                "Bit11": "Discharge Low Temperature Protection",
+                "Bit12": "Ambient High Temperature Protection",
+                "Bit13": "Ambient Low Temperature Protection",
+                "Bit14": "MOSFET High Temperature Protection"
+            }
+        },
+        "0xD8": {
+            "name": "fault_status",
+            "type": "UINT16",
+            "scale": 1,
+            "access": "R",
+            "bitfield": {
+                "Bit0": "Charge MOSFET Fault",
+                "Bit1": "Discharge MOSFET Fault",
+                "Bit2": "Temperature Sensor NTC Fault",
+                "Bit3": "Pre-Charge MOSFET Fault",
+                "Bit4": "Cell Fault",
+                "Bit5": "AFE Chip Fault",
+                "Bit7": "Current Limit Module Fault",
+                "Bit8": "BMS Internal DC Power Fault",
+                "Bit15": "Heating Function Fault"
+            }
+        }
+    }
+}
