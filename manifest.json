@@ -8,5 +8,5 @@
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/solar_manager",
   "quality_scale": "bronze",
-  "requirements": ["paho-mqtt==2.1.0", "crcmod==1.7"]
+  "requirements": ["paho-mqtt==2.1.0", "crcmod==1.7", "aiofiles>=24.1.0"]
 }

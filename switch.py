@@ -6,7 +6,7 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import DOMAIN, CONF_SERIAL
+from .const import CONF_SERIAL, DOMAIN
 from .protocol_helper.modbus_protocol_helper import ProtocolHelper
 
 

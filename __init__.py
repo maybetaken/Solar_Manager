@@ -61,6 +61,7 @@ async def async_setup_entry(
 
     protocol_file_path = Path(__file__).parent / "device_protocol" / f"{protocol}.json"
     device = device_class(hass, protocol_file_path)
+    await device.load_protocol()  # Ensure protocol data is loaded asynchronously
     solar_platforms = device.unpack_device_info()
     if serial not in hass.data[DOMAIN]:
         hass.data[DOMAIN][serial] = {}

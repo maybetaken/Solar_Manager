@@ -1,14 +1,18 @@
 import asyncio
-import threading
-import time
+import json
 import logging
 import struct
+import threading
+import time
+
 import paho.mqtt.client as mqtt
 
 _LOGGER = logging.getLogger(__name__)
 
 
 class MQTTManager:
+    """Manage MQTT connections and message handling."""
+
     def __init__(self, hass, broker, port, callback=None, username=None, password=None):
         self.hass = hass
         self.broker = broker

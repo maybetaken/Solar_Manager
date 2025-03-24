@@ -4,6 +4,7 @@ import json
 from typing import Any
 import struct
 import crcmod.predefined
+import aiofiles
 
 
 class ProtocolHelper:
@@ -12,16 +13,21 @@ class ProtocolHelper:
     def __init__(self, protocol_file: str) -> None:
         """Initialize the parser with the given protocol file."""
         self.protocol_file = protocol_file
-        self.protocol_data = self._load_protocol()
+        self.protocol_data = None
         self.crc16 = crcmod.predefined.mkPredefinedCrcFun("modbus")
 
-    def _load_protocol(self) -> dict[str, Any]:
-        """Load the protocol data from the JSON file."""
-        with open(self.protocol_file, "r") as file:
-            return json.load(file)
+    async def load_protocol(self) -> dict[str, Any]:
+        """Load the protocol data from the JSON file asynchronously."""
+        async with aiofiles.open(self.protocol_file, "r") as file:
+            data = await file.read()
+            self.protocol_data = json.loads(data)
+            return self.protocol_data
 
     async def read_data(self, register_name: str) -> Any:
         """Read data from the device for a specific register."""
+        if self.protocol_data is None:
+            self.protocol_data = await self.load_protocol()
+
         details = self.protocol_data["registers"].get(register_name)
         if not details:
             raise ValueError(f"Register {register_name} not found in protocol")
@@ -40,6 +46,9 @@ class ProtocolHelper:
 
     async def write_data(self, register_name: str, value: Any) -> None:
         """Write data to the device for a specific register."""
+        if self.protocol_data is None:
+            self.protocol_data = await self.load_protocol()
+
         details = self.protocol_data["registers"].get(register_name)
         if not details:
             raise ValueError(f"Register {register_name} not found in protocol")
