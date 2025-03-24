@@ -32,9 +32,9 @@ class SolarManagerNumber(NumberEntity):
     async def async_update(self) -> None:
         """Fetch new state data for the number."""
         data = await self._parser.read_data(self._register)
-        self._attr_value = data
+        self._attr_native_value = data
 
-    async def async_set_value(self, value: float) -> None:
+    async def async_set_native_value(self, value: float) -> None:
         """Update the current value."""
         await self._parser.write_data(self._register, value)
 
