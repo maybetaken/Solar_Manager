@@ -7,7 +7,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import CONF_SERIAL, DOMAIN
-from .protocol_helper.modbus_protocol_helper import ProtocolHelper
+from .protocol_helper.protocol_helper import ProtocolHelper
 
 
 class SolarManagerSwitch(SwitchEntity):
