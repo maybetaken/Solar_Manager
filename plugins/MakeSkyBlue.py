@@ -1,12 +1,22 @@
 """MakeSkyBlue device class for Solar Manager integration."""
 
-from homeassistant.helpers.entity import Entity
-from .base_device import BaseDevice
 from typing import Any
+
+from custom_components.solar_manager.protocol_helper.modbus_protocol_helper import (
+    ModbusProtocolHelper,
+)
+from homeassistant.core import HomeAssistant
+
+from .base_device import BaseDevice
 
 
 class MakeSkyBlueDevice(BaseDevice):
     """MakeSkyBlue device class for Solar Manager."""
+
+    def __init__(self, hass: HomeAssistant, protocol_file: str) -> None:
+        """Initialize the base device."""
+        super().__init__(hass, protocol_file)
+        self.parser = ModbusProtocolHelper(protocol_file)
 
     def unpack_device_info(self) -> dict[str, list[dict[str, Any]]]:
         """Unpack device information into different groups."""

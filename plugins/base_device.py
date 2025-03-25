@@ -7,8 +7,6 @@ from typing import Any
 
 from homeassistant.core import HomeAssistant
 
-from ..protocol_helper.modbus_protocol_helper import ProtocolHelper
-
 
 class BaseDevice(ABC):
     """Base device class for Solar Manager."""
@@ -17,7 +15,7 @@ class BaseDevice(ABC):
         """Initialize the base device."""
         self.hass = hass
         self.protocol_file = protocol_file
-        self.parser = ProtocolHelper(protocol_file)
+        self.parser = None
         self.protocol_data = None
 
     async def load_protocol(self) -> None:
