@@ -1,28 +1,50 @@
 """Helper for handling JSON protocol files for Solar Manager."""
 
-import json
 import struct
-from typing import Any, Dict
-import crcmod.predefined
+from typing import Any
+
+from custom_components.solar_manager.const import _LOGGER
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
+from .protocol_helper import ProtocolHelper
 
-class JsonProtocolHelper:
+
+class JsonProtocolHelper(ProtocolHelper):
     """Class to handle JSON protocol files and Modbus communication."""
 
-    def __init__(self, protocol_file: str) -> None:
-        """Initialize the helper with the given protocol file."""
-        self.protocol_file = protocol_file
-        self.protocol_data = self._load_protocol()
-        self.crc16 = crcmod.predefined.mkPredefinedCrcFun("modbus")
+    async def read_data(self, register_name: str) -> Any:
+        """Read data from the device for a specific register."""
+        if self.protocol_data is None:
+            self.protocol_data = await self.load_protocol()
 
-    def _load_protocol(self) -> Dict[str, Any]:
-        """Load the protocol data from the JSON file."""
-        with open(self.protocol_file, "r") as file:
-            return json.load(file)
+        details = self.protocol_data["registers"].get(register_name)
+        if not details:
+            raise ValueError(f"Register {register_name} not found in protocol")
 
-    def parse_data(self, data: bytes) -> Dict[str, Any]:
+        if details["type"] == "UINT16":
+            value = 1
+        elif details["type"] == "UINT32":
+            value = 56789
+        else:
+            value = 0
+
+        if details["scale"] != 1:
+            value *= details["scale"]
+
+        return value
+
+    async def write_data(self, register_name: str, value: Any) -> None:
+        """Write data to the device for a specific register."""
+        if self.protocol_data is None:
+            self.protocol_data = await self.load_protocol()
+
+        details = self.protocol_data["registers"].get(register_name)
+        if not details:
+            raise ValueError(f"Register {register_name} not found in protocol")
+        _LOGGER.debug("register_name: %s, value: %s", register_name, value)
+
+    def parse_data(self, data: bytes) -> dict[str, Any]:
         """Parse the given data according to the protocol."""
         parsed_data = {}
         for register, details in self.protocol_data["registers"].items():
@@ -52,5 +74,4 @@ class JsonProtocolHelper:
         """Send data to the device and return the response."""
         session = async_get_clientsession(hass)
         async with session.post(url, data=data) as response:
-            response_data = await response.read()
-            return response_data
+            return await response.read()
