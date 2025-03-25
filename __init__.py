@@ -83,6 +83,10 @@ async def async_unload_entry(
 ) -> bool:
     """Unload a config entry."""
     unload_ok = await hass.config_entries.async_unload_platforms(entry, _PLATFORMS)
-    if unload_ok and not hass.config_entries.async_entries(DOMAIN):
-        hass.data.pop(DOMAIN)
+    if unload_ok:
+        serial = entry.data[CONF_SERIAL]
+        if serial in hass.data[DOMAIN]:
+            hass.data[DOMAIN].pop(serial)
+        if not hass.config_entries.async_entries(DOMAIN):
+            hass.data.pop(DOMAIN)
     return unload_ok
