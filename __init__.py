@@ -32,6 +32,8 @@ device_class_map: dict[str, type[BaseDevice]] = {
 # Create ConfigEntry type alias with API object
 type SolarManagerConfigEntry = ConfigEntry  # Update with actual API type if available
 
+mqtt_manager = MQTTManager("192.168.31.71", 1883)
+
 
 async def async_setup_entry(
     hass: HomeAssistant, entry: SolarManagerConfigEntry
@@ -42,11 +44,6 @@ async def async_setup_entry(
     print(f"Setting up entry with data: {entry.data}")
 
     hass.data.setdefault(DOMAIN, {})
-
-    # Create API instance if not already created
-    if "MQTT" not in hass.data[DOMAIN]:
-        mqtt_manager = MQTTManager(hass, "192.168.31.71", 1883)
-        hass.data[DOMAIN]["MQTT"] = mqtt_manager
 
     # Handle the protocol and device setup
     model = entry.data[CONF_MODEL]

@@ -1,7 +1,8 @@
+"""MQTT Manager for handling MQTT connections and message processing."""
+
 import asyncio
 import json
 import logging
-import struct
 import threading
 import time
 
@@ -13,11 +14,24 @@ _LOGGER = logging.getLogger(__name__)
 class MQTTManager:
     """Manage MQTT connections and message handling."""
 
-    def __init__(self, hass, broker, port, callback=None, username=None, password=None):
-        self.hass = hass
+    def __init__(
+        self,
+        broker: str,
+        port: int,
+        username: str | None = None,
+        password: str | None = None,
+    ) -> None:
+        """Initialize the MQTTManager.
+
+        Args:
+            broker (str): The MQTT broker address.
+            port (int): The port to connect to the MQTT broker.
+            username (str, optional): Username for MQTT authentication.
+            password (str, optional): Password for MQTT authentication.
+
+        """
         self.broker = broker
         self.port = port
-        self.callback = callback
         self.username = username
         self.password = password
 
@@ -33,32 +47,81 @@ class MQTTManager:
         self._loop_thread = threading.Thread(target=self._start_loop, daemon=True)
         self._loop_thread.start()
 
+        # 用于存储每个设备的回调函数
+        self.callbacks = {}
+
     def _start_loop(self):
-        _LOGGER.info("Starting MQTT loop...")
+        _LOGGER.info("Starting MQTT loop")
         self.client.connect(self.broker, self.port, 60)
         self.client.loop_forever()
 
     def on_connect(self, client, userdata, flags, rc):
+        """Handle connection to the MQTT broker.
+
+        Args:
+            client: The MQTT client instance.
+            userdata: The private user data as set in Client().
+            flags: Response flags sent by the broker.
+            rc: The connection result code.
+
+        """
         _LOGGER.info("Connected to MQTT broker with result code %s", rc)
-        client.subscribe("/notify/#")
+        client.subscribe("notify/#")
 
     def on_message(self, client, userdata, msg):
+        """Handle incoming MQTT messages.
+
+        Args:
+            client: The MQTT client instance.
+            userdata: The private user data as set in Client().
+            msg: The MQTT message containing topic and payload.
+
+        """
         _LOGGER.info("MQTT message received on topic %s: %s", msg.topic, msg.payload)
         try:
-            if self.callback:
-                # 将原始的 bytes 数据传递给回调
-                asyncio.run_coroutine_threadsafe(
-                    self.callback(msg.topic, msg.payload), self.hass.loop
-                )
-        except Exception as e:
-            _LOGGER.error("Failed to handle MQTT message: %s", e)
+            for topic_prefix, callback in self.callbacks.items():
+                if msg.topic.startswith(topic_prefix):
+                    asyncio.run_coroutine_threadsafe(
+                        callback(msg.topic, msg.payload), asyncio.get_event_loop()
+                    )
+        except (ValueError, TypeError) as e:
+            _LOGGER.error("Failed to handle MQTT message due to invalid data: %s", e)
+        except RuntimeError as e:
+            _LOGGER.error("Failed to handle MQTT message due to runtime error: %s", e)
 
     def on_disconnect(self, client, userdata, rc):
-        _LOGGER.warning("Disconnected from MQTT broker, reconnecting in 5 seconds...")
+        """Handle disconnection from the MQTT broker.
+
+        Args:
+            client: The MQTT client instance.
+            userdata: The private user data as set in Client().
+            rc: The disconnection result code.
+
+        """
+        _LOGGER.warning("Disconnected from MQTT broker, reconnecting in 5 seconds")
         time.sleep(5)
         self.client.reconnect()
 
-    def publish(self, topic, payload):
+    def register_callback(self, topic_prefix: str, callback: callable) -> None:
+        """Register a callback function for a specific topic prefix.
+
+        Args:
+            topic_prefix (str): The topic prefix to listen for.
+            callback (callable): The callback function to handle messages.
+
+        """
+        self.client.subscribe(topic_prefix + "/#")
+        self.callbacks[topic_prefix] = callback
+
+    def publish(self, topic: str, payload: bytes | dict) -> None:
+        """Publish a message to a specific MQTT topic.
+
+        Args:
+            topic (str): The MQTT topic to publish the message to.
+            payload (Union[bytes, dict]): The message payload to publish.
+                Can be bytes or a dictionary.
+
+        """
         if isinstance(payload, bytes):
             self.client.publish(topic, payload)
         elif isinstance(payload, dict):
