@@ -40,10 +40,6 @@ class ProtocolHelper(ABC):
         """Write data to the device for a specific register."""
 
     @abstractmethod
-    def parse_data(self, data: bytes) -> None:
-        """Parse the given data according to the protocol."""
-
-    @abstractmethod
     def pack_data(self, slave_id: int, address: int, value: int) -> bytes:
         """Pack data according to the protocol."""
 

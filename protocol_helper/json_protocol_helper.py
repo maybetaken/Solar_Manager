@@ -44,18 +44,6 @@ class JsonProtocolHelper(ProtocolHelper):
             raise ValueError(f"Register {register_name} not found in protocol")
         _LOGGER.debug("register_name: %s, value: %s", register_name, value)
 
-    def parse_data(self, data: bytes) -> None:
-        """Parse the given data according to the protocol."""
-        parsed_data = {}
-        for register, details in self.protocol_data["registers"].items():
-            start = int(register, 16) * 2
-            length = 2 if details["type"] == "UINT16" else 4
-            raw_value = data[start : start + length]
-            value = struct.unpack(f">{details['type'][4:].lower()}", raw_value)[0]
-            if details["scale"] != 1:
-                value *= details["scale"]
-            parsed_data[details["name"]] = value
-
     def pack_data(self, slave_id: int, address: int, value: int) -> bytes:
         """Pack data according to the protocol."""
         write_command = self.protocol_data["write_command"]
