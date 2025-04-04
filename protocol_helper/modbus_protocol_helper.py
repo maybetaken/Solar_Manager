@@ -46,7 +46,7 @@ class ModbusProtocolHelper(ProtocolHelper):
         details = self.protocol_data["registers"].get(register_name)
         if not details:
             raise ValueError(f"Register {register_name} not found in protocol")
-        _LOGGER.debug("register_name: %s, value: %s", register_name, value)
+        self.callback(register_name, value)
 
     def parse_data(self, data: bytes) -> None:
         """Parse the given data according to the protocol."""
@@ -76,3 +76,7 @@ class ModbusProtocolHelper(ProtocolHelper):
         """Send data to the device and return the response."""
         # This is a placeholder for actual Modbus communication
         return data
+
+    def register_callback(self, callback: callable) -> None:
+        """Register a callback function to handle specific events."""
+        self.callback = callback

@@ -28,6 +28,7 @@ class MakeSkyBlueDevice(BaseDevice):
             sn,
             self.handle_notify,
         )
+        self.parser.register_callback(self.handle_cmd)
 
     def unpack_device_info(self) -> dict[str, list[dict[str, Any]]]:
         """Unpack device information into different groups."""
@@ -59,3 +60,13 @@ class MakeSkyBlueDevice(BaseDevice):
 
         """
         _LOGGER.info("[callback ] %s: %s", topic, payload)
+
+    def handle_cmd(self, cmd: str, value: Any) -> None:
+        """Handle commands from the user.
+
+        Args:
+            cmd (str): The command to handle.
+            value (Any): The value associated with the command.
+
+        """
+        _LOGGER.info("[cmd ] %s: %s", cmd, value)

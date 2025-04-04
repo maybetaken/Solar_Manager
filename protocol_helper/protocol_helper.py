@@ -18,6 +18,7 @@ class ProtocolHelper(ABC):
         self.protocol_file = protocol_file
         self.protocol_data: dict[str, Any] | None = None
         self.crc16 = crcmod.predefined.mkPredefinedCrcFun("modbus")
+        self.callback = None
 
     async def load_protocol(self) -> dict[str, Any]:
         """Load the protocol data from the file asynchronously."""
@@ -25,6 +26,10 @@ class ProtocolHelper(ABC):
             data = await file.read()
             self.protocol_data = json.loads(data)
             return self.protocol_data
+
+    @abstractmethod
+    def register_callback(self, callback: callable) -> None:
+        """Register a callback function to send data through mqtt."""
 
     @abstractmethod
     async def read_data(self, register_name: str) -> Any:
