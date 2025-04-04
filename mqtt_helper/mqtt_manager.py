@@ -45,15 +45,28 @@ class MQTTManager(metaclass=SingletonMeta):
         self.client.on_message = self.on_message
         self.client.on_disconnect = self.on_disconnect
 
-        # 启动MQTT事件循环
+        self.loop = asyncio.new_event_loop()
+        self._event_thread = threading.Thread(
+            target=self._start_event_loop, daemon=True
+        )
+        self._event_thread.start()
+
         self._loop_thread = threading.Thread(target=self._start_loop, daemon=True)
         self._loop_thread.start()
 
         # 用于存储每个设备的回调函数
         self.callbacks = {}
 
+    def _start_event_loop(self):
+        asyncio.set_event_loop(self.loop)
+        _LOGGER.info(
+            "Asyncio event loop started in thread: %s", threading.current_thread().name
+        )
+        self.loop.run_forever()
+
     def _start_loop(self):
         _LOGGER.info("Starting MQTT loop")
+        asyncio.set_event_loop(self.loop)
         self.client.connect(self.broker, self.port, 60)
         self.client.loop_forever()
 
@@ -79,12 +92,11 @@ class MQTTManager(metaclass=SingletonMeta):
             msg: The MQTT message containing topic and payload.
 
         """
-        _LOGGER.info("MQTT message received on topic %s: %s", msg.topic, msg.payload)
         try:
             for topic_prefix, callback in self.callbacks.items():
                 if msg.topic.startswith(topic_prefix):
                     asyncio.run_coroutine_threadsafe(
-                        callback(msg.topic, msg.payload), asyncio.get_event_loop()
+                        callback(msg.topic, msg.payload), self.loop
                     )
         except (ValueError, TypeError) as e:
             _LOGGER.error("Failed to handle MQTT message due to invalid data: %s", e)
