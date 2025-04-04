@@ -23,8 +23,13 @@ class MakeSkyBlueDevice(BaseDevice):
         """Initialize the base device."""
         super().__init__(hass, protocol_file, sn, model)
         self.parser = ModbusProtocolHelper(protocol_file)
-        mqtt_manager = mqtt_global.get_mqtt_manager()
-        mqtt_manager.register_callback(
+        self.slave_id = 1
+        self.read_command = 3
+        self.write_command = 6
+        self.total_length = 217
+        self.start_address = 0
+        self.mqtt_manager = mqtt_global.get_mqtt_manager()
+        self.mqtt_manager.register_callback(
             sn,
             self.handle_notify,
         )
@@ -32,6 +37,12 @@ class MakeSkyBlueDevice(BaseDevice):
 
     def unpack_device_info(self) -> dict[str, list[dict[str, Any]]]:
         """Unpack device information into different groups."""
+        self.slave_id = int(self.parser.protocol_data["slave_id"])
+        self.read_command = int(self.parser.protocol_data["read_command"])
+        self.write_command = int(self.parser.protocol_data["write_command"])
+        self.total_length = int(self.parser.protocol_data["register_total_length"])
+        self.start_address = int(self.parser.protocol_data["register_start_address"])
+
         device_info: dict[str, list[dict[str, Any]]] = {
             "sensor": [],
             "number": [],
@@ -69,4 +80,24 @@ class MakeSkyBlueDevice(BaseDevice):
             value (Any): The value associated with the command.
 
         """
-        _LOGGER.info("[cmd ] %s: %s", cmd, value)
+        topic = self.sn
+        data: any = None
+        if isinstance(value, str):
+            topic += "/" + cmd
+            data = value
+        elif isinstance(value, int):
+            topic += "/" + self.model + "/" + str(self.slave_id)
+            data = self.parser.pack_data(self.slave_id, int(cmd, 16), value)
+        elif isinstance(value, float):
+            topic += "/" + self.model + "/" + str(self.slave_id)
+            # TO-DO correct me
+            data = self.parser.pack_data(
+                self.slave_id,
+                int(cmd, 16),
+                int(value / self.protocol_data["registers"][cmd].get("scale", 1)),
+            )
+        else:
+            _LOGGER.error("Unsupported value type: %s", type(value))
+            return
+
+        self.mqtt_manager.publish(topic, data)
