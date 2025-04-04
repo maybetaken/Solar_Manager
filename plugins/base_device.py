@@ -11,10 +11,14 @@ from homeassistant.core import HomeAssistant
 class BaseDevice(ABC):
     """Base device class for Solar Manager."""
 
-    def __init__(self, hass: HomeAssistant, protocol_file: str) -> None:
+    def __init__(
+        self, hass: HomeAssistant, protocol_file: str, sn: str, model: str
+    ) -> None:
         """Initialize the base device."""
         self.hass = hass
         self.protocol_file = protocol_file
+        self.sn = sn
+        self.model = model
         self.parser = None
         self.protocol_data = None
 
