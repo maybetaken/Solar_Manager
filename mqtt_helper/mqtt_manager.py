@@ -8,10 +8,12 @@ import time
 
 import paho.mqtt.client as mqtt
 
+from .singleton_meta import SingletonMeta
+
 _LOGGER = logging.getLogger(__name__)
 
 
-class MQTTManager:
+class MQTTManager(metaclass=SingletonMeta):
     """Manage MQTT connections and message handling."""
 
     def __init__(
@@ -113,7 +115,7 @@ class MQTTManager:
         self.client.subscribe(topic_prefix + "/#")
         self.callbacks[topic_prefix] = callback
 
-    def publish(self, topic: str, payload: bytes | dict) -> None:
+    def publish(self, topic: str, payload: bytes | dict | str) -> None:
         """Publish a message to a specific MQTT topic.
 
         Args:
@@ -126,5 +128,7 @@ class MQTTManager:
             self.client.publish(topic, payload)
         elif isinstance(payload, dict):
             self.client.publish(topic, json.dumps(payload).encode("utf-8"))
+        elif isinstance(payload, str):
+            self.client.publish(topic, payload.encode("utf-8"))
         else:
             _LOGGER.error("Unsupported payload type: %s", type(payload))

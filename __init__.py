@@ -10,9 +10,9 @@ from homeassistant.core import HomeAssistant
 
 from .const import _LOGGER, CONF_MODEL, CONF_SERIAL, DOMAIN
 from .device_protocol.protocol_map import protocol_map
-from .mqtt_manager import MQTTManager
 from .plugins.base_device import BaseDevice
 from .plugins.MakeSkyBlue import MakeSkyBlueDevice
+from .mqtt_helper.mqtt_global import get_mqtt_manager
 
 # List the platforms that you want to support.
 _PLATFORMS: list[Platform] = [
@@ -32,7 +32,7 @@ device_class_map: dict[str, type[BaseDevice]] = {
 # Create ConfigEntry type alias with API object
 type SolarManagerConfigEntry = ConfigEntry  # Update with actual API type if available
 
-mqtt_manager = MQTTManager("192.168.31.71", 1883)
+mqtt_manager = mqtt_manager = get_mqtt_manager()
 
 
 async def async_setup_entry(
