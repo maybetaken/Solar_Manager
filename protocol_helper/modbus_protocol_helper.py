@@ -12,6 +12,11 @@ from .protocol_helper import ProtocolHelper
 class ModbusProtocolHelper(ProtocolHelper):
     """Class to handle Modbus protocol files and communication."""
 
+    def __init__(self, protocol_file: str) -> None:
+        """Initialize the helper with the given protocol file."""
+        super().__init__(protocol_file)
+        self._parsed_data: dict[str, Any] = {}
+
     async def read_data(self, register_name: str) -> Any:
         """Read data from the device for a specific register."""
         if self.protocol_data is None:
@@ -43,9 +48,8 @@ class ModbusProtocolHelper(ProtocolHelper):
             raise ValueError(f"Register {register_name} not found in protocol")
         _LOGGER.debug("register_name: %s, value: %s", register_name, value)
 
-    def parse_data(self, data: bytes) -> dict[str, Any]:
+    def parse_data(self, data: bytes) -> None:
         """Parse the given data according to the protocol."""
-        parsed_data = {}
         for register, details in self.protocol_data["registers"].items():
             start = int(register, 16) * 2
             length = 2 if details["type"] == "UINT16" else 4
@@ -53,8 +57,7 @@ class ModbusProtocolHelper(ProtocolHelper):
             value = struct.unpack(f">{details['type'][4:].lower()}", raw_value)[0]
             if details["scale"] != 1:
                 value *= details["scale"]
-            parsed_data[details["name"]] = value
-        return parsed_data
+            self._parsed_data[details["name"]] = value
 
     def pack_data(self, slave_id: int, address: int, value: int) -> bytes:
         """Pack data according to the protocol."""

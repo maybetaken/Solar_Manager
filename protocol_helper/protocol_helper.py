@@ -35,7 +35,7 @@ class ProtocolHelper(ABC):
         """Write data to the device for a specific register."""
 
     @abstractmethod
-    def parse_data(self, data: bytes) -> dict[str, Any]:
+    def parse_data(self, data: bytes) -> None:
         """Parse the given data according to the protocol."""
 
     @abstractmethod
