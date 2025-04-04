@@ -24,7 +24,8 @@ class BaseDevice(ABC):
 
     async def load_protocol(self) -> None:
         """Load the protocol data asynchronously."""
-        self.protocol_data = await self.parser.load_protocol()
+        if self.parser is not None:
+            self.protocol_data = await self.parser.load_protocol()
 
     @abstractmethod
     def unpack_device_info(self) -> dict[str, list[dict[str, Any]]]:

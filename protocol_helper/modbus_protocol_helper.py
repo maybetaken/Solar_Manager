@@ -53,9 +53,28 @@ class ModbusProtocolHelper(ProtocolHelper):
         for register, details in self.protocol_data["registers"].items():
             start = int(register, 16) * 2
             length = 2 if details["type"] == "UINT16" else 4
+
+            # Map endianness to struct format
+            endianness = details.get("endianness", "BE")  # Default to BE (big-endian)
+            if endianness == "BE":
+                endian_prefix = ">"
+            elif endianness == "LE":
+                endian_prefix = "<"
+            else:
+                raise ValueError(f"Unsupported endianness: {endianness}")
+
+            # Parse raw value based on endianness and type
             raw_value = data[start : start + length]
-            value = struct.unpack(f">{details['type'][4:].lower()}", raw_value)[0]
-            if details["scale"] != 1:
+            try:
+                value = struct.unpack(
+                    f"{endian_prefix}{details['type'][4:].lower()}", raw_value
+                )[0]
+            except struct.error as e:
+                _LOGGER.error("Failed to parse register %s: %s", register, e)
+                continue
+
+            # Apply scaling if necessary
+            if details.get("scale", 1) != 1:
                 value *= details["scale"]
             self._parsed_data[details["name"]] = value
 
