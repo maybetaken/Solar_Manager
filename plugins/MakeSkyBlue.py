@@ -70,7 +70,7 @@ class MakeSkyBlueDevice(BaseDevice):
             payload (Any): The payload of the notification.
 
         """
-        _LOGGER.info("[callback ] %s: %s", topic, payload)
+        self.parser.parse_data(payload, self.start_address)
 
     def handle_cmd(self, cmd: str, value: Any) -> None:
         """Handle commands from the user.

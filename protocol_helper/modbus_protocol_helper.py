@@ -26,6 +26,9 @@ class ModbusProtocolHelper(ProtocolHelper):
         if not details:
             raise ValueError(f"Register {register_name} not found in protocol")
 
+        if details["name"] in self._parsed_data:
+            return self._parsed_data[details["name"]]
+
         if details["type"] == "UINT16":
             value = 1
         elif details["type"] == "UINT32":
@@ -48,14 +51,21 @@ class ModbusProtocolHelper(ProtocolHelper):
             raise ValueError(f"Register {register_name} not found in protocol")
         self.callback(register_name, value)
 
-    def parse_data(self, data: bytes) -> None:
-        """Parse the given data according to the protocol."""
+    def parse_data(self, data: bytes, start_address: int = 0) -> None:
+        """Parse the given data starting from the specified address according to the protocol."""
+        offset = 0
         for register, details in self.protocol_data["registers"].items():
-            start = int(register, 16) * 2
-            length = 2 if details["type"] == "UINT16" else 4
+            reg_addr = int(register, 16)
+            if reg_addr < start_address:
+                continue
 
-            # Map endianness to struct format
-            endianness = details.get("endianness", "BE")  # Default to BE (big-endian)
+            length = 2 if details["type"] == "UINT16" else 4
+            fmt = "H" if details["type"] == "UINT16" else "I"
+
+            if offset + length > len(data):
+                break
+
+            endianness = self.protocol_data.get("endianness", "BE")
             if endianness == "BE":
                 endian_prefix = ">"
             elif endianness == "LE":
@@ -63,12 +73,10 @@ class ModbusProtocolHelper(ProtocolHelper):
             else:
                 raise ValueError(f"Unsupported endianness: {endianness}")
 
-            # Parse raw value based on endianness and type
-            raw_value = data[start : start + length]
+            raw_value = data[offset : offset + length]
             try:
-                value = struct.unpack(
-                    f"{endian_prefix}{details['type'][4:].lower()}", raw_value
-                )[0]
+                value = struct.unpack(f"{endian_prefix}{fmt}", raw_value)[0]
+
             except struct.error as e:
                 _LOGGER.error("Failed to parse register %s: %s", register, e)
                 continue
@@ -77,6 +85,7 @@ class ModbusProtocolHelper(ProtocolHelper):
             if details.get("scale", 1) != 1:
                 value *= details["scale"]
             self._parsed_data[details["name"]] = value
+            offset += length
 
     def pack_data(self, slave_id: int, address: int, value: int) -> bytes:
         """Pack data according to the protocol."""
