@@ -12,9 +12,9 @@ from .protocol_helper import ProtocolHelper
 class ModbusProtocolHelper(ProtocolHelper):
     """Class to handle Modbus protocol files and communication."""
 
-    def __init__(self, protocol_file: str) -> None:
+    def __init__(self, hass: HomeAssistant, protocol_file: str) -> None:
         """Initialize the helper with the given protocol file."""
-        super().__init__(protocol_file)
+        super().__init__(hass, protocol_file)
         self._parsed_data: dict[str, Any] = {}
 
     async def read_data(self, register_name: str) -> Any:
@@ -85,6 +85,21 @@ class ModbusProtocolHelper(ProtocolHelper):
             if details.get("scale", 1) != 1:
                 value *= details["scale"]
             self._parsed_data[details["name"]] = value
+
+            if register in self._update_callbacks:
+                try:
+                    self._hass.loop.call_soon_threadsafe(
+                        lambda reg=register, val=value: self._hass.loop.create_task(
+                            self._update_callbacks[reg](val)
+                        )
+                    )
+                except RuntimeError as e:
+                    _LOGGER.error(
+                        f"Failed to schedule callback for {register} due to event loop issue: {e}"
+                    )
+                except AttributeError as e:
+                    _LOGGER.error(f"Invalid hass.loop for {register}: {e}")
+
             offset += length
 
     def pack_data(self, slave_id: int, address: int, value: int) -> bytes:

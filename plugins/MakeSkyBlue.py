@@ -22,7 +22,7 @@ class MakeSkyBlueDevice(BaseDevice):
     ) -> None:
         """Initialize the base device."""
         super().__init__(hass, protocol_file, sn, model)
-        self.parser = ModbusProtocolHelper(protocol_file)
+        self.parser = ModbusProtocolHelper(hass, protocol_file)
         self.slave_id = 1
         self.read_command = 3
         self.write_command = 6

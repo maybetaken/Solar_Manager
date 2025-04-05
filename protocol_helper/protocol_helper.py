@@ -1,6 +1,7 @@
 """Base class for handling protocol files for Solar Manager."""
 
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 import json
 from typing import Any
 
@@ -13,12 +14,14 @@ from homeassistant.core import HomeAssistant
 class ProtocolHelper(ABC):
     """Base class to handle protocol files and Modbus communication."""
 
-    def __init__(self, protocol_file: str) -> None:
+    def __init__(self, hass: HomeAssistant, protocol_file: str) -> None:
         """Initialize the helper with the given protocol file."""
+        self._hass = hass
         self.protocol_file = protocol_file
         self.protocol_data: dict[str, Any] | None = None
         self.crc16 = crcmod.predefined.mkPredefinedCrcFun("modbus")
         self.callback = None
+        self._update_callbacks: dict[str, Callable[[Any], None]] = {}
 
     async def load_protocol(self) -> dict[str, Any]:
         """Load the protocol data from the file asynchronously."""
@@ -26,6 +29,14 @@ class ProtocolHelper(ABC):
             data = await file.read()
             self.protocol_data = json.loads(data)
             return self.protocol_data
+
+    def set_update_callback(
+        self, register: str, callback: Callable[[Any], None]
+    ) -> None:
+        """Set callback for certain register to update value."""
+
+        if register not in self._update_callbacks:
+            self._update_callbacks[register] = callback
 
     @abstractmethod
     def register_callback(self, callback: callable) -> None:
