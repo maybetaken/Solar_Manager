@@ -12,34 +12,12 @@ from .protocol_helper import ProtocolHelper
 class ModbusProtocolHelper(ProtocolHelper):
     """Class to handle Modbus protocol files and communication."""
 
-    def __init__(self, hass: HomeAssistant, protocol_file: str) -> None:
-        """Initialize the helper with the given protocol file."""
-        super().__init__(hass, protocol_file)
-        self._parsed_data: dict[str, Any] = {}
-
     async def read_data(self, register_name: str) -> Any:
         """Read data from the device for a specific register."""
         if self.protocol_data is None:
             self.protocol_data = await self.load_protocol()
 
-        details = self.protocol_data["registers"].get(register_name)
-        if not details:
-            raise ValueError(f"Register {register_name} not found in protocol")
-
-        if details["name"] in self._parsed_data:
-            return self._parsed_data[details["name"]]
-
-        if details["type"] == "UINT16":
-            value = 1
-        elif details["type"] == "UINT32":
-            value = 56789
-        else:
-            value = 0
-
-        if details["scale"] != 1:
-            value *= details["scale"]
-
-        return value
+        return None
 
     async def write_data(self, register_name: str, value: Any) -> None:
         """Write data to the device for a specific register."""
@@ -84,7 +62,6 @@ class ModbusProtocolHelper(ProtocolHelper):
             # Apply scaling if necessary
             if details.get("scale", 1) != 1:
                 value *= details["scale"]
-            self._parsed_data[details["name"]] = value
 
             if register in self._update_callbacks:
                 try:
