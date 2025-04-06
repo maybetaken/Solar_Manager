@@ -24,6 +24,7 @@ class SolarManagerNumber(NumberEntity):
         device_id: str,
     ) -> None:
         """Initialize the number."""
+        self._attr_mode = "box"
         self._attr_name = name
         self._parser = parser
         self._register = register
