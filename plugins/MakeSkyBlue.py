@@ -101,3 +101,14 @@ class MakeSkyBlueDevice(BaseDevice):
             return
 
         self.mqtt_manager.publish(topic, data)
+
+    def cleanup(self) -> None:
+        """Cleanup device."""
+        self.mqtt_manager.unregister_callback(
+            self.sn,
+            self.handle_notify,
+        )
+        self.parser = None
+        self.mqtt_manager = None
+        self.protocol_data = None
+        self.hass = None

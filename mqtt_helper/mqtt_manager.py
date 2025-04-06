@@ -127,6 +127,18 @@ class MQTTManager(metaclass=SingletonMeta):
         self.client.subscribe(topic_prefix + "/#")
         self.callbacks[topic_prefix] = callback
 
+    def unregister_callback(self, topic_prefix: str, callback: callable) -> None:
+        """Unregister a callback function for a specific topic prefix.
+
+        Args:
+            topic_prefix (str): The topic prefix to unregister the callback from.
+            callback (callable): The callback function to remove.
+
+        """
+        if topic_prefix in self.callbacks and self.callbacks[topic_prefix] == callback:
+            del self.callbacks[topic_prefix]
+            self.client.unsubscribe(topic_prefix + "/#")
+
     def publish(self, topic: str, payload: bytes | dict | str) -> None:
         """Publish a message to a specific MQTT topic.
 

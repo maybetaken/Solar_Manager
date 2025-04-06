@@ -62,6 +62,7 @@ async def async_setup_entry(
     solar_platforms = device.unpack_device_info()
     if serial not in hass.data[DOMAIN]:
         hass.data[DOMAIN][serial] = {}
+        hass.data[DOMAIN][serial]["devices"] = device
     for platform, items in solar_platforms.items():
         for item in items:
             item_name = f"{model}_{serial}_{item['name']}"
@@ -79,11 +80,22 @@ async def async_unload_entry(
     hass: HomeAssistant, entry: SolarManagerConfigEntry
 ) -> bool:
     """Unload a config entry."""
+    serial = entry.data[CONF_SERIAL]
+    if serial not in hass.data[DOMAIN]:
+        _LOGGER.warning(f"Try not unload non-exist serial: {serial}")
+        return True
+
     unload_ok = await hass.config_entries.async_unload_platforms(entry, _PLATFORMS)
     if unload_ok:
-        serial = entry.data[CONF_SERIAL]
-        if serial in hass.data[DOMAIN]:
-            hass.data[DOMAIN].pop(serial)
+        device = hass.data[DOMAIN][serial].get("devices")
+        if device:
+            device.cleanup()
+            _LOGGER.info(f"Clean serial {serial}")
+        else:
+            _LOGGER.warning(f"Cannot find instance for serial: {serial}")
+
+        hass.data[DOMAIN].pop(serial)
         if not hass.config_entries.async_entries(DOMAIN):
             hass.data.pop(DOMAIN)
+
     return unload_ok

@@ -30,3 +30,7 @@ class BaseDevice(ABC):
     @abstractmethod
     def unpack_device_info(self) -> dict[str, list[dict[str, Any]]]:
         """Unpack device information into different groups."""
+
+    @abstractmethod
+    def cleanup(self) -> None:
+        """Cleanup device."""
