@@ -1,5 +1,7 @@
 """Select entity for Solar Manager integration."""
 
+from typing import Any
+
 from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -30,15 +32,15 @@ class SolarManagerSelect(SelectEntity):
         self._attr_current_option = None
         self._attr_unique_id = unique_id
         self._device_id = device_id
+        self._parser.set_update_callback(self._register, self.on_data_update)
 
-    async def async_update(self) -> None:
-        """Fetch new state data for the select."""
-        data = await self._parser.read_data(self._register)
-        if isinstance(data, int) and 0 <= data < len(self._attr_options):
-            self._attr_current_option = self._attr_options[data]
+    async def on_data_update(self, value: Any) -> None:
+        """Set current option based on data update."""
+        if isinstance(value, int) and 0 <= value < len(self._attr_options):
+            self._attr_current_option = self._attr_options[value]
         else:
             self._attr_current_option = None
-        self.async_write_ha_state()
+        self.schedule_update_ha_state()
 
     async def async_select_option(self, option: str) -> None:
         """Update the current option."""
@@ -47,6 +49,11 @@ class SolarManagerSelect(SelectEntity):
             await self._parser.write_data(self._register, index)
             self._attr_current_option = option
             self.async_write_ha_state()
+
+    @property
+    def available(self) -> bool:
+        """Return if the select entity is available."""
+        return self._attr_current_option is not None
 
     @property
     def device_info(self):

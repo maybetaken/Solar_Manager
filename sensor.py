@@ -1,5 +1,7 @@
 """Sensor entity for Solar Manager integration."""
 
+from typing import Any
+
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -28,12 +30,12 @@ class SolarManagerSensor(SensorEntity):
         self._attr_state = None
         self._attr_unique_id = unique_id
         self._device_id = device_id
+        self._parser.set_update_callback(self._register, self.on_data_update)
 
-    async def async_update(self) -> None:
-        """Fetch new state data for the sensor."""
-        data = await self._parser.read_data(self._register)
-        self._attr_native_value = data
-        self.async_write_ha_state()  # Notify Home Assistant of the state update
+    async def on_data_update(self, value: Any) -> None:
+        """Set current option based on data update."""
+        self._attr_native_value = value
+        self.schedule_update_ha_state()
 
     @property
     def available(self) -> bool:

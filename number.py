@@ -1,5 +1,7 @@
 """Number entity for Solar Manager integration."""
 
+from typing import Any
+
 from homeassistant.components.number import NumberEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -25,18 +27,27 @@ class SolarManagerNumber(NumberEntity):
         self._attr_name = name
         self._parser = parser
         self._register = register
-        self._attr_value = None
+        self._attr_native_value = None
         self._attr_unique_id = unique_id
         self._device_id = device_id
+        self._parser.set_update_callback(self._register, self.on_data_update)
 
-    async def async_update(self) -> None:
-        """Fetch new state data for the number."""
-        data = await self._parser.read_data(self._register)
-        self._attr_native_value = data
+    async def on_data_update(self, value: Any) -> None:
+        """Set number value based on data update."""
+        if isinstance(value, (int, float)):
+            self._attr_native_value = float(value)
+        else:
+            self._attr_native_value = None
+        self.schedule_update_ha_state()
 
     async def async_set_native_value(self, value: float) -> None:
         """Update the current value."""
         await self._parser.write_data(self._register, value)
+
+    @property
+    def available(self) -> bool:
+        """Return if the number entity is available."""
+        return self._attr_native_value is not None
 
     @property
     def device_info(self):

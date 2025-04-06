@@ -1,5 +1,7 @@
 """Switch entity for Solar Manager integration."""
 
+from typing import Any
+
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -25,14 +27,18 @@ class SolarManagerSwitch(SwitchEntity):
         self._attr_name = name
         self._parser = parser
         self._register = register
-        self._attr_is_on = False
+        self._attr_is_on = None
         self._attr_unique_id = unique_id
         self._device_id = device_id
+        self._parser.set_update_callback(self._register, self.on_data_update)
 
-    async def async_update(self) -> None:
-        """Fetch new state data for the switch."""
-        data = await self._parser.read_data(self._register)
-        self._attr_is_on = data == "on"
+    async def on_data_update(self, value: Any) -> None:
+        """Set switch value based on data update."""
+        if isinstance(value, str):
+            self._attr_is_on = value == "on"
+        else:
+            self._attr_is_on = None
+        self.schedule_update_ha_state()
 
     async def async_turn_on(self, **kwargs) -> None:
         """Turn the switch on."""
@@ -45,6 +51,11 @@ class SolarManagerSwitch(SwitchEntity):
         await self._parser.write_data(self._register, "off")
         self._attr_is_on = False
         self.async_write_ha_state()
+
+    @property
+    def available(self) -> bool:
+        """Return if the sensor is available."""
+        return self._attr_is_on is not None
 
     @property
     def device_info(self):
