@@ -76,7 +76,7 @@ async def async_setup_entry(
     switches = []
     serial = entry.data[CONF_SERIAL]
     for item in hass.data[DOMAIN][serial].get(Platform.SWITCH, []):
-        unique_id = f"{entry.entry_id}-{serial}-{item['register']}"
+        unique_id = f"{entry.entry_id}-{serial}-{item['name']}"
         switch = SolarManagerSwitch(
             item["name"], item["parser"], item["register"], unique_id, serial
         )

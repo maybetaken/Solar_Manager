@@ -157,7 +157,7 @@ async def async_setup_entry(
     sensors = []
     serial = entry.data[CONF_SERIAL]
     for device in hass.data[DOMAIN][serial].get(Platform.SENSOR, []):
-        unique_id = f"{entry.entry_id}-{serial}-{device['register']}"
+        unique_id = f"{entry.entry_id}-{serial}-{device['name']}"
         sensor = SolarManagerSensor(
             device["name"], device["parser"], device["register"], unique_id, serial
         )
