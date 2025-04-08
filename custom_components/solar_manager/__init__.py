@@ -10,9 +10,9 @@ from homeassistant.core import HomeAssistant
 
 from .const import _LOGGER, CONF_MODEL, CONF_SERIAL, DOMAIN
 from .device_protocol.protocol_map import protocol_map
+from .mqtt_helper.mqtt_global import get_mqtt_manager
 from .plugins.base_device import BaseDevice
 from .plugins.MakeSkyBlue import MakeSkyBlueDevice
-from .mqtt_helper.mqtt_global import get_mqtt_manager
 
 # List the platforms that you want to support.
 _PLATFORMS: list[Platform] = [
@@ -32,16 +32,13 @@ device_class_map: dict[str, type[BaseDevice]] = {
 # Create ConfigEntry type alias with API object
 type SolarManagerConfigEntry = ConfigEntry  # Update with actual API type if available
 
-mqtt_manager = mqtt_manager = get_mqtt_manager()
+mqtt_manager = get_mqtt_manager()
 
 
 async def async_setup_entry(
     hass: HomeAssistant, entry: SolarManagerConfigEntry
 ) -> bool:
     """Set up Solar Manager from a config entry."""
-    # Print the title and data
-    print(f"Setting up entry with title: {entry.title}")
-    print(f"Setting up entry with data: {entry.data}")
 
     hass.data.setdefault(DOMAIN, {})
 
@@ -65,7 +62,7 @@ async def async_setup_entry(
         hass.data[DOMAIN][serial]["devices"] = device
     for platform, items in solar_platforms.items():
         for item in items:
-            item_name = f"{model}_{serial}_{item['name']}"
+            item_name = f"{item['name']}_{model}_{serial}"
             item["name"] = item_name
             item["parser"] = device.parser
             if platform not in hass.data[DOMAIN][serial]:
