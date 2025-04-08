@@ -10,3 +10,17 @@ __pycache__
 */._*
 */.Spotlight-V100
 */.Trashes
+.HA_VERSION
+.storage/
+automations.yaml
+blueprints/
+configuration.yaml
+home-assistant.log
+home-assistant.log.1
+home-assistant.log.fault
+home-assistant_v2.db
+home-assistant_v2.db-shm
+home-assistant_v2.db-wal
+scenes.yaml
+scripts.yaml
+secrets.yaml
