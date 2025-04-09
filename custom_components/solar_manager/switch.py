@@ -34,21 +34,21 @@ class SolarManagerSwitch(SwitchEntity):
 
     async def on_data_update(self, value: Any) -> None:
         """Set switch value based on data update."""
-        if isinstance(value, str):
-            self._attr_is_on = value == "on"
+        if isinstance(value, int):
+            self._attr_is_on = value
         else:
             self._attr_is_on = None
         self.schedule_update_ha_state()
 
     async def async_turn_on(self, **kwargs) -> None:
         """Turn the switch on."""
-        await self._parser.write_data(self._register, "on")
+        await self._parser.write_data(self._register, 1)
         self._attr_is_on = True
         self.async_write_ha_state()
 
     async def async_turn_off(self, **kwargs) -> None:
         """Turn the switch off."""
-        await self._parser.write_data(self._register, "off")
+        await self._parser.write_data(self._register, 0)
         self._attr_is_on = False
         self.async_write_ha_state()
 
