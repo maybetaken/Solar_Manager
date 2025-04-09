@@ -47,6 +47,7 @@ class MakeSkyBlueDevice(BaseDevice):
             "sensor": [],
             "number": [],
             "select": [],
+            "switch": [],
         }
         for register, details in self.protocol_data["registers"].items():
             name = details["name"]
@@ -60,6 +61,8 @@ class MakeSkyBlueDevice(BaseDevice):
                     device_info["select"].append(
                         {"name": name, "register": register, "options": options}
                     )
+            elif details["access"] == "SW":
+                device_info["switch"].append({"name": name, "register": register})
         return device_info
 
     async def handle_notify(self, topic, payload):

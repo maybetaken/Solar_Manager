@@ -168,7 +168,7 @@
             "name": "anti_backflow_mode",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "access": "SW",
             "enum": {
                 "0": "Off",
                 "1": "On"
@@ -178,7 +178,7 @@
             "name": "system_switch",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "access": "SW",
             "enum": {
                 "0": "Off",
                 "1": "On"
@@ -195,7 +195,7 @@
             "name": "reset_energy_meter",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "access": "SW",
             "enum": {
                 "0": "No Reset",
                 "1": "Reset"
@@ -216,7 +216,7 @@
             "name": "remote_anti_backflow_switch",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "access": "SW",
             "enum": {
                 "0": "Off",
                 "1": "On"
@@ -812,7 +812,7 @@
             "name": "12v_relay_switch",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "access": "SW",
             "enum": {
                 "0": "Off",
                 "1": "On"
@@ -822,7 +822,7 @@
             "name": "dc_switch",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "access": "SW",
             "enum": {
                 "0": "Off",
                 "1": "On"
@@ -832,7 +832,7 @@
             "name": "dc_reset",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "access": "SW",
             "enum": {
                 "0": "No Reset",
                 "1": "Reset"
@@ -842,7 +842,7 @@
             "name": "vehicle_48v_generator_switch",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "access": "SW",
             "enum": {
                 "0": "Off",
                 "1": "On"
@@ -852,7 +852,7 @@
             "name": "vehicle_48v_generator_reset",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "access": "SW",
             "enum": {
                 "0": "No Reset",
                 "1": "Reset"
