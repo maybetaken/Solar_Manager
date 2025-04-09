@@ -242,15 +242,8 @@
             }
         },
         "0x1E": {
-            "name": "network_time_h",
-            "type": "UINT16",
-            "scale": 1,
-            "access": "RW",
-            "range": "2024-01-01 00:00:00 ~ 2087-12-31 23:59:59"
-        },
-        "0x1F": {
-            "name": "network_time_l",
-            "type": "UINT16",
+            "name": "network_time",
+            "type": "UINT32",
             "scale": 1,
             "access": "RW",
             "range": "2024-01-01 00:00:00 ~ 2087-12-31 23:59:59"
@@ -540,15 +533,8 @@
             "range": "0~1000kWh"
         },
         "0x84": {
-            "name": "mppt_cumulative_generation_h",
-            "type": "UINT16",
-            "scale": 0.1,
-            "access": "R",
-            "range": "0~36500000kWh"
-        },
-        "0x85": {
-            "name": "mppt_cumulative_generation_l",
-            "type": "UINT16",
+            "name": "mppt_cumulative_generation",
+            "type": "UINT32",
             "scale": 0.1,
             "access": "R",
             "range": "0~36500000kWh"
@@ -738,7 +724,7 @@
             "range": "-40~100°C"
         },
         "0x9D": {
-            "name": "mppt_cumulative_generation",
+            "name": "mppt_cumulative",
             "type": "UINT16",
             "scale": 1,
             "access": "R",
