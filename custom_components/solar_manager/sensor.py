@@ -27,6 +27,9 @@ from .const import CONF_SERIAL, DOMAIN
 from .protocol_helper.protocol_helper import ProtocolHelper
 
 SENSOR_STYLES: Final[dict[str, SensorEntityDescription]] = {
+    "direction": SensorEntityDescription(
+        key="direction",
+    ),
     "voltage": SensorEntityDescription(
         key="voltage",
         native_unit_of_measurement=UnitOfElectricPotential.VOLT,
@@ -150,6 +153,35 @@ class SolarManagerSensor(SensorEntity):
         }
 
 
+class SolarManagerEnumSensor(SolarManagerSensor):
+    """Representation of a Solar Manager sensor with enum mapping."""
+
+    def __init__(
+        self,
+        name: str,
+        parser: ProtocolHelper,
+        register: str,
+        unique_id: str,
+        device_id: str,
+        enum_mapping: dict[int, str],
+    ) -> None:
+        """Initialize the enum sensor."""
+        super().__init__(name, parser, register, unique_id, device_id)
+        self._enum_mapping = enum_mapping
+
+        # Create a new entity description without numeric-related attributes
+        self.entity_description = SensorEntityDescription(
+            key=self.entity_description.key,
+            name=self.entity_description.name,
+        )
+
+    async def on_data_update(self, value: Any) -> None:
+        """Set current option based on data update."""
+        # Map the numeric value to its corresponding enum string
+        self._attr_native_value = self._enum_mapping.get(value, f"Unknown ({value})")
+        self.schedule_update_ha_state()
+
+
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
@@ -158,8 +190,24 @@ async def async_setup_entry(
     serial = entry.data[CONF_SERIAL]
     for device in hass.data[DOMAIN][serial].get(Platform.SENSOR, []):
         unique_id = f"{entry.entry_id}-{serial}-{device['name']}"
-        sensor = SolarManagerSensor(
-            device["name"], device["parser"], device["register"], unique_id, serial
-        )
+        if "enum_mapping" in device:
+            # Use SolarManagerEnumSensor if enum_mapping is provided
+            sensor = SolarManagerEnumSensor(
+                device["name"],
+                device["parser"],
+                device["register"],
+                unique_id,
+                serial,
+                device["enum_mapping"],
+            )
+        else:
+            # Use regular SolarManagerSensor
+            sensor = SolarManagerSensor(
+                device["name"],
+                device["parser"],
+                device["register"],
+                unique_id,
+                serial,
+            )
         sensors.append(sensor)
     async_add_entities(sensors)
