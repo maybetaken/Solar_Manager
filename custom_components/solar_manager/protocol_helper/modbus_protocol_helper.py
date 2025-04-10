@@ -12,6 +12,11 @@ from .protocol_helper import ProtocolHelper
 class ModbusProtocolHelper(ProtocolHelper):
     """Class to handle Modbus protocol files and communication."""
 
+    def __init__(self, hass: HomeAssistant, protocol_data: dict[str, Any]) -> None:
+        """Initialize the ModbusProtocolHelper."""
+        super().__init__(hass, protocol_data)
+        self._parsed_data: dict[str, Any] = {}
+
     async def read_data(self, register_name: str) -> Any:
         """Read data from the device for a specific register."""
         if self.protocol_data is None:
@@ -63,19 +68,23 @@ class ModbusProtocolHelper(ProtocolHelper):
             if details.get("scale", 1) != 1:
                 value *= details["scale"]
 
-            if register in self._update_callbacks:
-                try:
-                    self._hass.loop.call_soon_threadsafe(
-                        lambda reg=register, val=value: self._hass.loop.create_task(
-                            self._update_callbacks[reg](val)
+            previous_value = self._parsed_data.get(register)
+
+            if previous_value != value:
+                self._parsed_data[register] = value
+                if register in self._update_callbacks:
+                    try:
+                        self._hass.loop.call_soon_threadsafe(
+                            lambda reg=register, val=value: self._hass.loop.create_task(
+                                self._update_callbacks[reg](val)
+                            )
                         )
-                    )
-                except RuntimeError as e:
-                    _LOGGER.error(
-                        f"Failed to schedule callback for {register} due to event loop issue: {e}"
-                    )
-                except AttributeError as e:
-                    _LOGGER.error(f"Invalid hass.loop for {register}: {e}")
+                    except RuntimeError as e:
+                        _LOGGER.error(
+                            f"Failed to schedule callback for {register} due to event loop issue: {e}"
+                        )
+                    except AttributeError as e:
+                        _LOGGER.error(f"Invalid hass.loop for {register}: {e}")
 
             offset += length
 
