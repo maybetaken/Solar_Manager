@@ -49,10 +49,27 @@ class MakeSkyBlueDevice(BaseDevice):
             "select": [],
             "switch": [],
         }
+
         for register, details in self.protocol_data["registers"].items():
             name = details["name"]
+
             if details["access"] == "R":
-                device_info["sensor"].append({"name": name, "register": register})
+                # Check if the register has an enum mapping
+                if "enum" in details:
+                    # Convert enum keys from string to int
+                    enum_mapping = {
+                        int(key, 16): value for key, value in details["enum"].items()
+                    }
+                    device_info["sensor"].append(
+                        {
+                            "name": name,
+                            "register": register,
+                            "enum_mapping": enum_mapping,
+                        }
+                    )
+                else:
+                    device_info["sensor"].append({"name": name, "register": register})
+
             elif details["access"] == "RW":
                 if "range" in details:
                     device_info["number"].append({"name": name, "register": register})
@@ -61,8 +78,10 @@ class MakeSkyBlueDevice(BaseDevice):
                     device_info["select"].append(
                         {"name": name, "register": register, "options": options}
                     )
+
             elif details["access"] == "SW":
                 device_info["switch"].append({"name": name, "register": register})
+
         return device_info
 
     async def handle_notify(self, topic, payload):
