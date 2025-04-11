@@ -58,7 +58,7 @@
             "name": "energy_saving_mode",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "access": "SW",
             "enum": {
                 "0": "Off",
                 "1": "On"
