@@ -48,7 +48,7 @@ class MQTTManager:
         self._callbacks[topic_prefix] = (unsubscribe, wrapped_callback)
         _LOGGER.info("Subscribed to %s", topic_filter)
 
-    async def unregister_callback(self, topic_prefix: str):
+    def unregister_callback(self, topic_prefix: str):
         """Unsubscribe from topic."""
         if topic_prefix in self._callbacks:
             unsubscribe, _ = self._callbacks.pop(topic_prefix)
