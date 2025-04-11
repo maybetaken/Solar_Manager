@@ -36,12 +36,11 @@ class ModbusProtocolHelper(ProtocolHelper):
 
     def parse_data(self, data: bytes, start_address: int = 0) -> None:
         """Parse the given data starting from the specified address according to the protocol."""
-        offset = 0
         for register, details in self.protocol_data["registers"].items():
             reg_addr = int(register, 16)
             if reg_addr < start_address:
                 continue
-
+            offset = reg_addr * 2 - start_address
             length = 2 if details["type"] == "UINT16" else 4
             fmt = "H" if details["type"] == "UINT16" else "I"
 
@@ -55,7 +54,6 @@ class ModbusProtocolHelper(ProtocolHelper):
                 endian_prefix = "<"
             else:
                 raise ValueError(f"Unsupported endianness: {endianness}")
-
             raw_value = data[offset : offset + length]
             try:
                 value = struct.unpack(f"{endian_prefix}{fmt}", raw_value)[0]
@@ -85,8 +83,6 @@ class ModbusProtocolHelper(ProtocolHelper):
                         )
                     except AttributeError as e:
                         _LOGGER.error(f"Invalid hass.loop for {register}: {e}")
-
-            offset += length
 
     def pack_data(self, slave_id: int, address: int, value: int) -> bytes:
         """Pack data according to the protocol."""
