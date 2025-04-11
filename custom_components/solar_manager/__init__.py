@@ -32,14 +32,13 @@ device_class_map: dict[str, type[BaseDevice]] = {
 # Create ConfigEntry type alias with API object
 type SolarManagerConfigEntry = ConfigEntry  # Update with actual API type if available
 
-mqtt_manager = get_mqtt_manager()
-
 
 async def async_setup_entry(
     hass: HomeAssistant, entry: SolarManagerConfigEntry
 ) -> bool:
     """Set up Solar Manager from a config entry."""
 
+    _ = get_mqtt_manager(hass)
     hass.data.setdefault(DOMAIN, {})
 
     # Handle the protocol and device setup
@@ -69,7 +68,7 @@ async def async_setup_entry(
                 hass.data[DOMAIN][serial][platform] = []
             hass.data[DOMAIN][serial][platform].append(item)
         await hass.config_entries.async_forward_entry_setups(entry, [platform])
-
+    await device.async_init()
     return True
 
 

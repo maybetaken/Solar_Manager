@@ -28,12 +28,15 @@ class MakeSkyBlueDevice(BaseDevice):
         self.write_command = 6
         self.total_length = 217
         self.start_address = 0
-        self.mqtt_manager = mqtt_global.get_mqtt_manager()
-        self.mqtt_manager.register_callback(
-            sn,
+        self.mqtt_manager = mqtt_global.get_mqtt_manager(hass)
+        self.parser.register_callback(self.handle_cmd)
+
+    async def async_init(self):
+        """Async part of initialization."""
+        await self.mqtt_manager.register_callback(
+            self.sn,
             self.handle_notify,
         )
-        self.parser.register_callback(self.handle_cmd)
 
     def unpack_device_info(self) -> dict[str, list[dict[str, Any]]]:
         """Unpack device information into different groups."""
@@ -126,10 +129,7 @@ class MakeSkyBlueDevice(BaseDevice):
 
     def cleanup(self) -> None:
         """Cleanup device."""
-        self.mqtt_manager.unregister_callback(
-            self.sn,
-            self.handle_notify,
-        )
+        self.mqtt_manager.unregister_callback(self.sn)
         self.parser = None
         self.mqtt_manager = None
         self.protocol_data = None

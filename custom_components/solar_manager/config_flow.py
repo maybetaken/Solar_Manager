@@ -7,6 +7,7 @@ from typing import Any
 
 import voluptuous as vol
 
+from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
@@ -47,8 +48,16 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
         raise InvalidAuth
 
     name = f"{data[CONF_MODEL]} ({data[CONF_SERIAL]})"
-
     return {"title": name}
+
+
+async def check_mqtt_connection(hass):
+    if MQTT_DOMAIN not in hass.data:
+        return False
+    mqtt_data = hass.data[MQTT_DOMAIN]
+    if "client" not in mqtt_data or not mqtt_data["client"].is_connected:
+        return False
+    return True
 
 
 class SolarManagerConfigFlow(ConfigFlow, domain=DOMAIN):
@@ -61,6 +70,13 @@ class SolarManagerConfigFlow(ConfigFlow, domain=DOMAIN):
     ) -> ConfigFlowResult:
         """Handle the initial step."""
         errors: dict[str, str] = {}
+
+        if not await check_mqtt_connection(self.hass):
+            errors["base"] = "mqtt_not_ready"
+            return self.async_show_form(
+                step_id="user", data_schema=STEP_USER_DATA_SCHEMA, errors=errors
+            )
+
         if user_input is not None:
             # Check if the serial already exists
             if any(

@@ -6,7 +6,8 @@
         "error": {
             "cannot_connect": "Failed to connect",
             "invalid_auth": "Invalid authentication",
-            "unknown": "Unexpected error"
+            "unknown": "Unexpected error",
+            "mqtt_not_ready": "MQTT is not ready, Please download the MQTT integration first"
         },
         "step": {
             "user": {

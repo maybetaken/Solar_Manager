@@ -9,5 +9,6 @@
   "documentation": "https://github.com/maybetaken/Solar_Manager",
   "issue_tracker": "https://github.com/maybetaken/Solar_Manager/issues",
   "quality_scale": "bronze",
-  "requirements": ["paho-mqtt", "crcmod>=1.7", "aiofiles>=24.1.0"]
+  "dependencies": ["mqtt"],
+  "requirements": ["crcmod>=1.7", "aiofiles>=24.1.0"]
 }

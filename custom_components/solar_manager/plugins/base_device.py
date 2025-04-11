@@ -28,6 +28,10 @@ class BaseDevice(ABC):
             self.protocol_data = await self.parser.load_protocol()
 
     @abstractmethod
+    async def async_init(self) -> None:
+        """Cleanup device."""
+
+    @abstractmethod
     def unpack_device_info(self) -> dict[str, list[dict[str, Any]]]:
         """Unpack device information into different groups."""
 

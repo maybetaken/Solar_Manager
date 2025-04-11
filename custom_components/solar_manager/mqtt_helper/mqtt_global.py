@@ -1,5 +1,7 @@
 """Global access point for MQTTManager."""
 
+from homeassistant.core import HomeAssistant
+
 from .mqtt_manager import MQTTManager
 
 
@@ -9,16 +11,13 @@ class MQTTManagerSingleton:
     _instance: MQTTManager | None = None
 
     @classmethod
-    def get_instance(cls) -> MQTTManager:
+    def get_instance(cls, hass: HomeAssistant) -> MQTTManager:
         """Get or create the MQTTManager instance."""
         if cls._instance is None:
-            # You can modify these parameters as needed
-            cls._instance = MQTTManager(
-                broker="192.168.31.71", port=1883, username=None, password=None
-            )
+            cls._instance = MQTTManager(hass)
         return cls._instance
 
 
-def get_mqtt_manager() -> MQTTManager:
+def get_mqtt_manager(hass: HomeAssistant) -> MQTTManager:
     """Get the global MQTTManager instance."""
-    return MQTTManagerSingleton.get_instance()
+    return MQTTManagerSingleton.get_instance(hass)
