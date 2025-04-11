@@ -7,7 +7,7 @@ from typing import Any
 
 import voluptuous as vol
 
-from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN
+from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN, MqttData
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
@@ -52,10 +52,9 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
 
 
 async def check_mqtt_connection(hass):
-    if MQTT_DOMAIN not in hass.data:
-        return False
-    mqtt_data = hass.data[MQTT_DOMAIN]
-    if "client" not in mqtt_data or not mqtt_data["client"].is_connected:
+    mqtt_data: MqttData = hass.data.get(MQTT_DOMAIN)
+
+    if mqtt_data is None or mqtt_data.client is None or not mqtt_data.client.connected:
         return False
     return True
 
