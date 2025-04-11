@@ -32,7 +32,7 @@ class ModbusProtocolHelper(ProtocolHelper):
         details = self.protocol_data["registers"].get(register_name)
         if not details:
             raise ValueError(f"Register {register_name} not found in protocol")
-        self.callback(register_name, value)
+        await self.callback(register_name, value)
 
     def parse_data(self, data: bytes, start_address: int = 0) -> None:
         """Parse the given data starting from the specified address according to the protocol."""

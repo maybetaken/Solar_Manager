@@ -97,7 +97,7 @@ class MakeSkyBlueDevice(BaseDevice):
         """
         self.parser.parse_data(payload, self.start_address)
 
-    def handle_cmd(self, cmd: str, value: Any) -> None:
+    async def handle_cmd(self, cmd: str, value: Any) -> None:
         """Handle commands from the user.
 
         Args:
@@ -125,7 +125,7 @@ class MakeSkyBlueDevice(BaseDevice):
             _LOGGER.error("Unsupported value type: %s", type(value))
             return
 
-        self.mqtt_manager.publish(topic, data)
+        await self.mqtt_manager.publish(topic, data)
 
     def cleanup(self) -> None:
         """Cleanup device."""

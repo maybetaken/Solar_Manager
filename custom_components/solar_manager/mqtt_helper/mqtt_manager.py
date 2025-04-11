@@ -26,9 +26,9 @@ class MQTTManager:
     async def publish(self, topic: str, payload) -> None:
         """Publish message to topic."""
         if isinstance(payload, dict):
-            payload = json.dumps(payload)
-        elif isinstance(payload, bytes):
-            payload = payload.decode("utf-8")
+            payload = json.dumps(payload).encode("utf-8")
+        elif isinstance(payload, str):
+            payload = payload.encode("utf-8")
 
         await mqtt.async_publish(self.hass, topic, payload)
 
