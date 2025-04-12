@@ -38,7 +38,7 @@ class MakeSkyBlueDevice(BaseDevice):
             self.handle_notify,
         )
 
-    def unpack_device_info(self) -> dict[str, list[dict[str, Any]]]:
+    async def unpack_device_info(self) -> dict[str, list[dict[str, Any]]]:
         """Unpack device information into different groups."""
         self.slave_id = int(self.parser.protocol_data["slave_id"])
         self.read_command = int(self.parser.protocol_data["read_command"])
@@ -55,13 +55,15 @@ class MakeSkyBlueDevice(BaseDevice):
 
         for register, details in self.protocol_data["registers"].items():
             name = details["name"]
+            sensor_type = details.get("sensor_type")
 
-            if details["access"] == "R":
+            if sensor_type == "sensor":
                 # Check if the register has an enum mapping
                 if "enum" in details:
                     # Convert enum keys from string to int
                     enum_mapping = {
-                        int(key, 16): value for key, value in details["enum"].items()
+                        int(key, 16) if key.startswith("0x") else int(key): value
+                        for key, value in details["enum"].items()
                     }
                     device_info["sensor"].append(
                         {
@@ -71,40 +73,63 @@ class MakeSkyBlueDevice(BaseDevice):
                         }
                     )
                 else:
-                    device_info["sensor"].append({"name": name, "register": register})
-
-            elif details["access"] == "RW":
-                if "range" in details:
-                    device_info["number"].append({"name": name, "register": register})
-                elif "enum" in details:
-                    options = list(details["enum"].values())
-                    device_info["select"].append(
-                        {"name": name, "register": register, "options": options}
+                    device_info["sensor"].append(
+                        {
+                            "name": name,
+                            "register": register,
+                            "scale": details.get("scale", 1.0),
+                            "unit": details.get("unit"),
+                        }
                     )
 
-            elif details["access"] == "SW":
-                device_info["switch"].append({"name": name, "register": register})
+            elif sensor_type == "number":
+                device_info["number"].append(
+                    {
+                        "name": name,
+                        "register": register,
+                        "scale": details.get("scale", 1.0),
+                        "min_value": details.get("min_value"),
+                        "max_value": details.get("max_value"),
+                        "unit": details.get("unit"),
+                        "step": details.get("step", details.get("scale", 1.0)),
+                        "display_precision": details.get("display_precision", 0),
+                        "icon": details.get("icon"),
+                    }
+                )
+
+            elif sensor_type == "select":
+                if "enum" in details:
+                    options = list(details["enum"].values())
+                    device_info["select"].append(
+                        {
+                            "name": name,
+                            "register": register,
+                            "options": options,
+                            "enum_mapping": {
+                                int(key, 16)
+                                if key.startswith("0x")
+                                else int(key): value
+                                for key, value in details["enum"].items()
+                            },
+                        }
+                    )
+
+            elif sensor_type == "switch":
+                device_info["switch"].append(
+                    {
+                        "name": name,
+                        "register": register,
+                    }
+                )
 
         return device_info
 
     async def handle_notify(self, topic, payload):
-        """Handle MQTT notifications.
-
-        Args:
-            topic (str): The MQTT topic of the notification.
-            payload (Any): The payload of the notification.
-
-        """
+        """Handle MQTT notifications."""
         self.parser.parse_data(payload, self.start_address)
 
     async def handle_cmd(self, cmd: str, value: Any) -> None:
-        """Handle commands from the user.
-
-        Args:
-            cmd (str): The command to handle.
-            value (Any): The value associated with the command.
-
-        """
+        """Handle commands from the user."""
         topic = self.sn
         data: any = None
         if isinstance(value, str):
@@ -115,11 +140,12 @@ class MakeSkyBlueDevice(BaseDevice):
             data = self.parser.pack_data(self.slave_id, int(cmd, 16), value)
         elif isinstance(value, float):
             topic += "/" + self.model + "/" + str(self.slave_id)
-            # TO-DO correct me
+            # Apply scaling for number entities
+            scale = self.protocol_data["registers"][cmd].get("scale", 1.0)
             data = self.parser.pack_data(
                 self.slave_id,
                 int(cmd, 16),
-                int(value / self.protocol_data["registers"][cmd].get("scale", 1)),
+                int(value / scale),
             )
         else:
             _LOGGER.error("Unsupported value type: %s", type(value))

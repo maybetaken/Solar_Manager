@@ -11,30 +11,32 @@
             "name": "work_mode",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "sensor_type": "select",
             "enum": {
                 "0": "SUB (Solar-Grid-Storage Mode)",
                 "1": "UTI (Grid Priority Mode)",
                 "2": "SBU (Solar-Storage-Grid Mode)",
                 "3": "NBU (No Battery AC Coupling Mode)",
                 "4": "ONI (Pure Inverter Mode)"
-            }
+            },
+            "icon": "mdi:cog"
         },
         "0x01": {
             "name": "grid_voltage_range",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "sensor_type": "select",
             "enum": {
                 "0": "WID (90~270VAC)",
                 "1": "NOR (160~240VAC)"
-            }
+            },
+            "icon": "mdi:lightning-bolt"
         },
         "0x02": {
             "name": "inverter_ac_voltage",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "sensor_type": "select",
             "enum": {
                 "0": "110V",
                 "1": "120V",
@@ -42,257 +44,364 @@
                 "3": "220V",
                 "4": "230V",
                 "5": "240V"
-            }
+            },
+            "icon": "mdi:lightning-bolt"
         },
         "0x03": {
             "name": "ac_frequency",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "sensor_type": "select",
             "enum": {
                 "0": "50Hz",
                 "1": "60Hz"
-            }
+            },
+            "icon": "mdi:sine-wave"
         },
         "0x04": {
             "name": "energy_saving_mode",
             "type": "UINT16",
             "scale": 1,
-            "access": "SW",
+            "sensor_type": "switch",
             "enum": {
                 "0": "Off",
                 "1": "On"
-            }
+            },
+            "icon": "mdi:leaf"
         },
         "0x05": {
             "name": "charge_priority",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "sensor_type": "select",
             "enum": {
                 "0": "CSO (Solar Priority Charging)",
                 "1": "CUT (Grid Priority Charging)",
                 "2": "SNU (Solar and Grid Charging Together)",
                 "3": "OSO (Solar Only Charging)"
-            }
+            },
+            "icon": "mdi:battery-charging"
         },
         "0x06": {
             "name": "battery_type",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "sensor_type": "select",
             "enum": {
                 "0": "Pb (Lead-Acid Battery)",
                 "1": "Li (Lithium Battery)"
-            }
+            },
+            "icon": "mdi:battery"
         },
         "0x07": {
             "name": "battery_rated_voltage",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
+            "sensor_type": "sensor",
             "enum": {
                 "0x48": "72V",
                 "0x30": "48V",
                 "0x18": "24V",
                 "0x0C": "12V"
-            }
+            },
+            "unit": "VOLT",
+            "display_precision": 1,
+            "icon": "mdi:battery"
         },
         "0x08": {
             "name": "battery_discharge_min_voltage",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "RW",
+            "sensor_type": "number",
             "range": {
                 "72V_platform": "60V-70.5V",
                 "48V_platform": "40V-47V",
                 "24V_platform": "20V-23.5V",
                 "12V_platform": "10V-11.7V"
-            }
+            },
+            "min_value": 40.0,
+            "max_value": 47.0,
+            "unit": "VOLT",
+            "step": 0.1,
+            "display_precision": 1,
+            "icon": "mdi:battery-minus"
         },
         "0x09": {
             "name": "battery_start_discharge_voltage",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "RW",
+            "sensor_type": "number",
             "range": {
                 "72V_platform": "72V-84V",
                 "48V_platform": "48V-56V",
                 "24V_platform": "24V-28V",
                 "12V_platform": "12V-14V"
-            }
+            },
+            "min_value": 48.0,
+            "max_value": 56.0,
+            "unit": "VOLT",
+            "step": 0.1,
+            "display_precision": 1,
+            "icon": "mdi:battery-minus"
         },
         "0x0A": {
             "name": "grid_to_battery_max_charge_current",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "RW",
-            "range": "0~100A"
+            "sensor_type": "number",
+            "range": "0~100A",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "unit": "AMPERE",
+            "step": 0.1,
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
         },
         "0x0B": {
             "name": "pv_to_battery_max_charge_current",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "RW",
-            "range": "0~100A"
+            "sensor_type": "number",
+            "range": "0~100A",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "unit": "AMPERE",
+            "step": 0.1,
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
         },
         "0x0C": {
             "name": "inverter_max_grid_current",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "RW",
-            "range": "0~30A"
+            "sensor_type": "number",
+            "range": "0~30A",
+            "min_value": 0.0,
+            "max_value": 30.0,
+            "unit": "AMPERE",
+            "step": 0.1,
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
         },
         "0x0D": {
             "name": "inverter_output_max_power",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~rated_power"
+            "sensor_type": "sensor",
+            "range": "0~rated_power",
+            "unit": "WATT",
+            "display_precision": 1,
+            "icon": "mdi:power"
         },
         "0x0E": {
             "name": "charge_soc",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
-            "range": "0~100%"
+            "sensor_type": "number",
+            "range": "0~100%",
+            "min_value": 0.0,
+            "max_value": 100.0,
+            "unit": "PERCENTAGE",
+            "step": 1.0,
+            "display_precision": 0,
+            "icon": "mdi:battery-charging"
         },
         "0x0F": {
             "name": "discharge_soc",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
-            "range": "0~90%"
+            "sensor_type": "number",
+            "range": "0~90%",
+            "min_value": 0.0,
+            "max_value": 90.0,
+            "unit": "PERCENTAGE",
+            "step": 1.0,
+            "display_precision": 0,
+            "icon": "mdi:battery-charging"
         },
         "0x10": {
             "name": "anti_backflow_mode",
             "type": "UINT16",
             "scale": 1,
-            "access": "SW",
+            "sensor_type": "switch",
             "enum": {
                 "0": "Off",
                 "1": "On"
-            }
+            },
+            "icon": "mdi:toggle-switch"
         },
         "0x11": {
             "name": "system_switch",
             "type": "UINT16",
             "scale": 1,
-            "access": "SW",
+            "sensor_type": "switch",
             "enum": {
                 "0": "Off",
                 "1": "On"
-            }
+            },
+            "icon": "mdi:power"
         },
         "0x12": {
             "name": "communication_address",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
-            "range": "0~128"
+            "sensor_type": "number",
+            "range": "0~128",
+            "min_value": 0.0,
+            "max_value": 128.0,
+            "unit": null,
+            "step": 1.0,
+            "display_precision": 0,
+            "icon": "mdi:network"
         },
         "0x13": {
             "name": "reset_energy_meter",
             "type": "UINT16",
             "scale": 1,
-            "access": "SW",
+            "sensor_type": "switch",
             "enum": {
                 "0": "No Reset",
                 "1": "Reset"
-            }
+            },
+            "icon": "mdi:counter-reset"
         },
         "0x14": {
             "name": "force_charge_discharge_control",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "sensor_type": "select",
             "enum": {
                 "0": "Normal Charging",
                 "1": "Force Charging",
                 "2": "Force Discharging"
-            }
+            },
+            "icon": "mdi:battery-charging"
         },
         "0x15": {
             "name": "remote_anti_backflow_switch",
             "type": "UINT16",
             "scale": 1,
-            "access": "SW",
+            "sensor_type": "switch",
             "enum": {
                 "0": "Off",
                 "1": "On"
-            }
+            },
+            "icon": "mdi:toggle-switch"
         },
         "0x16": {
             "name": "anti_backflow_grid_power",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
-            "range": "20W~200W"
+            "sensor_type": "number",
+            "range": "20W~200W",
+            "min_value": 20.0,
+            "max_value": 200.0,
+            "unit": "WATT",
+            "step": 1.0,
+            "display_precision": 0,
+            "icon": "mdi:power"
         },
         "0x17": {
             "name": "battery_cutoff_voltage",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "RW",
+            "sensor_type": "number",
             "range": {
                 "72V_platform": "76V~84V",
                 "48V_platform": "51V~59V",
                 "24V_platform": "25.5V~29.5V",
                 "12V_platform": "12.7V~14V"
-            }
+            },
+            "min_value": 51.0,
+            "max_value": 59.0,
+            "unit": "VOLT",
+            "step": 0.1,
+            "display_precision": 1,
+            "icon": "mdi:battery-minus"
         },
         "0x1E": {
             "name": "network_time",
             "type": "UINT32",
             "scale": 1,
-            "access": "RW",
-            "range": "2024-01-01 00:00:00 ~ 2087-12-31 23:59:59"
+            "sensor_type": "number",
+            "range": "2024-01-01 00:00:00 ~ 2087-12-31 23:59:59",
+            "min_value": 1704067200.0,
+            "max_value": 3777052799.0,
+            "unit": null,
+            "step": 1.0,
+            "display_precision": 0,
+            "icon": "mdi:clock"
         },
         "0x20": {
             "name": "scheduled_force_charge_start_time",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
-            "range": "00:00~23:59"
+            "sensor_type": "number",
+            "range": "00:00~23:59",
+            "min_value": 0.0,
+            "max_value": 1439.0,
+            "unit": null,
+            "step": 1.0,
+            "display_precision": 0,
+            "icon": "mdi:clock-start"
         },
         "0x21": {
             "name": "scheduled_force_charge_end_time",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
-            "range": "00:00~23:59"
+            "sensor_type": "number",
+            "range": "00:00~23:59",
+            "min_value": 0.0,
+            "max_value": 1439.0,
+            "unit": null,
+            "step": 1.0,
+            "display_precision": 0,
+            "icon": "mdi:clock-end"
         },
         "0x22": {
             "name": "scheduled_force_discharge_start_time",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
-            "range": "00:00~23:59"
+            "sensor_type": "number",
+            "range": "00:00~23:59",
+            "min_value": 0.0,
+            "max_value": 1439.0,
+            "unit": null,
+            "step": 1.0,
+            "display_precision": 0,
+            "icon": "mdi:clock-start"
         },
         "0x23": {
             "name": "scheduled_force_discharge_end_time",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
-            "range": "00:00~23:59"
+            "sensor_type": "number",
+            "range": "00:00~23:59",
+            "min_value": 0.0,
+            "max_value": 1439.0,
+            "unit": null,
+            "step": 1.0,
+            "display_precision": 0,
+            "icon": "mdi:clock-end"
         },
         "0x24": {
             "name": "scheduled_force_charge_discharge_enable",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
+            "sensor_type": "select",
             "enum": {
                 "0": "Disabled",
                 "1": "Enable Scheduled Force Charging Only",
                 "2": "Enable Scheduled Force Discharging Only",
                 "3": "Enable Both Scheduled Force Charging and Discharging"
-            }
+            },
+            "icon": "mdi:calendar-check"
         },
         "0x64": {
             "name": "machine_model",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "enum": {
                 "0": "2.2kW Platform",
                 "1": "3.5kW Platform",
@@ -301,13 +410,14 @@
                 "4": "8.0kW Platform",
                 "5": "10.0kW Platform",
                 "6": "12.0kW Platform"
-            }
+            },
+            "icon": "mdi:information"
         },
         "0x65": {
             "name": "inverter_status",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "enum": {
                 "0": "Shutdown",
                 "1": "Inverting",
@@ -315,235 +425,327 @@
                 "3": "Anti-Backflow",
                 "4": "Bypass",
                 "5": "Off-Grid"
-            }
+            },
+            "icon": "mdi:power-plug"
         },
         "0x66": {
             "name": "mppt_status",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "enum": {
                 "0": "Constant Voltage",
                 "1": "Full Load",
                 "2": "Current Limiting",
                 "3": "Tracking"
-            }
+            },
+            "icon": "mdi:solar-panel"
         },
         "0x67": {
             "name": "bus_voltage",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "0~750V"
+            "sensor_type": "sensor",
+            "range": "0~750V",
+            "unit": "VOLT",
+            "display_precision": 0,
+            "icon": "mdi:lightning-bolt"
         },
         "0x68": {
             "name": "grid_frequency",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "45Hz~65Hz"
+            "sensor_type": "sensor",
+            "range": "45Hz~65Hz",
+            "unit": "HERTZ",
+            "display_precision": 1,
+            "icon": "mdi:sine-wave"
         },
         "0x69": {
             "name": "grid_voltage",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "0~300V"
+            "sensor_type": "sensor",
+            "range": "0~300V",
+            "unit": "VOLT",
+            "display_precision": 0,
+            "icon": "mdi:lightning-bolt"
         },
         "0x6A": {
             "name": "inverter_output_voltage",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "0~300V"
+            "sensor_type": "sensor",
+            "range": "0~300V",
+            "unit": "VOLT",
+            "display_precision": 0,
+            "icon": "mdi:lightning-bolt"
         },
         "0x6B": {
             "name": "inverter_off_grid_load_current",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~60A"
+            "sensor_type": "sensor",
+            "range": "0~60A",
+            "unit": "AMPERE",
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
         },
         "0x6C": {
             "name": "inverter_grid_port_current",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "-100~100A"
+            "sensor_type": "sensor",
+            "range": "-100~100A",
+            "unit": "AMPERE",
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
         },
         "0x6D": {
             "name": "inverter_current",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "-100~100A"
+            "sensor_type": "sensor",
+            "range": "-100~100A",
+            "unit": "AMPERE",
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
         },
         "0x6E": {
             "name": "power_factor",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~1.00"
+            "sensor_type": "sensor",
+            "range": "0~1.00",
+            "unit": null,
+            "display_precision": 2,
+            "icon": "mdi:angle-acute"
         },
         "0x6F": {
             "name": "grid_power",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "-30000~30000W"
+            "sensor_type": "sensor",
+            "range": "-30000~30000W",
+            "unit": "WATT",
+            "display_precision": 0,
+            "icon": "mdi:power"
         },
         "0x70": {
             "name": "load_power",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "-30000~30000W"
+            "sensor_type": "sensor",
+            "range": "-30000~30000W",
+            "unit": "WATT",
+            "display_precision": 0,
+            "icon": "mdi:power"
         },
         "0x71": {
             "name": "inverter_input_output_power",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "-30000~30000W"
+            "sensor_type": "sensor",
+            "range": "-30000~30000W",
+            "unit": "WATT",
+            "display_precision": 0,
+            "icon": "mdi:power"
         },
         "0x72": {
             "name": "battery_voltage",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~80V"
+            "sensor_type": "sensor",
+            "range": "0~80V",
+            "unit": "VOLT",
+            "display_precision": 1,
+            "icon": "mdi:battery"
         },
         "0x73": {
             "name": "battery_charge_discharge_current",
             "type": "INT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "-100~100A"
+            "sensor_type": "sensor",
+            "range": "-100~100A",
+            "unit": "AMPERE",
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
         },
         "0x74": {
             "name": "grid_rs_voltage",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "0~460V"
+            "sensor_type": "sensor",
+            "range": "0~460V",
+            "unit": "VOLT",
+            "display_precision": 0,
+            "icon": "mdi:lightning-bolt"
         },
         "0x75": {
             "name": "grid_st_voltage",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "0~460V"
+            "sensor_type": "sensor",
+            "range": "0~460V",
+            "unit": "VOLT",
+            "display_precision": 0,
+            "icon": "mdi:lightning-bolt"
         },
         "0x76": {
             "name": "grid_tr_voltage",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "0~460V"
+            "sensor_type": "sensor",
+            "range": "0~460V",
+            "unit": "VOLT",
+            "display_precision": 0,
+            "icon": "mdi:lightning-bolt"
         },
         "0x77": {
             "name": "grid_rs_current",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~60A"
+            "sensor_type": "sensor",
+            "range": "0~60A",
+            "unit": "AMPERE",
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
         },
         "0x78": {
             "name": "grid_st_current",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~60A"
+            "sensor_type": "sensor",
+            "range": "0~60A",
+            "unit": "AMPERE",
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
         },
         "0x79": {
             "name": "grid_tr_current",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~60A"
+            "sensor_type": "sensor",
+            "range": "0~60A",
+            "unit": "AMPERE",
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
         },
         "0x7A": {
             "name": "mppt1_voltage",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~450V"
+            "sensor_type": "sensor",
+            "range": "0~450V",
+            "unit": "VOLT",
+            "display_precision": 1,
+            "icon": "mdi:solar-panel"
         },
         "0x7B": {
             "name": "mppt2_voltage",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~450V"
+            "sensor_type": "sensor",
+            "range": "0~450V",
+            "unit": "VOLT",
+            "display_precision": 1,
+            "icon": "mdi:solar-panel"
         },
         "0x7C": {
             "name": "mppt3_voltage",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~450V"
+            "sensor_type": "sensor",
+            "range": "0~450V",
+            "unit": "VOLT",
+            "display_precision": 1,
+            "icon": "mdi:solar-panel"
         },
         "0x7D": {
             "name": "mppt1_current",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~60A"
+            "sensor_type": "sensor",
+            "range": "0~60A",
+            "unit": "AMPERE",
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
         },
         "0x7E": {
             "name": "mppt2_current",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~60A"
+            "sensor_type": "sensor",
+            "range": "0~60A",
+            "unit": "AMPERE",
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
         },
         "0x7F": {
             "name": "mppt3_current",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~60A"
+            "sensor_type": "sensor",
+            "range": "0~60A",
+            "unit": "AMPERE",
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
         },
         "0x80": {
             "name": "mppt1_power",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "0~30000W"
+            "sensor_type": "sensor",
+            "range": "0~30000W",
+            "unit": "WATT",
+            "display_precision": 0,
+            "icon": "mdi:power"
         },
         "0x81": {
             "name": "mppt2_power",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "0~30000W"
+            "sensor_type": "sensor",
+            "range": "0~30000W",
+            "unit": "WATT",
+            "display_precision": 0,
+            "icon": "mdi:power"
         },
         "0x82": {
             "name": "mppt3_power",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "0~30000W"
+            "sensor_type": "sensor",
+            "range": "0~30000W",
+            "unit": "WATT",
+            "display_precision": 0,
+            "icon": "mdi:power"
         },
         "0x83": {
             "name": "mppt_daily_generation",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~1000kWh"
+            "sensor_type": "sensor",
+            "range": "0~1000kWh",
+            "unit": "KILOWATT_HOUR",
+            "display_precision": 1,
+            "icon": "mdi:solar-power"
         },
         "0x84": {
             "name": "mppt_cumulative_generation",
             "type": "UINT32",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~36500000kWh"
+            "sensor_type": "sensor",
+            "range": "0~36500000kWh",
+            "unit": "KILOWATT_HOUR",
+            "display_precision": 1,
+            "icon": "mdi:solar-power"
         },
         "0x86": {
             "name": "system_fault",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "enum": {
                 "0": "Min Input Voltage Protection",
                 "1": "Max Input Voltage Protection",
@@ -555,58 +757,74 @@
                 "7": "Inverter Bus Overvoltage",
                 "8": "PV1 Input Overvoltage",
                 "9": "PV2 Input Overvoltage",
-                "A": "PV1 Overcurrent Protection",
-                "B": "PV2 Overcurrent Protection",
-                "C": "Charging Overcurrent Protection",
-                "D": "Charging Overvoltage Protection",
-                "E": "Battery Voltage Protection",
-                "F": "INV Over-Temperature Protection",
-                "10": "MPP1 Over-Temperature Protection",
-                "11": "MPP2 Over-Temperature Protection",
-                "12": "BMS Fault",
-                "63": "No Fault"
-            }
+                "10": "PV1 Overcurrent Protection",
+                "11": "PV2 Overcurrent Protection",
+                "12": "Charging Overcurrent Protection",
+                "13": "Charging Overvoltage Protection",
+                "14": "Battery Voltage Protection",
+                "15": "INV Over-Temperature Protection",
+                "16": "MPP1 Over-Temperature Protection",
+                "17": "MPP2 Over-Temperature Protection",
+                "18": "BMS Fault",
+                "99": "No Fault"
+            },
+            "icon": "mdi:alert"
         },
         "0x87": {
             "name": "dc_dc_temperature",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "-40~100°C"
+            "sensor_type": "sensor",
+            "range": "-40~100°C",
+            "unit": "CELSIUS",
+            "display_precision": 1,
+            "icon": "mdi:thermometer"
         },
         "0x88": {
             "name": "inverter_temperature",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "-40~100°C"
+            "sensor_type": "sensor",
+            "range": "-40~100°C",
+            "unit": "CELSIUS",
+            "display_precision": 1,
+            "icon": "mdi:thermometer"
         },
         "0x89": {
             "name": "mppt1_temperature",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "-40~100°C"
+            "sensor_type": "sensor",
+            "range": "-40~100°C",
+            "unit": "CELSIUS",
+            "display_precision": 1,
+            "icon": "mdi:thermometer"
         },
         "0x8A": {
             "name": "mppt2_temperature",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "-40~100°C"
+            "sensor_type": "sensor",
+            "range": "-40~100°C",
+            "unit": "CELSIUS",
+            "display_precision": 1,
+            "icon": "mdi:thermometer"
         },
         "0x8B": {
             "name": "mppt3_temperature",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "-40~100°C"
+            "sensor_type": "sensor",
+            "range": "-40~100°C",
+            "unit": "CELSIUS",
+            "display_precision": 1,
+            "icon": "mdi:thermometer"
         },
         "0x8C": {
             "name": "relay_status",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "bitfield": {
                 "Bit0": "Grid Pre-Charge Relay",
                 "Bit1": "Grid Relay",
@@ -615,69 +833,75 @@
                 "Bit4": "Bidirectional DCDC Drive Enable",
                 "Bit5": "Bidirectional DCDC Sync Drive Enable",
                 "Bit6": "MPPT Enable"
-            }
+            },
+            "icon": "mdi:electric-switch"
         },
         "0x8D": {
             "name": "pv_energy_flow_direction",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "enum": {
                 "0": "No PV",
                 "1": "PV Present",
                 "2": "PV Generating"
-            }
+            },
+            "icon": "mdi:solar-panel"
         },
         "0x8E": {
             "name": "battery_energy_flow_direction",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "enum": {
                 "0": "No Battery",
                 "1": "Battery Present",
                 "2": "Charging",
                 "3": "Discharging"
-            }
+            },
+            "icon": "mdi:battery"
         },
         "0x8F": {
             "name": "grid_energy_flow_direction",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "enum": {
                 "0": "No Grid",
                 "1": "Grid Present",
                 "2": "Grid to Inverter (Forward)",
                 "3": "Inverter to Grid (Reverse)"
-            }
+            },
+            "icon": "mdi:transmission-tower"
         },
         "0x90": {
             "name": "load_energy_flow_direction",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "enum": {
                 "0": "No Load",
                 "1": "Load Present"
-            }
+            },
+            "icon": "mdi:power-plug"
         },
         "0x91": {
             "name": "software_version",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "bitfield": {
                 "Bit0-Bit5": "Minor Version",
                 "Bit6-Bit9": "Middle Version",
                 "Bit10-Bit15": "Major Version"
-            }
+            },
+            "icon": "mdi:information"
         },
         "0x97": {
             "name": "mppt_fault_status",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "enum": {
                 "0": "Battery Undervoltage",
                 "1": "Battery Overvoltage",
@@ -685,63 +909,88 @@
                 "3": "Input PV Overvoltage",
                 "4": "Output Overcurrent Protection",
                 "5": "Output Short Circuit",
-                "63": "Normal Status"
-            }
+                "99": "Normal Status"
+            },
+            "icon": "mdi:alert"
         },
         "0x98": {
             "name": "current_mppt_battery_voltage",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~60V"
+            "sensor_type": "sensor",
+            "range": "0~60V",
+            "unit": "VOLT",
+            "display_precision": 1,
+            "icon": "mdi:battery"
         },
         "0x99": {
             "name": "current_mppt_charge_current",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~200A"
+            "sensor_type": "sensor",
+            "range": "0~200A",
+            "unit": "AMPERE",
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
         },
         "0x9A": {
             "name": "current_mppt_pv_voltage",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~60V"
+            "sensor_type": "sensor",
+            "range": "0~60V",
+            "unit": "VOLT",
+            "display_precision": 1,
+            "icon": "mdi:solar-panel"
         },
         "0x9B": {
             "name": "mppt_charge_power",
             "type": "UINT16",
             "scale": 1,
-            "access": "RW",
-            "range": "0~rated_power"
+            "sensor_type": "number",
+            "range": "0~rated_power",
+            "min_value": 0.0,
+            "max_value": 65535.0,
+            "unit": "WATT",
+            "step": 1.0,
+            "display_precision": 0,
+            "icon": "mdi:power"
         },
         "0x9C": {
             "name": "mppt_temperature",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "-40~100°C"
+            "sensor_type": "sensor",
+            "range": "-40~100°C",
+            "unit": "CELSIUS",
+            "display_precision": 1,
+            "icon": "mdi:thermometer"
         },
         "0x9D": {
             "name": "mppt_cumulative",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "0~65535kWh"
+            "sensor_type": "sensor",
+            "range": "0~65535kWh",
+            "unit": "KILOWATT_HOUR",
+            "display_precision": 0,
+            "icon": "mdi:solar-power"
         },
         "0x9E": {
             "name": "mppt_output_current",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~200A"
+            "sensor_type": "sensor",
+            "range": "0~200A",
+            "unit": "AMPERE",
+            "display_precision": 2,
+            "icon": "mdi:current-dc"
         },
         "0x9F": {
             "name": "mppt_work_status",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "enum": {
                 "0": "Shutdown",
                 "1": "Pre-Charging",
@@ -750,167 +999,234 @@
                 "4": "MPPT Tracking",
                 "5": "Bus Constant Voltage",
                 "6": "Float Charging"
-            }
+            },
+            "icon": "mdi:solar-panel"
         },
         "0xA6": {
             "name": "12v_battery_charge_current_setting",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "RW",
-            "range": "0~90A"
+            "sensor_type": "number",
+            "range": "0~90A",
+            "min_value": 0.0,
+            "max_value": 90.0,
+            "unit": "AMPERE",
+            "step": 0.01,
+            "display_precision": 2,
+            "icon": "mdi:current-dc"
         },
         "0xA7": {
             "name": "12v_battery_discharge_current_setting",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "RW",
-            "range": "0~90A"
+            "sensor_type": "number",
+            "range": "0~90A",
+            "min_value": 0.0,
+            "max_value": 90.0,
+            "unit": "AMPERE",
+            "step": 0.01,
+            "display_precision": 2,
+            "icon": "mdi:current-dc"
         },
         "0xA8": {
             "name": "12v_battery_charge_discharge_voltage_setting",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "RW",
-            "range": "12.5~16V"
+            "sensor_type": "number",
+            "range": "12.5~16V",
+            "min_value": 12.5,
+            "max_value": 16.0,
+            "unit": "VOLT",
+            "step": 0.01,
+            "display_precision": 2,
+            "icon": "mdi:battery"
         },
         "0xA9": {
             "name": "48v_battery_charge_cutoff_voltage_setting",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "RW",
-            "range": "40~60V"
+            "sensor_type": "number",
+            "range": "40~60V",
+            "min_value": 40.0,
+            "max_value": 60.0,
+            "unit": "VOLT",
+            "step": 0.01,
+            "display_precision": 2,
+            "icon": "mdi:battery"
         },
         "0xAA": {
             "name": "48v_battery_discharge_cutoff_voltage_setting",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "RW",
-            "range": "40~60V"
+            "sensor_type": "number",
+            "range": "40~60V",
+            "min_value": 40.0,
+            "max_value": 60.0,
+            "unit": "VOLT",
+            "step": 0.01,
+            "display_precision": 2,
+            "icon": "mdi:battery"
         },
         "0xAB": {
             "name": "vehicle_48v_generator_current_setting",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "RW",
-            "range": "0~80A"
+            "sensor_type": "number",
+            "range": "0~80A",
+            "min_value": 0.0,
+            "max_value": 80.0,
+            "unit": "AMPERE",
+            "step": 0.01,
+            "display_precision": 2,
+            "icon": "mdi:current-dc"
         },
         "0xAC": {
             "name": "12v_relay_switch",
             "type": "UINT16",
             "scale": 1,
-            "access": "SW",
+            "sensor_type": "switch",
             "enum": {
                 "0": "Off",
                 "1": "On"
-            }
+            },
+            "icon": "mdi:electric-switch"
         },
         "0xAD": {
             "name": "dc_switch",
             "type": "UINT16",
             "scale": 1,
-            "access": "SW",
+            "sensor_type": "switch",
             "enum": {
                 "0": "Off",
                 "1": "On"
-            }
+            },
+            "icon": "mdi:toggle-switch"
         },
         "0xAE": {
             "name": "dc_reset",
             "type": "UINT16",
             "scale": 1,
-            "access": "SW",
+            "sensor_type": "switch",
             "enum": {
                 "0": "No Reset",
                 "1": "Reset"
-            }
+            },
+            "icon": "mdi:restart"
         },
         "0xAF": {
             "name": "vehicle_48v_generator_switch",
             "type": "UINT16",
             "scale": 1,
-            "access": "SW",
+            "sensor_type": "switch",
             "enum": {
                 "0": "Off",
                 "1": "On"
-            }
+            },
+            "icon": "mdi:toggle-switch"
         },
         "0xB0": {
             "name": "vehicle_48v_generator_reset",
             "type": "UINT16",
             "scale": 1,
-            "access": "SW",
+            "sensor_type": "switch",
             "enum": {
                 "0": "No Reset",
                 "1": "Reset"
-            }
+            },
+            "icon": "mdi:restart"
         },
         "0xB1": {
             "name": "vehicle_dcdc_program_version",
             "type": "UINT16",
             "scale": 1,
-            "access": "R"
+            "sensor_type": "sensor",
+            "icon": "mdi:information"
         },
         "0xB2": {
             "name": "12v_battery_current",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~90A"
+            "sensor_type": "sensor",
+            "range": "0~90A",
+            "unit": "AMPERE",
+            "display_precision": 2,
+            "icon": "mdi:current-dc"
         },
         "0xB3": {
             "name": "vehicle_48v_generator_current",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~80A"
+            "sensor_type": "sensor",
+            "range": "0~80A",
+            "unit": "AMPERE",
+            "display_precision": 2,
+            "icon": "mdi:current-dc"
         },
         "0xB4": {
             "name": "12v_battery_voltage",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~16V"
+            "sensor_type": "sensor",
+            "range": "0~16V",
+            "unit": "VOLT",
+            "display_precision": 2,
+            "icon": "mdi:battery"
         },
         "0xB5": {
             "name": "vehicle_48v_generator_voltage",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~100V"
+            "sensor_type": "sensor",
+            "range": "0~100V",
+            "unit": "VOLT",
+            "display_precision": 2,
+            "icon": "mdi:generator-stationary"
         },
         "0xB6": {
             "name": "system_temperature",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "-40~150°C"
+            "sensor_type": "sensor",
+            "range": "-40~150°C",
+            "unit": "CELSIUS",
+            "display_precision": 1,
+            "icon": "mdi:thermometer"
         },
         "0xB7": {
             "name": "48v_battery_current",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~40A"
+            "sensor_type": "sensor",
+            "range": "0~40A",
+            "unit": "AMPERE",
+            "display_precision": 2,
+            "icon": "mdi:current-dc"
         },
         "0xB8": {
             "name": "48v_battery_voltage",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~60V"
+            "sensor_type": "sensor",
+            "range": "0~60V",
+            "unit": "VOLT",
+            "display_precision": 2,
+            "icon": "mdi:battery"
         },
         "0xB9": {
             "name": "external_generator_temperature",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "-40~150°C"
+            "sensor_type": "sensor",
+            "range": "-40~150°C",
+            "unit": "CELSIUS",
+            "display_precision": 1,
+            "icon": "mdi:thermometer"
         },
         "0xBA": {
             "name": "fault",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "enum": {
                 "0x0000": "No Fault",
                 "0x0001": "12V Battery Side Input Overvoltage",
@@ -924,13 +1240,14 @@
                 "0x0100": "12V Battery Charge Current Overcurrent",
                 "0x0200": "12V Battery Discharge Current Overcurrent",
                 "0x0400": "External Generator Over-Temperature"
-            }
+            },
+            "icon": "mdi:alert"
         },
         "0xBB": {
             "name": "machine_current_status",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "enum": {
                 "0x0000": "Not Working",
                 "0x0001": "Forward Constant Current",
@@ -938,152 +1255,211 @@
                 "0x0005": "Vehicle 48V Generator Constant Current 5",
                 "0x0006": "Vehicle 48V Generator Constant Current 6",
                 "0x0008": "Vehicle 48V Generator Constant Current 8"
-            }
+            },
+            "icon": "mdi:information"
         },
         "0xBC": {
             "name": "protection_parameter_modify_switch",
             "type": "UINT16",
             "scale": 1,
-            "access": "R"
+            "sensor_type": "sensor",
+            "icon": "mdi:shield-edit"
         },
         "0xBD": {
             "name": "12v_battery_charge_protection_current",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~90A"
+            "sensor_type": "sensor",
+            "range": "0~90A",
+            "unit": "AMPERE",
+            "display_precision": 2,
+            "icon": "mdi:current-dc"
         },
         "0xBE": {
             "name": "12v_battery_discharge_protection_current",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~90A"
+            "sensor_type": "sensor",
+            "range": "0~90A",
+            "unit": "AMPERE",
+            "display_precision": 2,
+            "icon": "mdi:current-dc"
         },
         "0xBF": {
             "name": "12v_battery_input_max_voltage",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~16V"
+            "sensor_type": "sensor",
+            "range": "0~16V",
+            "unit": "VOLT",
+            "display_precision": 2,
+            "icon": "mdi:battery"
         },
         "0xC0": {
             "name": "48v_charge_cutoff_protection_voltage",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "40~60V"
+            "sensor_type": "sensor",
+            "range": "40~60V",
+            "unit": "VOLT",
+            "display_precision": 2,
+            "icon": "mdi:battery"
         },
         "0xC1": {
             "name": "48v_discharge_cutoff_protection_voltage",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "40~60V"
+            "sensor_type": "sensor",
+            "range": "40~60V",
+            "unit": "VOLT",
+            "display_precision": 2,
+            "icon": "mdi:battery"
         },
         "0xC2": {
             "name": "vehicle_48v_generator_protection_current",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~80A"
+            "sensor_type": "sensor",
+            "range": "0~80A",
+            "unit": "AMPERE",
+            "display_precision": 2,
+            "icon": "mdi:current-dc"
         },
         "0xC9": {
             "name": "charge_limit_voltage",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~60V"
+            "sensor_type": "sensor",
+            "range": "0~60V",
+            "unit": "VOLT",
+            "display_precision": 2,
+            "icon": "mdi:battery"
         },
         "0xCA": {
             "name": "charge_limit_current",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~200A"
+            "sensor_type": "sensor",
+            "range": "0~200A",
+            "unit": "AMPERE",
+            "display_precision": 2,
+            "icon": "mdi:current-dc"
         },
         "0xCB": {
             "name": "discharge_limit_voltage",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~60V"
+            "sensor_type": "sensor",
+            "range": "0~60V",
+            "unit": "VOLT",
+            "display_precision": 2,
+            "icon": "mdi:battery"
         },
         "0xCC": {
             "name": "discharge_limit_current",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~200A"
+            "sensor_type": "sensor",
+            "range": "0~200A",
+            "unit": "AMPERE",
+            "display_precision": 2,
+            "icon": "mdi:current-dc"
         },
         "0xCD": {
             "name": "battery_total_voltage",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~60V"
+            "sensor_type": "sensor",
+            "range": "0~60V",
+            "unit": "VOLT",
+            "display_precision": 2,
+            "icon": "mdi:battery"
         },
         "0xCE": {
             "name": "battery_total_current",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~200A"
+            "sensor_type": "sensor",
+            "range": "0~200A",
+            "unit": "AMPERE",
+            "display_precision": 2,
+            "icon": "mdi:current-dc"
         },
         "0xCF": {
             "name": "max_temperature",
             "type": "UINT16",
             "scale": 0.1,
-            "access": "R",
-            "range": "0~100°C"
+            "sensor_type": "sensor",
+            "range": "0~100°C",
+            "unit": "CELSIUS",
+            "display_precision": 1,
+            "icon": "mdi:thermometer"
         },
         "0xD0": {
             "name": "soc",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "0~100%"
+            "sensor_type": "sensor",
+            "range": "0~100%",
+            "unit": "PERCENTAGE",
+            "display_precision": 0,
+            "icon": "mdi:battery-charging"
         },
         "0xD1": {
             "name": "soh",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "0~100%"
+            "sensor_type": "sensor",
+            "range": "0~100%",
+            "unit": "PERCENTAGE",
+            "display_precision": 0,
+            "icon": "mdi:battery-heart"
         },
         "0xD2": {
             "name": "remaining_capacity",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~rated_capacity"
+            "sensor_type": "sensor",
+            "range": "0~rated_capacity",
+            "unit": "AMPERE_HOUR",
+            "display_precision": 2,
+            "icon": "mdi:battery"
         },
         "0xD3": {
             "name": "full_charge_capacity",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~rated_capacity"
+            "sensor_type": "sensor",
+            "range": "0~rated_capacity",
+            "unit": "AMPERE_HOUR",
+            "display_precision": 2,
+            "icon": "mdi:battery"
         },
         "0xD4": {
             "name": "design_capacity",
             "type": "UINT16",
             "scale": 0.01,
-            "access": "R",
-            "range": "0~rated_capacity"
+            "sensor_type": "sensor",
+            "range": "0~rated_capacity",
+            "unit": "AMPERE_HOUR",
+            "display_precision": 2,
+            "icon": "mdi:battery"
         },
         "0xD5": {
             "name": "cycle_count",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
-            "range": "0~100000"
+            "sensor_type": "sensor",
+            "range": "0~100000",
+            "unit": null,
+            "display_precision": 0,
+            "icon": "mdi:counter"
         },
         "0xD6": {
             "name": "alarm_flag",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "bitfield": {
                 "Bit0": "Cell Overvoltage Alarm",
                 "Bit1": "Cell Undervoltage Alarm",
@@ -1099,13 +1475,14 @@
                 "Bit13": "Ambient Low Temperature Alarm",
                 "Bit14": "MOSFET High Temperature Alarm",
                 "Bit15": "SOC Too Low Alarm"
-            }
+            },
+            "icon": "mdi:alert"
         },
         "0xD7": {
             "name": "protection_flag",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "bitfield": {
                 "Bit0": "Cell Overvoltage Protection",
                 "Bit1": "Cell Undervoltage Protection",
@@ -1121,13 +1498,14 @@
                 "Bit12": "Ambient High Temperature Protection",
                 "Bit13": "Ambient Low Temperature Protection",
                 "Bit14": "MOSFET High Temperature Protection"
-            }
+            },
+            "icon": "mdi:shield-alert"
         },
         "0xD8": {
             "name": "fault_status",
             "type": "UINT16",
             "scale": 1,
-            "access": "R",
+            "sensor_type": "sensor",
             "bitfield": {
                 "Bit0": "Charge MOSFET Fault",
                 "Bit1": "Discharge MOSFET Fault",
@@ -1138,7 +1516,8 @@
                 "Bit7": "Current Limit Module Fault",
                 "Bit8": "BMS Internal DC Power Fault",
                 "Bit15": "Heating Function Fault"
-            }
+            },
+            "icon": "mdi:alert"
         }
     }
 }

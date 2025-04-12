@@ -62,10 +62,6 @@ class ModbusProtocolHelper(ProtocolHelper):
                 _LOGGER.error("Failed to parse register %s: %s", register, e)
                 continue
 
-            # Apply scaling if necessary
-            if details.get("scale", 1) != 1:
-                value *= details["scale"]
-
             previous_value = self._parsed_data.get(register)
 
             if previous_value != value:
