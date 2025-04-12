@@ -69,7 +69,9 @@ class MakeSkyBlueDevice(BaseDevice):
                         {
                             "name": name,
                             "register": register,
+                            "scale": details.get("scale", 1.0),
                             "enum_mapping": enum_mapping,
+                            "icon": details.get("icon"),
                         }
                     )
                 else:
@@ -79,6 +81,8 @@ class MakeSkyBlueDevice(BaseDevice):
                             "register": register,
                             "scale": details.get("scale", 1.0),
                             "unit": details.get("unit"),
+                            "icon": details.get("icon"),
+                            "display_precision": details.get("display_precision", 0),
                         }
                     )
 

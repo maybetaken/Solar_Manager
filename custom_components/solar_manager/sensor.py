@@ -17,7 +17,6 @@ from homeassistant.const import (
     UnitOfEnergy,
     UnitOfPower,
     UnitOfTemperature,
-    UnitOfTime,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
@@ -26,71 +25,17 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
 from .protocol_helper.protocol_helper import ProtocolHelper
 
-SENSOR_STYLES: Final[dict[str, SensorEntityDescription]] = {
-    "direction": SensorEntityDescription(
-        key="direction",
-    ),
-    "voltage": SensorEntityDescription(
-        key="voltage",
-        native_unit_of_measurement=UnitOfElectricPotential.VOLT,
-        state_class=SensorStateClass.MEASUREMENT,
-        device_class=SensorDeviceClass.VOLTAGE,
-        suggested_display_precision=1,
-    ),
-    "battery": SensorEntityDescription(
-        key="battery",
-        native_unit_of_measurement=PERCENTAGE,
-        state_class=SensorStateClass.MEASUREMENT,
-        device_class=SensorDeviceClass.BATTERY,
-    ),
-    "temperature": SensorEntityDescription(
-        key="temperature",
-        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-        state_class=SensorStateClass.MEASUREMENT,
-        device_class=SensorDeviceClass.TEMPERATURE,
-        suggested_display_precision=1,
-    ),
-    "current": SensorEntityDescription(
-        key="current",
-        native_unit_of_measurement=UnitOfElectricCurrent.AMPERE,
-        state_class=SensorStateClass.MEASUREMENT,
-        device_class=SensorDeviceClass.CURRENT,
-    ),
-    "power": SensorEntityDescription(
-        key="power",
-        native_unit_of_measurement=UnitOfPower.WATT,
-        state_class=SensorStateClass.MEASUREMENT,
-        device_class=SensorDeviceClass.POWER,
-        suggested_display_precision=1,
-    ),
-    "energy": SensorEntityDescription(
-        key="energy",
-        native_unit_of_measurement=UnitOfEnergy.WATT_HOUR,
-        state_class=SensorStateClass.MEASUREMENT,
-        device_class=SensorDeviceClass.ENERGY,
-        suggested_display_precision=1,
-    ),
-    "runtime": SensorEntityDescription(
-        key="runtime",
-        native_unit_of_measurement=UnitOfTime.SECONDS,
-        suggested_unit_of_measurement=UnitOfTime.HOURS,
-        state_class=SensorStateClass.MEASUREMENT,
-        device_class=SensorDeviceClass.DURATION,
-    ),
-}
-
-DEFAULT_SENSOR_STYLE = SensorEntityDescription(
-    key="default",
-    state_class=SensorStateClass.MEASUREMENT,
-)
-
-ENTITY_CATEGORIES: Final[dict[str, EntityCategory]] = {
-    "diagnostic": EntityCategory.DIAGNOSTIC,
-    "config": EntityCategory.CONFIG,
-    "setting": EntityCategory.CONFIG,
-    "rssi": EntityCategory.DIAGNOSTIC,
-    "link": EntityCategory.DIAGNOSTIC,
-    "delta": EntityCategory.DIAGNOSTIC,
+unit_mapping = {
+    "AMPERE": UnitOfElectricCurrent.AMPERE,
+    "PERCENTAGE": PERCENTAGE,
+    "VOLT": UnitOfElectricPotential.VOLT,
+    "WATT": UnitOfPower.WATT,
+    "KILOWATT_HOUR": UnitOfEnergy.KILO_WATT_HOUR,
+    "WATT_HOUR": UnitOfEnergy.WATT_HOUR,
+    "CELSIUS": UnitOfTemperature.CELSIUS,
+    "HERTZ": "Hz",
+    "AMPERE_HOUR": "Ah",
+    None: None,
 }
 
 
@@ -104,6 +49,10 @@ class SolarManagerSensor(SensorEntity):
         register: str,
         unique_id: str,
         device_id: str,
+        unit: str | None = None,
+        scale_factor: float = 1.0,
+        display_precision: int = 0,
+        icon: str | None = None,
     ) -> None:
         """Initialize the sensor."""
         self._parser = parser
@@ -113,28 +62,22 @@ class SolarManagerSensor(SensorEntity):
         self._device_id = device_id
         self._attr_translation_key = name
         self._attr_has_entity_name = True
-
-        name_lower = name.lower()
-        self.entity_description = next(
-            (
-                style
-                for keyword, style in SENSOR_STYLES.items()
-                if keyword in name_lower
-            ),
-            DEFAULT_SENSOR_STYLE,
-        )
-
-        self._attr_entity_category = None
-        for keyword, category in ENTITY_CATEGORIES.items():
-            if keyword in name_lower:
-                self._attr_entity_category = category
-                break
+        self._attr_native_unit_of_measurement = unit_mapping.get(unit)
+        self._attr_suggested_display_precision = display_precision
+        self._attr_icon = icon
+        self._scale_factor = scale_factor
 
         self._parser.set_update_callback(self._register, self.on_data_update)
 
     async def on_data_update(self, value: Any) -> None:
         """Set current option based on data update."""
-        self._attr_native_value = value
+        try:
+            value = float(value) * self._scale_factor
+            if self._attr_suggested_display_precision == 0:
+                value = int(value)
+            self._attr_native_value = value
+        except (ValueError, TypeError):
+            self._attr_native_value = None
         self.schedule_update_ha_state()
 
     @property
@@ -165,20 +108,31 @@ class SolarManagerEnumSensor(SolarManagerSensor):
         unique_id: str,
         device_id: str,
         enum_mapping: dict[int, str],
+        unit: str | None = None,
+        scale_factor: float = 1.0,
+        display_precision: int = 0,
+        icon: str | None = None,
     ) -> None:
         """Initialize the enum sensor."""
-        super().__init__(name, parser, register, unique_id, device_id)
-        self._enum_mapping = enum_mapping
-
-        # Create a new entity description without numeric-related attributes
-        self.entity_description = SensorEntityDescription(
-            key=name.lower(),
-            translation_key=name.lower(),
+        super().__init__(
+            name,
+            parser,
+            register,
+            unique_id,
+            device_id,
+            unit,
+            scale_factor,
+            display_precision,
+            icon,
         )
+        self._attr_suggested_display_precision = None
+        self._enum_mapping = enum_mapping
 
     async def on_data_update(self, value: Any) -> None:
         """Set current option based on data update."""
+        self.schedule_update_ha_state()
         try:
+            value = float(value) * self._scale_factor
             # Convert value to int and map to string
             self._attr_native_value = self._enum_mapping.get(
                 int(value), f"Unknown ({value})"
@@ -197,6 +151,7 @@ async def async_setup_entry(
     serial = entry.data[CONF_SERIAL]
     model = entry.data[CONF_MODEL]
     for device in hass.data[DOMAIN][serial].get(Platform.SENSOR, []):
+        unit = device.get("unit", None)
         unique_id = f"{device['name']}_{model}_{serial}"
         if "enum_mapping" in device:
             # Use SolarManagerEnumSensor if enum_mapping is provided
@@ -207,6 +162,10 @@ async def async_setup_entry(
                 unique_id,
                 serial,
                 device["enum_mapping"],
+                unit,
+                device.get("scale", 1.0),
+                device.get("display_precision", 0),
+                device.get("icon"),
             )
         else:
             # Use regular SolarManagerSensor
@@ -216,6 +175,10 @@ async def async_setup_entry(
                 device["register"],
                 unique_id,
                 serial,
+                unit,
+                device.get("scale", 1.0),
+                device.get("display_precision", 0),
+                device.get("icon"),
             )
         sensors.append(sensor)
     async_add_entities(sensors)

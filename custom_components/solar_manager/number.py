@@ -116,7 +116,6 @@ async def async_setup_entry(
     model = entry.data[CONF_MODEL]
     for item in hass.data[DOMAIN][serial].get(Platform.NUMBER, []):
         unit = item.get("unit")
-        ha_unit = unit_mapping.get(unit)
         unique_id = f"{item['name']}_{model}_{serial}"
         number = SolarManagerNumber(
             name=item["name"],
@@ -126,7 +125,7 @@ async def async_setup_entry(
             device_id=serial,
             min_value=item.get("min_value", 0.0),
             max_value=item.get("max_value", 100.0),
-            unit=ha_unit,
+            unit=unit_mapping.get(unit),
             step=item.get("step", 1.0),
             scale_factor=item.get("scale", 1.0),
             display_precision=item.get("display_precision", 0),
