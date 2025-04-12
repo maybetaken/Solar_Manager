@@ -22,6 +22,7 @@ class SolarManagerSwitch(SwitchEntity):
         register: str,
         unique_id: str,
         device_id: str,
+        icon: str | None = None,
     ) -> None:
         """Initialize the switch."""
         self._parser = parser
@@ -32,6 +33,7 @@ class SolarManagerSwitch(SwitchEntity):
         self._parser.set_update_callback(self._register, self.on_data_update)
         self._attr_translation_key = name
         self._attr_has_entity_name = True
+        self._attr_icon = icon
 
     async def on_data_update(self, value: Any) -> None:
         """Set switch value based on data update."""
@@ -80,7 +82,12 @@ async def async_setup_entry(
     for item in hass.data[DOMAIN][serial].get(Platform.SWITCH, []):
         unique_id = f"{item['name']}_{model}_{serial}"
         switch = SolarManagerSwitch(
-            item["name"], item["parser"], item["register"], unique_id, serial
+            item["name"],
+            item["parser"],
+            item["register"],
+            unique_id,
+            serial,
+            item.get("icon"),
         )
         switches.append(switch)
     async_add_entities(switches)

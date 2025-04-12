@@ -123,6 +123,7 @@ class MakeSkyBlueDevice(BaseDevice):
                     {
                         "name": name,
                         "register": register,
+                        "icon": details.get("icon", None),
                     }
                 )
 

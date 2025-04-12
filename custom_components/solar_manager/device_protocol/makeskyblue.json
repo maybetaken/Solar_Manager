@@ -263,7 +263,7 @@
                 "0": "No Reset",
                 "1": "Reset"
             },
-            "icon": "mdi:counter-reset"
+            "icon": "mdi:autorenew"
         },
         "0x14": {
             "name": "force_charge_discharge_control",
