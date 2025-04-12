@@ -1,20 +1,20 @@
 {
     "config": {
         "abort": {
-            "already_configured": "Device is already configured"
+            "already_configured": "设备已配置"
         },
         "error": {
-            "cannot_connect": "Failed to connect",
-            "invalid_auth": "Invalid authentication",
-            "unknown": "Unexpected error",
-            "mqtt_not_ready": "MQTT is not ready, Please download the MQTT integration first"
+            "cannot_connect": "无法连接",
+            "invalid_auth": "无效的身份验证",
+            "unknown": "无法连接到设备",
+            "mqtt_not_ready": "MQTT未准备好, 请先配置MQTT集成!"
         },
         "step": {
             "user": {
                 "data": {
-                    "host": "Host",
-                    "password": "Password",
-                    "username": "Username"
+                    "host": "设备IP地址",
+                    "password": "密码",
+                    "username": "用户名"
                 }
             }
         }
