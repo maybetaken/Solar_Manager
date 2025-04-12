@@ -8,7 +8,7 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import CONF_SERIAL, DOMAIN
+from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
 from .protocol_helper.protocol_helper import ProtocolHelper
 
 
@@ -24,13 +24,14 @@ class SolarManagerSwitch(SwitchEntity):
         device_id: str,
     ) -> None:
         """Initialize the switch."""
-        self._attr_name = name
         self._parser = parser
         self._register = register
         self._attr_is_on = None
         self._attr_unique_id = unique_id
         self._device_id = device_id
         self._parser.set_update_callback(self._register, self.on_data_update)
+        self._attr_translation_key = name
+        self._attr_has_entity_name = True
 
     async def on_data_update(self, value: Any) -> None:
         """Set switch value based on data update."""
@@ -75,8 +76,9 @@ async def async_setup_entry(
     """Set up Solar Manager switch from a config entry."""
     switches = []
     serial = entry.data[CONF_SERIAL]
+    model = entry.data[CONF_MODEL]
     for item in hass.data[DOMAIN][serial].get(Platform.SWITCH, []):
-        unique_id = f"{entry.entry_id}-{serial}-{item['name']}"
+        unique_id = f"{item['name']}_{model}_{serial}"
         switch = SolarManagerSwitch(
             item["name"], item["parser"], item["register"], unique_id, serial
         )

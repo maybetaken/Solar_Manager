@@ -8,7 +8,7 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import CONF_SERIAL, DOMAIN
+from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
 from .protocol_helper.protocol_helper import ProtocolHelper
 
 
@@ -25,12 +25,13 @@ class SolarManagerNumber(NumberEntity):
     ) -> None:
         """Initialize the number."""
         self._attr_mode = "box"
-        self._attr_name = name
         self._parser = parser
         self._register = register
         self._attr_native_value = None
         self._attr_unique_id = unique_id
         self._device_id = device_id
+        self._attr_translation_key = name
+        self._attr_has_entity_name = True
         self._parser.set_update_callback(self._register, self.on_data_update)
 
     async def on_data_update(self, value: Any) -> None:
@@ -68,8 +69,9 @@ async def async_setup_entry(
     """Set up Solar Manager number from a config entry."""
     numbers = []
     serial = entry.data[CONF_SERIAL]
+    model = entry.data[CONF_MODEL]
     for item in hass.data[DOMAIN][serial].get(Platform.NUMBER, []):
-        unique_id = f"{entry.entry_id}-{serial}-{item['name']}"
+        unique_id = f"{item['name']}_{model}_{serial}"
         number = SolarManagerNumber(
             item["name"], item["parser"], item["register"], unique_id, serial
         )

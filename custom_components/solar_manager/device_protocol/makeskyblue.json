@@ -92,10 +92,10 @@
             "scale": 0.1,
             "access": "R",
             "enum": {
-                "72": "72V",
-                "48": "48V",
-                "24": "24V",
-                "12": "12V"
+                "0x48": "72V",
+                "0x30": "48V",
+                "0x18": "24V",
+                "0x0C": "12V"
             }
         },
         "0x08": {
@@ -555,16 +555,16 @@
                 "7": "Inverter Bus Overvoltage",
                 "8": "PV1 Input Overvoltage",
                 "9": "PV2 Input Overvoltage",
-                "10": "PV1 Overcurrent Protection",
-                "11": "PV2 Overcurrent Protection",
-                "12": "Charging Overcurrent Protection",
-                "13": "Charging Overvoltage Protection",
-                "14": "Battery Voltage Protection",
-                "15": "INV Over-Temperature Protection",
-                "16": "MPP1 Over-Temperature Protection",
-                "17": "MPP2 Over-Temperature Protection",
-                "18": "BMS Fault",
-                "99": "No Fault"
+                "A": "PV1 Overcurrent Protection",
+                "B": "PV2 Overcurrent Protection",
+                "C": "Charging Overcurrent Protection",
+                "D": "Charging Overvoltage Protection",
+                "E": "Battery Voltage Protection",
+                "F": "INV Over-Temperature Protection",
+                "10": "MPP1 Over-Temperature Protection",
+                "11": "MPP2 Over-Temperature Protection",
+                "12": "BMS Fault",
+                "63": "No Fault"
             }
         },
         "0x87": {
@@ -685,7 +685,7 @@
                 "3": "Input PV Overvoltage",
                 "4": "Output Overcurrent Protection",
                 "5": "Output Short Circuit",
-                "99": "Normal Status"
+                "63": "Normal Status"
             }
         },
         "0x98": {
@@ -935,9 +935,9 @@
                 "0x0000": "Not Working",
                 "0x0001": "Forward Constant Current",
                 "0x0002": "Reverse Constant Current",
-                "0x0005": "Vehicle 48V Generator Constant Current",
-                "0x0006": "Vehicle 48V Generator Constant Current",
-                "0x0008": "Vehicle 48V Generator Constant Current"
+                "0x0005": "Vehicle 48V Generator Constant Current 5",
+                "0x0006": "Vehicle 48V Generator Constant Current 6",
+                "0x0008": "Vehicle 48V Generator Constant Current 8"
             }
         },
         "0xBC": {
