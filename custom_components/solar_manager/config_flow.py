@@ -51,7 +51,8 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     return {"title": name}
 
 
-async def check_mqtt_connection(hass):
+async def check_mqtt_connection(hass: HomeAssistant | None) -> bool:
+    """Check if the MQTT connection is active."""
     mqtt_data: MqttData = hass.data.get(MQTT_DOMAIN)
 
     if mqtt_data is None or mqtt_data.client is None or not mqtt_data.client.connected:
