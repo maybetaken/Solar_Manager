@@ -38,8 +38,8 @@ class MQTTManager:
         async def wrapped_callback(msg: ReceiveMessage):
             try:
                 await callback(msg.topic, msg.payload)
-            except Exception as e:
-                _LOGGER.exception("Callback error on topic %s: %s", msg.topic, e)
+            except Exception:
+                _LOGGER.exception("Callback error on topic %s", msg.topic)
 
         topic_filter = topic_prefix.rstrip("/") + "/#"
         unsubscribe = await mqtt.async_subscribe(

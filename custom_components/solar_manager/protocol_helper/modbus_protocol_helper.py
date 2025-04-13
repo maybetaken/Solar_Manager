@@ -4,6 +4,7 @@ import struct
 from typing import Any
 
 from custom_components.solar_manager.const import _LOGGER
+
 from homeassistant.core import HomeAssistant
 
 from .protocol_helper import ProtocolHelper

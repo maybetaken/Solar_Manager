@@ -7,6 +7,7 @@ from custom_components.solar_manager.mqtt_helper import mqtt_global
 from custom_components.solar_manager.protocol_helper.modbus_protocol_helper import (
     ModbusProtocolHelper,
 )
+
 from homeassistant.core import HomeAssistant
 
 from .base_device import BaseDevice
