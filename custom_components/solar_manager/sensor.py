@@ -16,7 +16,7 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
+from .const import CONF_SERIAL, DOMAIN
 from .protocol_helper.protocol_helper import ProtocolHelper
 
 unit_mapping = {
@@ -143,10 +143,9 @@ async def async_setup_entry(
     """Set up Solar Manager sensor from a config entry."""
     sensors = []
     serial = entry.data[CONF_SERIAL]
-    model = entry.data[CONF_MODEL]
     for device in hass.data[DOMAIN][serial].get(Platform.SENSOR, []):
         unit = device.get("unit", None)
-        unique_id = f"{device['name']}_{model}_{serial}"
+        unique_id = f"{device['name']}_{device['model']}_{serial}"
         if "enum_mapping" in device:
             # Use SolarManagerEnumSensor if enum_mapping is provided
             sensor = SolarManagerEnumSensor(

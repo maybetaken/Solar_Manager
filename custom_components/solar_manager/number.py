@@ -113,10 +113,9 @@ async def async_setup_entry(
     """Set up Solar Manager number from a config entry."""
     numbers = []
     serial = entry.data[CONF_SERIAL]
-    model = entry.data[CONF_MODEL]
     for item in hass.data[DOMAIN][serial].get(Platform.NUMBER, []):
         unit = item.get("unit")
-        unique_id = f"{item['name']}_{model}_{serial}"
+        unique_id = f"{item['name']}_{item['model']}_{serial}"
         number = SolarManagerNumber(
             name=item["name"],
             parser=item["parser"],

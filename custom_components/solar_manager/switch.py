@@ -8,7 +8,7 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
-from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
+from .const import CONF_SERIAL, DOMAIN
 from .protocol_helper.protocol_helper import ProtocolHelper
 
 
@@ -78,9 +78,8 @@ async def async_setup_entry(
     """Set up Solar Manager switch from a config entry."""
     switches = []
     serial = entry.data[CONF_SERIAL]
-    model = entry.data[CONF_MODEL]
     for item in hass.data[DOMAIN][serial].get(Platform.SWITCH, []):
-        unique_id = f"{item['name']}_{model}_{serial}"
+        unique_id = f"{item['name']}_{item['model']}_{serial}"
         switch = SolarManagerSwitch(
             item["name"],
             item["parser"],
