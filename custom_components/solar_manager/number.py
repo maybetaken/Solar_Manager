@@ -115,7 +115,7 @@ async def async_setup_entry(
     serial = entry.data[CONF_SERIAL]
     for item in hass.data[DOMAIN][serial].get(Platform.NUMBER, []):
         unit = item.get("unit")
-        unique_id = f"{item['name']}_{item['model']}_{serial}"
+        unique_id = f"{item['name']}_{entry.data[CONF_MODEL]}_{serial}"
         number = SolarManagerNumber(
             name=item["name"],
             parser=item["parser"],

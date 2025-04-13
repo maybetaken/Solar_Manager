@@ -55,42 +55,39 @@ async def async_setup_entry(
 
     # Handle the protocol and device setup
     serial = entry.data[CONF_SERIAL]
+    model = entry.data[CONF_MODEL]
+
     if serial not in hass.data[DOMAIN]:
         hass.data[DOMAIN][serial] = {"devices": []}
 
-    for model_data in entry.data.get("models", []):
-        model = model_data[CONF_MODEL]
-        protocol = protocol_map.get(model)
-        if protocol is None:
-            _LOGGER.error("Protocol not found for model %s", model)
-            continue
+    protocol = protocol_map.get(model)
+    if protocol is None:
+        _LOGGER.error("Protocol not found for model %s", model)
+        return False
 
-        device_class = device_class_map.get(model)
-        if device_class is None:
-            _LOGGER.error("Device class not found for model %s", model)
-            continue
+    device_class = device_class_map.get(model)
+    if device_class is None:
+        _LOGGER.error("Device class not found for model %s", model)
+        return False
 
-        protocol_file_path = (
-            Path(__file__).parent / "device_protocol" / f"{protocol}.json"
-        )
-        device = device_class(hass, protocol_file_path, serial, model)
+    protocol_file_path = Path(__file__).parent / "device_protocol" / f"{protocol}.json"
+    device = device_class(hass, protocol_file_path, serial, model)
 
-        await device.load_protocol()
+    await device.load_protocol()
 
-        solar_platforms = await device.unpack_device_info()
+    solar_platforms = await device.unpack_device_info()
 
-        hass.data[DOMAIN][serial]["devices"].append(device)
+    hass.data[DOMAIN][serial]["devices"].append(device)
 
-        for platform, items in solar_platforms.items():
-            for item in items:
-                item["parser"] = device.parser
-                item["model"] = model
-                if platform not in hass.data[DOMAIN][serial]:
-                    hass.data[DOMAIN][serial][platform] = []
-                hass.data[DOMAIN][serial][platform].append(item)
-            await hass.config_entries.async_forward_entry_setups(entry, [platform])
+    for platform, items in solar_platforms.items():
+        for item in items:
+            item["parser"] = device.parser
+            if platform not in hass.data[DOMAIN][serial]:
+                hass.data[DOMAIN][serial][platform] = []
+            hass.data[DOMAIN][serial][platform].append(item)
+        await hass.config_entries.async_forward_entry_setups(entry, [platform])
 
-        await device.async_init()
+    await device.async_init()
     return True
 
 
@@ -100,7 +97,7 @@ async def async_unload_entry(
     """Unload a config entry."""
     serial = entry.data[CONF_SERIAL]
     if serial not in hass.data[DOMAIN]:
-        _LOGGER.warning(f"Try not unload non-exist serial: {serial}")
+        _LOGGER.warning(f"Try to unload non-existent serial: {serial}")
         return True
 
     unload_ok = await hass.config_entries.async_unload_platforms(entry, _PLATFORMS)

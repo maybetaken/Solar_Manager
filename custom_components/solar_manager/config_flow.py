@@ -8,18 +8,13 @@ import voluptuous as vol
 
 from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN, MqttData
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult, OptionsFlow
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 
 from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
 from .device_protocol.protocol_map import protocol_map
 
-MODEL_CONFIG = {
-    "MakeSkyBlue": {"allow_multiple_models": False},
-    "ChintMeter": {"allow_multiple_models": True},
-}
-
-SUPPORTED_MODELS = list(MODEL_CONFIG.keys())
+SUPPORTED_MODELS = ["MakeSkyBlue", "ChintMeter"]
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
@@ -30,12 +25,6 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 STEP_MODEL_DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_MODEL, default="MakeSkyBlue"): vol.In(SUPPORTED_MODELS),
-    }
-)
-
-STEP_ADD_ANOTHER_MODEL_SCHEMA = vol.Schema(
-    {
-        vol.Required("add_another", default=False): bool,
     }
 )
 
@@ -60,7 +49,7 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
     if not await hub.authenticate(model):
         raise InvalidAuth
 
-    return {"title": f"Model {model} ({data[CONF_SERIAL]})"}
+    return {"title": f"{model} ({data[CONF_SERIAL]})"}
 
 
 async def check_mqtt_connection(hass: HomeAssistant | None) -> bool:
@@ -79,7 +68,6 @@ class SolarManagerConfigFlow(ConfigFlow, domain=DOMAIN):
 
     def __init__(self) -> None:
         """Initialize the config flow."""
-        self._temp_models = []
         self._serial = None
 
     async def async_step_user(
@@ -96,7 +84,6 @@ class SolarManagerConfigFlow(ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             self._serial = user_input[CONF_SERIAL]
-            self._temp_models = []
 
             # Check if serial already exists
             if any(
@@ -128,16 +115,11 @@ class SolarManagerConfigFlow(ConfigFlow, domain=DOMAIN):
                 if protocol is None:
                     errors["base"] = "invalid_model"
                 else:
-                    self._temp_models.append({CONF_MODEL: model})
-                    # Only ChintMeter allows multiple models
-                    if model == "ChintMeter":
-                        return await self.async_step_add_another_model()
-                    # Other models create entry directly
                     return self.async_create_entry(
-                        title=f"Device ({self._serial})",
+                        title=f"{model} ({self._serial})",
                         data={
                             CONF_SERIAL: self._serial,
-                            "models": self._temp_models,
+                            CONF_MODEL: model,
                         },
                     )
             except CannotConnect:
@@ -150,49 +132,6 @@ class SolarManagerConfigFlow(ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="model", data_schema=STEP_MODEL_DATA_SCHEMA, errors=errors
         )
-
-    async def async_step_add_another_model(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
-        """Ask if the user wants to add another model."""
-        if user_input is not None:
-            if user_input.get("add_another", False):
-                return await self.async_step_model()
-            else:
-                return self.async_create_entry(
-                    title=f"Device ({self._serial})",
-                    data={
-                        CONF_SERIAL: self._serial,
-                        "models": self._temp_models,
-                    },
-                )
-
-        return self.async_show_form(
-            step_id="add_another_model",
-            data_schema=STEP_ADD_ANOTHER_MODEL_SCHEMA,
-            description_placeholders={"serial": self._serial},
-        )
-
-    @staticmethod
-    @callback
-    def async_get_options_flow(config_entry):
-        """Get the options flow for this handler."""
-        return SolarManagerOptionsFlow(config_entry)
-
-
-class SolarManagerOptionsFlow(OptionsFlow):
-    """Handle options flow for Solar Manager."""
-
-    def __init__(self, config_entry) -> None:
-        """Initialize the options flow."""
-        self.config_entry = config_entry
-
-    async def async_step_init(
-        self, user_input: dict[str, Any] | None = None
-    ) -> ConfigFlowResult:
-        """Manage the options."""
-        # No options to configure
-        return self.async_create_entry(title="", data={})
 
 
 class CannotConnect(HomeAssistantError):

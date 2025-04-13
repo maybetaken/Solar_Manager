@@ -75,7 +75,7 @@ async def async_setup_entry(
     selects = []
     serial = entry.data[CONF_SERIAL]
     for item in hass.data[DOMAIN][serial].get(Platform.SELECT, []):
-        unique_id = f"{item['name']}_{item['model']}_{serial}"
+        unique_id = f"{item['name']}_{entry.data[CONF_MODEL]}_{serial}"
         select = SolarManagerSelect(
             item["name"],
             item["parser"],

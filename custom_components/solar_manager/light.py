@@ -76,7 +76,7 @@ async def async_setup_entry(
     lights = []
     serial = entry.data[CONF_SERIAL]
     for item in hass.data[DOMAIN][serial].get(Platform.LIGHT, []):
-        unique_id = f"{item['name']}_{item['model']}_{serial}"
+        unique_id = f"{item['name']}_{entry.data[CONF_MODEL]}_{serial}"
         light = SolarManagerLight(
             item["name"], item["parser"], item["register"], unique_id, serial
         )
