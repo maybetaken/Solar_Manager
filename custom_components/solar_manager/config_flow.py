@@ -12,9 +12,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
 
 from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
-from .device_protocol.protocol_map import protocol_map
-
-SUPPORTED_MODELS = ["MakeSkyBlue", "ChintMeter"]
+from .device_protocol.device_config import PROTOCOL_MAP, SUPPORTED_MODELS
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
     {
@@ -111,7 +109,7 @@ class SolarManagerConfigFlow(ConfigFlow, domain=DOMAIN):
                     self.hass,
                     {CONF_SERIAL: self._serial, CONF_MODEL: model},
                 )
-                protocol = protocol_map.get(model)
+                protocol = PROTOCOL_MAP.get(model)
                 if protocol is None:
                     errors["base"] = "invalid_model"
                 else:

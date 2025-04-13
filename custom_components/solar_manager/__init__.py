@@ -9,10 +9,8 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 
 from .const import _LOGGER, CONF_MODEL, CONF_SERIAL, DOMAIN
-from .device_protocol.protocol_map import protocol_map
+from .device_protocol.device_config import DEVICE_CLASS_MAP, PROTOCOL_MAP
 from .mqtt_helper.mqtt_global import get_mqtt_manager
-from .plugins.base_device import BaseDevice
-from .plugins.MakeSkyBlue import MakeSkyBlueDevice
 from .ssdp import SSDPBroadcaster
 
 # List the platforms that you want to support.
@@ -23,12 +21,6 @@ _PLATFORMS: list[Platform] = [
     Platform.NUMBER,
     Platform.SELECT,
 ]
-
-# Mapping of model names to device classes
-device_class_map: dict[str, type[BaseDevice]] = {
-    "MakeSkyBlue": MakeSkyBlueDevice,
-    # Add other device classes here
-}
 
 # Create ConfigEntry type alias with API object
 type SolarManagerConfigEntry = ConfigEntry
@@ -60,12 +52,12 @@ async def async_setup_entry(
     if serial not in hass.data[DOMAIN]:
         hass.data[DOMAIN][serial] = {"devices": []}
 
-    protocol = protocol_map.get(model)
+    protocol = PROTOCOL_MAP.get(model)
     if protocol is None:
         _LOGGER.error("Protocol not found for model %s", model)
         return False
 
-    device_class = device_class_map.get(model)
+    device_class = DEVICE_CLASS_MAP.get(model)
     if device_class is None:
         _LOGGER.error("Device class not found for model %s", model)
         return False
