@@ -1,4 +1,9 @@
-"""Helper for handling Modbus protocol files for Solar Manager."""
+"""Helper for handling Modbus protocol files for Solar Manager.
+
+Solar Manager or solar_manager © 2025 by @maybetaken is
+licensed under Creative Commons
+Attribution-NonCommercial-NoDerivatives 4.0 International.
+"""
 
 import struct
 from typing import Any

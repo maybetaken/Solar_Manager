@@ -1,4 +1,9 @@
-"""Helper module for managing MQTT communication in Home Assistant."""
+"""Helper module for managing MQTT communication in Home Assistant.
+
+Solar Manager or solar_manager © 2025 by @maybetaken is
+licensed under Creative Commons
+Attribution-NonCommercial-NoDerivatives 4.0 International.
+"""
 
 import json
 import logging
