@@ -21,6 +21,9 @@
     },
     "entity": {
         "switch": {
+          "led": {
+            "name": "LED指示灯"
+          },
           "anti_backflow_mode": {
             "name": "并网状态下防逆流模式"
           },
@@ -53,6 +56,8 @@
           }
         },
         "sensor":{
+            "ssid": {"name": "Wi-Fi 名称"},
+            "rssi": {"name": "信号强度"},
             "battery_rated_voltage":{
                 "name": "电池额定电压",
                 "state": {

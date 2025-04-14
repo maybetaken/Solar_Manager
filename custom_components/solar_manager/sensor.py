@@ -2,7 +2,11 @@
 
 from typing import Any
 
-from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorStateClass,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     PERCENTAGE,
@@ -14,6 +18,7 @@ from homeassistant.const import (
     UnitOfTemperature,
 )
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
@@ -83,7 +88,7 @@ class SolarManagerSensor(SensorEntity):
     def device_info(self):
         """Return device information about this entity."""
         return {
-            "identifiers": {(DOMAIN, self._device_id)},  # Ensure same device
+            "identifiers": {(DOMAIN, self._device_id)},
             "name": f"Solar Manager {self._device_id}",
             "manufacturer": "Solar Manager Inc.",
             "model": "Modbus Device",
@@ -124,17 +129,64 @@ class SolarManagerEnumSensor(SolarManagerSensor):
 
     async def on_data_update(self, value: Any) -> None:
         """Set current option based on data update."""
-        self.schedule_update_ha_state()
         try:
             value = float(value) * self._scale_factor
-            # Convert value to int and map to string
             self._attr_native_value = self._enum_mapping.get(
                 int(value), f"Unknown ({value})"
             )
         except (ValueError, TypeError):
-            # Handle invalid values gracefully
             self._attr_native_value = None
         self.schedule_update_ha_state()
+
+
+class SolarManagerDiagnosticSensor(SensorEntity):
+    """Representation of a Solar Manager diagnostic sensor."""
+
+    def __init__(
+        self,
+        name: str,
+        device: Any,
+        unique_id: str,
+        device_id: str,
+        unit: str | None = None,
+        icon: str | None = None,
+    ) -> None:
+        """Initialize the diagnostic sensor."""
+        self._device = device
+        self._sensor_name = name.lower()
+        self._attr_unique_id = unique_id
+        self._attr_icon = icon
+        self._attr_entity_category = EntityCategory.DIAGNOSTIC
+        self._attr_native_unit_of_measurement = unit
+        self._device_id = device_id
+        self._attr_translation_key = name.lower()
+        self._attr_has_entity_name = True
+
+        if self._sensor_name == "rssi":
+            self._attr_device_class = SensorDeviceClass.SIGNAL_STRENGTH
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        diagnostics = self._device.get_diagnostics()
+        return diagnostics.get(self._sensor_name)
+
+    @property
+    def available(self) -> bool:
+        """Return if the sensor is available."""
+        return self.native_value is not None
+
+    @property
+    def device_info(self):
+        """Return device information about this entity."""
+        return {
+            "identifiers": {(DOMAIN, self._device_id)},
+            "name": f"Solar Manager {self._device_id}",
+            "manufacturer": "Solar Manager Inc.",
+            "model": "Modbus Device",
+            "sw_version": "1.0",
+        }
 
 
 async def async_setup_entry(
@@ -144,10 +196,19 @@ async def async_setup_entry(
     sensors = []
     serial = entry.data[CONF_SERIAL]
     for device in hass.data[DOMAIN][serial].get(Platform.SENSOR, []):
-        unit = device.get("unit", None)
         unique_id = f"{device['name']}_{entry.data[CONF_MODEL]}_{serial}"
-        if "enum_mapping" in device:
-            # Use SolarManagerEnumSensor if enum_mapping is provided
+        if device.get("diagnostic"):
+            sensor = SolarManagerDiagnosticSensor(
+                name=device["name"],
+                device=device["device"],
+                unique_id=unique_id,
+                device_id=serial,
+                unit=device.get("unit"),
+                icon=device.get("icon"),
+            )
+            # Register the diagnostic sensor with the device
+            device["device"].register_diagnostic_entity(device["name"], sensor)
+        elif "enum_mapping" in device:
             sensor = SolarManagerEnumSensor(
                 device["name"],
                 device["parser"],
@@ -155,20 +216,19 @@ async def async_setup_entry(
                 unique_id,
                 serial,
                 device["enum_mapping"],
-                unit,
+                device.get("unit"),
                 device.get("scale", 1.0),
                 device.get("display_precision", 0),
                 device.get("icon"),
             )
         else:
-            # Use regular SolarManagerSensor
             sensor = SolarManagerSensor(
                 device["name"],
                 device["parser"],
                 device["register"],
                 unique_id,
                 serial,
-                unit,
+                device.get("unit"),
                 device.get("scale", 1.0),
                 device.get("display_precision", 0),
                 device.get("icon"),

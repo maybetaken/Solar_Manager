@@ -3,7 +3,6 @@
 import logging
 from typing import Any
 
-from custom_components.solar_manager.mqtt_helper import mqtt_global
 from custom_components.solar_manager.protocol_helper.modbus_protocol_helper import (
     ModbusProtocolHelper,
 )
@@ -24,20 +23,16 @@ class MakeSkyBlueDevice(BaseDevice):
         """Initialize the base device."""
         super().__init__(hass, protocol_file, sn, model)
         self.parser = ModbusProtocolHelper(hass, protocol_file)
+        self.setup_protocol()
         self.slave_id = 1
         self.read_command = 3
         self.write_command = 6
         self.total_length = 217
         self.start_address = 0
-        self.mqtt_manager = mqtt_global.get_mqtt_manager(hass)
-        self.parser.register_callback(self.handle_cmd)
 
-    async def async_init(self):
-        """Async part of initialization."""
-        await self.mqtt_manager.register_callback(
-            self.sn,
-            self.handle_notify,
-        )
+    def setup_protocol(self) -> None:
+        """Set up Modbus protocol parameters."""
+        self.parser.register_callback(self.handle_cmd)
 
     async def unpack_device_info(self) -> dict[str, list[dict[str, Any]]]:
         """Unpack device information into different groups."""
@@ -47,21 +42,14 @@ class MakeSkyBlueDevice(BaseDevice):
         self.total_length = int(self.parser.protocol_data["register_total_length"])
         self.start_address = int(self.parser.protocol_data["register_start_address"])
 
-        device_info: dict[str, list[dict[str, Any]]] = {
-            "sensor": [],
-            "number": [],
-            "select": [],
-            "switch": [],
-        }
+        device_info = super().unpack_device_info()
 
         for register, details in self.protocol_data["registers"].items():
             name = details["name"]
             sensor_type = details.get("sensor_type")
 
             if sensor_type == "sensor":
-                # Check if the register has an enum mapping
                 if "enum" in details:
-                    # Convert enum keys from string to int
                     enum_mapping = {
                         int(key, 16) if key.startswith("0x") else int(key): value
                         for key, value in details["enum"].items()
@@ -130,14 +118,14 @@ class MakeSkyBlueDevice(BaseDevice):
 
         return device_info
 
-    async def handle_notify(self, topic, payload):
-        """Handle MQTT notifications."""
+    async def handle_notify(self, topic: str, payload: str) -> None:
+        """Handle MQTT notifications for Modbus data."""
         self.parser.parse_data(payload, self.start_address)
 
     async def handle_cmd(self, cmd: str, value: Any) -> None:
         """Handle commands from the user."""
         topic = self.sn
-        data: any = None
+        data: Any = None
         if isinstance(value, str):
             topic += "/" + cmd
             data = value
@@ -146,7 +134,6 @@ class MakeSkyBlueDevice(BaseDevice):
             data = self.parser.pack_data(self.slave_id, int(cmd, 16), value)
         elif isinstance(value, float):
             topic += "/" + self.model + "/" + str(self.slave_id)
-            # Apply scaling for number entities
             scale = self.protocol_data["registers"][cmd].get("scale", 1.0)
             data = self.parser.pack_data(
                 self.slave_id,
@@ -158,11 +145,3 @@ class MakeSkyBlueDevice(BaseDevice):
             return
 
         await self.mqtt_manager.publish(topic, data)
-
-    def cleanup(self) -> None:
-        """Cleanup device."""
-        self.mqtt_manager.unregister_callback(self.sn)
-        self.parser = None
-        self.mqtt_manager = None
-        self.protocol_data = None
-        self.hass = None

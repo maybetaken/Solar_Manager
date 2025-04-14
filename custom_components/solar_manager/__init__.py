@@ -74,6 +74,7 @@ async def async_setup_entry(
     for platform, items in solar_platforms.items():
         for item in items:
             item["parser"] = device.parser
+            item["device"] = device
             if platform not in hass.data[DOMAIN][serial]:
                 hass.data[DOMAIN][serial][platform] = []
             hass.data[DOMAIN][serial][platform].append(item)
