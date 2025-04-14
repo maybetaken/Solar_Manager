@@ -1,13 +1,18 @@
 """ssdp."""
 
 import asyncio
-import contextlib
+from collections.abc import Callable
+from datetime import datetime, timedelta
 import logging
 import socket
 
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.event import async_track_time_interval
 
 _LOGGER = logging.getLogger(__name__)
+
+# Cache duration: 20 minutes
+IP_CACHE_DURATION = timedelta(minutes=20)
 
 
 class SSDPBroadcaster:
@@ -17,14 +22,25 @@ class SSDPBroadcaster:
         """Initialize the SSDP broadcaster."""
         self.hass = hass
         self.interval = interval
-        self._local_ip = None
-        self._task = None
+        self._timer_remove: Callable[[], None] | None = None
         self._transport = None
         self._sock = None
+        self._local_ip: str | None = None
+        self._last_ip_fetch: datetime | None = None
 
     async def get_local_ip(self) -> str:
-        """Asynchronously get the local IP address."""
+        """Asynchronously get the local IP address, using cache if available."""
+        now = datetime.now()
+        # Use cached IP if available and not expired
+        if (
+            self._local_ip is not None
+            and self._last_ip_fetch is not None
+            and now - self._last_ip_fetch < IP_CACHE_DURATION
+        ):
+            _LOGGER.debug("Using cached local IP address: %s", self._local_ip)
+            return self._local_ip
 
+        # Fetch new IP
         try:
             # Create a UDP socket to determine local IP
             loop = asyncio.get_running_loop()
@@ -35,13 +51,14 @@ class SSDPBroadcaster:
             await loop.run_in_executor(None, lambda: sock.connect(("8.8.8.8", 80)))
             local_ip = sock.getsockname()[0]
             sock.close()
-
             self._local_ip = local_ip
+            self._last_ip_fetch = now
             _LOGGER.debug("Local IP address retrieved: %s", local_ip)
-            return local_ip
         except Exception as e:
             _LOGGER.error("Failed to get local IP address: %s", e)
-            return "0.0.0.0"
+            self._local_ip = "0.0.0.0"
+            self._last_ip_fetch = now
+        return self._local_ip
 
     async def send_ssdp_broadcast(self, ip_address: str):
         """Send an SSDP broadcast message."""
@@ -64,32 +81,30 @@ class SSDPBroadcaster:
             # Prepare and send SSDP message
             ssdp_message = f"maybetaken: mqtt://{ip_address}".encode()
             self._transport.sendto(ssdp_message, ("239.255.255.250", 1900))
+            _LOGGER.error("SSDP broadcast sent: %s", ssdp_message.decode())
         except Exception as e:
             _LOGGER.error("Failed to send SSDP broadcast: %s", e)
 
-    async def broadcast_loop(self):
-        """Broadcast SSDP messages at intervals."""
+    async def broadcast_once(self, now=None) -> None:
+        """Send a single SSDP broadcast."""
         ip_address = await self.get_local_ip()
-        while True:
-            await self.send_ssdp_broadcast(ip_address)
-            await asyncio.sleep(self.interval)
+        await self.send_ssdp_broadcast(ip_address)
 
     async def start(self):
-        """Start the SSDP broadcasting task."""
-        if self._task is None:
-            self._task = self.hass.async_create_task(self.broadcast_loop())
+        """Start the SSDP broadcasting timer."""
+        if self._timer_remove is None:
+            self._timer_remove = async_track_time_interval(
+                self.hass, self.broadcast_once, timedelta(seconds=self.interval)
+            )
             _LOGGER.info(
                 "SSDP broadcaster started with interval %.2f seconds", self.interval
             )
 
     async def stop(self):
-        """Stop the SSDP broadcasting task and clean up."""
-        if self._task:
-            self._task.cancel()
-            with contextlib.suppress(asyncio.CancelledError):
-                await self._task
-            self._task = None
-            _LOGGER.info("SSDP broadcaster stopped")
+        """Stop the SSDP broadcasting timer and clean up."""
+        if self._timer_remove:
+            self._timer_remove()
+            self._timer_remove = None
 
         if self._transport:
             self._transport.close()
