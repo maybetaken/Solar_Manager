@@ -81,7 +81,6 @@ class SSDPBroadcaster:
             # Prepare and send SSDP message
             ssdp_message = f"maybetaken: mqtt://{ip_address}".encode()
             self._transport.sendto(ssdp_message, ("239.255.255.250", 1900))
-            _LOGGER.error("SSDP broadcast sent: %s", ssdp_message.decode())
         except Exception as e:
             _LOGGER.error("Failed to send SSDP broadcast: %s", e)
 
