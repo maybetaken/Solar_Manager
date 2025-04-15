@@ -62,21 +62,21 @@ class MakeSkyBlueDevice(BaseDevice):
                     device_info["sensor"].append(
                         {
                             "name": name,
-                            "register": register,
                             "scale": details.get("scale", 1.0),
                             "enum_mapping": enum_mapping,
                             "icon": details.get("icon"),
+                            "device": self,
                         }
                     )
                 else:
                     device_info["sensor"].append(
                         {
                             "name": name,
-                            "register": register,
                             "scale": details.get("scale", 1.0),
                             "unit": details.get("unit"),
                             "icon": details.get("icon"),
                             "display_precision": details.get("display_precision", 0),
+                            "device": self,
                         }
                     )
 
@@ -84,7 +84,6 @@ class MakeSkyBlueDevice(BaseDevice):
                 device_info["number"].append(
                     {
                         "name": name,
-                        "register": register,
                         "scale": details.get("scale", 1.0),
                         "min_value": details.get("min_value"),
                         "max_value": details.get("max_value"),
@@ -92,6 +91,8 @@ class MakeSkyBlueDevice(BaseDevice):
                         "step": details.get("step", details.get("scale", 1.0)),
                         "display_precision": details.get("display_precision", 0),
                         "icon": details.get("icon"),
+                        "device": self,
+                        "register": register,  # Still needed for write operations
                     }
                 )
 
@@ -101,7 +102,6 @@ class MakeSkyBlueDevice(BaseDevice):
                     device_info["select"].append(
                         {
                             "name": name,
-                            "register": register,
                             "options": options,
                             "enum_mapping": {
                                 int(key, 16)
@@ -109,6 +109,8 @@ class MakeSkyBlueDevice(BaseDevice):
                                 else int(key): value
                                 for key, value in details["enum"].items()
                             },
+                            "device": self,
+                            "register": register,  # Still needed for write operations
                         }
                     )
 
@@ -116,8 +118,9 @@ class MakeSkyBlueDevice(BaseDevice):
                 device_info["switch"].append(
                     {
                         "name": name,
-                        "register": register,
                         "icon": details.get("icon", None),
+                        "device": self,
+                        "register": register,  # Still needed for write operations
                     }
                 )
 
@@ -125,12 +128,37 @@ class MakeSkyBlueDevice(BaseDevice):
 
     async def handle_notify(self, topic: str, payload: str) -> None:
         """Handle MQTT notifications for Modbus data."""
-        self.parser.parse_data(payload, self.start_address)
+        parsed_data = self.parser.parse_data(payload, self.start_address)
+        # Additional processing of parsed data
+        processed_data = self._process_parsed_data(parsed_data)
+        # Store in data_dict
+        self._data_dict.update(processed_data)
+        _LOGGER.debug("Updated data_dict for %s: %s", self.sn, self._data_dict)
+        # Reset clear timer
+        self._reset_clear_timer()
+        # Update only affected entities
+        for name in processed_data:
+            entity = self._entities.get(name)
+            if entity is not None:
+                entity.schedule_update_ha_state()
 
-    async def handle_cmd(self, cmd: str, value: Any) -> None:
+    def _process_parsed_data(self, parsed_data: dict) -> dict:
+        """Additional processing of parsed data before storing."""
+        # Create a lookup table for register details by name
+        register_details = {
+            details["name"]: details
+            for _, details in self.protocol_data["registers"].items()
+        }
+        processed = {}
+        for name, value in parsed_data.items():
+            # details = register_details.get(name)
+            processed[name] = value  # No processing if details not found
+        return processed
+
+    async def handle_cmd(self, cmd: str, value: any) -> None:
         """Handle commands from the user."""
         topic = self.sn
-        data: Any = None
+        data: any = None
         if isinstance(value, str):
             topic += "/" + cmd
             data = value

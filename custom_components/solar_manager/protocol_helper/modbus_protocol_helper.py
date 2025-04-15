@@ -21,7 +21,6 @@ class ModbusProtocolHelper(ProtocolHelper):
     def __init__(self, hass: HomeAssistant, protocol_data: dict[str, Any]) -> None:
         """Initialize the ModbusProtocolHelper."""
         super().__init__(hass, protocol_data)
-        self._parsed_data: dict[str, Any] = {}
 
     async def read_data(self, register_name: str) -> Any:
         """Read data from the device for a specific register."""
@@ -40,51 +39,47 @@ class ModbusProtocolHelper(ProtocolHelper):
             raise ValueError(f"Register {register_name} not found in protocol")
         await self.callback(register_name, value)
 
-    def parse_data(self, data: bytes, start_address: int = 0) -> None:
-        """Parse the given data starting from the specified address according to the protocol."""
-        for register, details in self.protocol_data["registers"].items():
-            reg_addr = int(register, 16)
-            if reg_addr < start_address:
-                continue
+    def parse_data(self, data: bytes, start_address: int = 0) -> dict[str, Any]:
+        """Parse the given data starting from the specified address according to the protocol.
+
+        Returns a dictionary with format {name: data}.
+        """
+        parsed_data = {}
+        # Cache endianness and prefix
+        endianness = self.protocol_data.get("endianness", "BE")
+        endian_prefix = ">" if endianness == "BE" else "<"
+        if endianness not in ("BE", "LE"):
+            raise ValueError(f"Unsupported endianness: {endianness}")
+
+        # Pre-compute register addresses and sort to process only relevant ones
+        registers = [
+            (int(register, 16), details)
+            for register, details in self.protocol_data["registers"].items()
+            if int(register, 16) >= start_address
+        ]
+        registers.sort()  # Ensure sequential processing
+
+        for reg_addr, details in registers:
             offset = reg_addr * 2 - start_address
             length = 2 if details["type"] == "UINT16" else 4
-            fmt = "H" if details["type"] == "UINT16" else "I"
-
             if offset + length > len(data):
                 break
-
-            endianness = self.protocol_data.get("endianness", "BE")
-            if endianness == "BE":
-                endian_prefix = ">"
-            elif endianness == "LE":
-                endian_prefix = "<"
-            else:
-                raise ValueError(f"Unsupported endianness: {endianness}")
-            raw_value = data[offset : offset + length]
+            fmt = "H" if details["type"] == "UINT16" else "I"
             try:
-                value = struct.unpack(f"{endian_prefix}{fmt}", raw_value)[0]
-
+                value = struct.unpack(
+                    f"{endian_prefix}{fmt}", data[offset : offset + length]
+                )[0]
+                parsed_data[details["name"]] = value
             except struct.error as e:
-                _LOGGER.error("Failed to parse register %s: %s", register, e)
+                _LOGGER.error(
+                    "Failed to parse register 0x%x (%s): %s",
+                    reg_addr,
+                    details["name"],
+                    e,
+                )
                 continue
 
-            previous_value = self._parsed_data.get(register)
-
-            if previous_value != value:
-                self._parsed_data[register] = value
-                if register in self._update_callbacks:
-                    try:
-                        self._hass.loop.call_soon_threadsafe(
-                            lambda reg=register, val=value: self._hass.loop.create_task(
-                                self._update_callbacks[reg](val)
-                            )
-                        )
-                    except RuntimeError as e:
-                        _LOGGER.error(
-                            f"Failed to schedule callback for {register} due to event loop issue: {e}"
-                        )
-                    except AttributeError as e:
-                        _LOGGER.error(f"Invalid hass.loop for {register}: {e}")
+        return parsed_data
 
     def pack_data(self, slave_id: int, address: int, value: int) -> bytes:
         """Pack data according to the protocol."""

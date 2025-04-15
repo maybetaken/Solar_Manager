@@ -19,8 +19,8 @@ from homeassistant.helpers.event import async_track_time_interval
 
 _LOGGER = logging.getLogger(__name__)
 
-# Clear diagnostics after 30 seconds of no updates
-DIAGNOSTICS_CLEAR_INTERVAL = timedelta(seconds=30)
+# Clear diagnostics and data after 30 seconds of no updates
+CLEAR_INTERVAL = timedelta(seconds=30)
 
 
 class BaseDevice(ABC):
@@ -42,8 +42,21 @@ class BaseDevice(ABC):
             "rssi": None,
             "led": None,
         }
+        self._data_dict = {}  # Store parsed data as {name: data}
         self._diagnostic_entities = {}  # Store diagnostic entities
-        self._clear_diagnostics_task = None
+        self._entities = {}  # Store regular entities
+        self._clear_task = None
+
+    def register_entity(self, name: str, entity: any) -> None:
+        """Register a regular entity."""
+        self._entities[name] = entity
+        _LOGGER.debug("Registered entity %s for %s", name, self.sn)
+
+    def unregister_entity(self, name: str) -> None:
+        """Unregister a regular entity."""
+        if name in self._entities:
+            self._entities[name] = None
+            _LOGGER.debug("Unregistered entity %s for %s", name, self.sn)
 
     def register_diagnostic_entity(self, sensor_name: str, entity: any) -> None:
         """Register a diagnostic entity."""
@@ -73,31 +86,38 @@ class BaseDevice(ABC):
             f"{self.sn}/notify",
             self.handle_notify,
         )
-        # Start diagnostics clear timer
-        self._reset_clear_diagnostics_timer()
+        # Start clear timer
+        self._reset_clear_timer()
 
-    def _reset_clear_diagnostics_timer(self) -> None:
-        """Reset the diagnostics clear timer."""
-        if self._clear_diagnostics_task:
-            self._clear_diagnostics_task()
-        self._clear_diagnostics_task = async_track_time_interval(
-            self.hass, self._clear_diagnostics, DIAGNOSTICS_CLEAR_INTERVAL
+    def _reset_clear_timer(self) -> None:
+        """Reset the clear timer."""
+        if self._clear_task:
+            self._clear_task()
+        self._clear_task = async_track_time_interval(
+            self.hass, self._clear_data, CLEAR_INTERVAL
         )
 
-    async def _clear_diagnostics(self, now=None) -> None:
-        """Clear diagnostics data after timeout."""
+    async def _clear_data(self, now=None) -> None:
+        """Clear diagnostics and data after timeout."""
         self._diagnostics["ssid"] = None
         self._diagnostics["rssi"] = None
         self._diagnostics["led"] = None
-        _LOGGER.debug("Cleared diagnostics data for %s", self.sn)
+        self._data_dict.clear()
+        _LOGGER.debug("Cleared diagnostics and data for %s", self.sn)
         # Update entities
-        for sensor_name, entity in self._diagnostic_entities.items():
+        for name, entity in self._diagnostic_entities.items():
             if entity is not None:
                 entity.schedule_update_ha_state()
                 _LOGGER.debug(
-                    "Directly updated entity %s for %s due to diagnostics clear",
-                    sensor_name,
+                    "Directly updated diagnostic entity %s for %s due to clear",
+                    name,
                     self.sn,
+                )
+        for name, entity in self._entities.items():
+            if entity is not None:
+                entity.schedule_update_ha_state()
+                _LOGGER.debug(
+                    "Directly updated entity %s for %s due to clear", name, self.sn
                 )
 
     async def handle_diagnostics(self, topic: str, payload: str) -> None:
@@ -118,13 +138,15 @@ class BaseDevice(ABC):
             self._diagnostics["led"] = data.get("led")
             _LOGGER.debug("Diagnostics updated for %s: %s", self.sn, self._diagnostics)
             # Reset clear timer
-            self._reset_clear_diagnostics_timer()
+            self._reset_clear_timer()
             # Directly update registered diagnostic entities
             for sensor_name, entity in self._diagnostic_entities.items():
                 if entity is not None:
                     entity.schedule_update_ha_state()
                     _LOGGER.debug(
-                        "Directly updated entity %s for %s", sensor_name, self.sn
+                        "Directly updated diagnostic entity %s for %s",
+                        sensor_name,
+                        self.sn,
                     )
         except KeyError as e:
             _LOGGER.error(
@@ -139,6 +161,10 @@ class BaseDevice(ABC):
         """Return diagnostics information."""
         return self._diagnostics.copy()
 
+    def get_dict(self, name: str) -> any:
+        """Return data for the given name from data_dict."""
+        return self._data_dict.get(name)
+
     async def set_led(self, state: bool) -> None:
         """Set LED state via MQTT."""
         self._diagnostics["led"] = state
@@ -148,13 +174,15 @@ class BaseDevice(ABC):
             await self.mqtt_manager.publish(topic, payload)
             _LOGGER.debug("Published LED state %s to %s", state, topic)
             # Reset clear timer
-            self._reset_clear_diagnostics_timer()
-            # Update entities
+            self._reset_clear_timer()
+            # Update diagnostic entities
             for sensor_name, entity in self._diagnostic_entities.items():
                 if entity is not None:
                     entity.schedule_update_ha_state()
                     _LOGGER.debug(
-                        "Directly updated entity %s for %s", sensor_name, self.sn
+                        "Directly updated diagnostic entity %s for %s",
+                        sensor_name,
+                        self.sn,
                     )
         except (json.JSONDecodeError, TypeError, ValueError) as e:
             _LOGGER.error("Error setting LED for %s: %s", self.sn, e)
@@ -207,13 +235,15 @@ class BaseDevice(ABC):
         self.mqtt_manager.unregister_callback(f"{self.sn}/notify")
 
         self._diagnostic_entities.clear()
-        if self._clear_diagnostics_task:
-            self._clear_diagnostics_task()
-            self._clear_diagnostics_task = None
+        self._entities.clear()
+        if self._clear_task:
+            self._clear_task()
+            self._clear_task = None
         self.parser = None
         self.mqtt_manager = None
         self.protocol_data = None
         self.hass = None
+        self._data_dict.clear()
 
     @abstractmethod
     def setup_protocol(self) -> None:

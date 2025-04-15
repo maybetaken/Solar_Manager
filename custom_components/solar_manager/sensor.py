@@ -27,7 +27,6 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
-from .protocol_helper.protocol_helper import ProtocolHelper
 
 unit_mapping = {
     "AMPERE": UnitOfElectricCurrent.AMPERE,
@@ -49,8 +48,7 @@ class SolarManagerSensor(SensorEntity):
     def __init__(
         self,
         name: str,
-        parser: ProtocolHelper,
-        register: str,
+        device: Any,
         unique_id: str,
         device_id: str,
         unit: str | None = None,
@@ -59,9 +57,8 @@ class SolarManagerSensor(SensorEntity):
         icon: str | None = None,
     ) -> None:
         """Initialize the sensor."""
-        self._parser = parser
-        self._register = register
-        self._attr_state = None
+        self._device = device
+        self._name = name
         self._attr_unique_id = unique_id
         self._device_id = device_id
         self._attr_translation_key = name
@@ -70,24 +67,26 @@ class SolarManagerSensor(SensorEntity):
         self._attr_suggested_display_precision = display_precision
         self._attr_icon = icon
         self._scale_factor = scale_factor
+        self._device.register_entity(name, self)
 
-        self._parser.set_update_callback(self._register, self.on_data_update)
-
-    async def on_data_update(self, value: Any) -> None:
-        """Set current option based on data update."""
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        value = self._device.get_dict(self._name)
+        if value is None:
+            return None
         try:
             value = float(value) * self._scale_factor
             if self._attr_suggested_display_precision == 0:
                 value = int(value)
-            self._attr_native_value = value
+            return value
         except (ValueError, TypeError):
-            self._attr_native_value = None
-        self.schedule_update_ha_state()
+            return None
 
     @property
     def available(self) -> bool:
         """Return if the sensor is available."""
-        return self._attr_native_value is not None
+        return self.native_value is not None
 
     @property
     def device_info(self):
@@ -107,41 +106,39 @@ class SolarManagerEnumSensor(SolarManagerSensor):
     def __init__(
         self,
         name: str,
-        parser: ProtocolHelper,
-        register: str,
+        device: Any,
         unique_id: str,
         device_id: str,
         enum_mapping: dict[int, str],
         unit: str | None = None,
         scale_factor: float = 1.0,
-        display_precision: int = 0,
         icon: str | None = None,
     ) -> None:
         """Initialize the enum sensor."""
         super().__init__(
             name,
-            parser,
-            register,
+            device,
             unique_id,
             device_id,
             unit,
             scale_factor,
-            display_precision,
+            0,
             icon,
         )
         self._attr_suggested_display_precision = None
         self._enum_mapping = enum_mapping
 
-    async def on_data_update(self, value: Any) -> None:
-        """Set current option based on data update."""
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        value = self._device.get_dict(self._name)
+        if value is None:
+            return None
         try:
             value = float(value) * self._scale_factor
-            self._attr_native_value = self._enum_mapping.get(
-                int(value), f"Unknown ({value})"
-            )
+            return self._enum_mapping.get(int(value), f"Unknown ({value})")
         except (ValueError, TypeError):
-            self._attr_native_value = None
-        self.schedule_update_ha_state()
+            return None
 
 
 class SolarManagerDiagnosticSensor(SensorEntity):
@@ -170,6 +167,7 @@ class SolarManagerDiagnosticSensor(SensorEntity):
         if self._sensor_name == "rssi":
             self._attr_device_class = SensorDeviceClass.SIGNAL_STRENGTH
             self._attr_state_class = SensorStateClass.MEASUREMENT
+        self._device.register_diagnostic_entity(name, self)
 
     @property
     def native_value(self):
@@ -211,32 +209,27 @@ async def async_setup_entry(
                 unit=device.get("unit"),
                 icon=device.get("icon"),
             )
-            # Register the diagnostic sensor with the device
-            device["device"].register_diagnostic_entity(device["name"], sensor)
         elif "enum_mapping" in device:
             sensor = SolarManagerEnumSensor(
-                device["name"],
-                device["parser"],
-                device["register"],
-                unique_id,
-                serial,
-                device["enum_mapping"],
-                device.get("unit"),
-                device.get("scale", 1.0),
-                device.get("display_precision", 0),
-                device.get("icon"),
+                name=device["name"],
+                device=device["device"],
+                unique_id=unique_id,
+                device_id=serial,
+                enum_mapping=device["enum_mapping"],
+                unit=device.get("unit"),
+                scale_factor=device.get("scale", 1.0),
+                icon=device.get("icon"),
             )
         else:
             sensor = SolarManagerSensor(
-                device["name"],
-                device["parser"],
-                device["register"],
-                unique_id,
-                serial,
-                device.get("unit"),
-                device.get("scale", 1.0),
-                device.get("display_precision", 0),
-                device.get("icon"),
+                name=device["name"],
+                device=device["device"],
+                unique_id=unique_id,
+                device_id=serial,
+                unit=device.get("unit"),
+                scale_factor=device.get("scale", 1.0),
+                display_precision=device.get("display_precision", 0),
+                icon=device.get("icon"),
             )
         sensors.append(sensor)
     async_add_entities(sensors)

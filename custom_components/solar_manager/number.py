@@ -22,7 +22,6 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
-from .protocol_helper.protocol_helper import ProtocolHelper
 
 unit_mapping = {
     "AMPERE": UnitOfElectricCurrent.AMPERE,
@@ -31,8 +30,8 @@ unit_mapping = {
     "WATT": UnitOfPower.WATT,
     "KILOWATT_HOUR": UnitOfEnergy.KILO_WATT_HOUR,
     "CELSIUS": UnitOfTemperature.CELSIUS,
-    "AMPERE_HOUR": "Ah",  # No direct HA constant; use None for custom unit
-    None: None,  # Handle null units (e.g., communication_address)
+    "AMPERE_HOUR": "Ah",
+    None: None,
 }
 
 
@@ -42,7 +41,7 @@ class SolarManagerNumber(NumberEntity):
     def __init__(
         self,
         name: str,
-        parser: ProtocolHelper,
+        device: Any,
         register: str,
         unique_id: str,
         device_id: str,
@@ -56,9 +55,9 @@ class SolarManagerNumber(NumberEntity):
     ) -> None:
         """Initialize the number."""
         self._attr_mode = "box"
-        self._parser = parser
-        self._register = register  # Convert 0x0B to 11
-        self._attr_native_value = None
+        self._device = device
+        self._name = name
+        self._register = register
         self._attr_unique_id = unique_id
         self._device_id = device_id
         self._attr_translation_key = name.lower()
@@ -70,35 +69,37 @@ class SolarManagerNumber(NumberEntity):
         self._attr_suggested_display_precision = display_precision
         self._attr_icon = icon
         self._scale_factor = scale_factor
-        self._parser.set_update_callback(self._register, self.on_data_update)
+        self._device.register_entity(name, self)
 
-    async def on_data_update(self, value: Any) -> None:
-        """Set number value based on data update."""
+    @property
+    def native_value(self):
+        """Return the state of the number."""
+        value = self._device.get_dict(self._name)
+        if value is None:
+            return None
         try:
             value = float(value) * self._scale_factor
             if self._attr_native_min_value <= value <= self._attr_native_max_value:
                 if self._attr_suggested_display_precision == 0:
                     value = int(value)
-                self._attr_native_value = value
-            else:
-                self._attr_native_value = None
+                return value
+            return None
         except (ValueError, TypeError):
-            self._attr_native_value = None
-        self.schedule_update_ha_state()
+            return None
 
     async def async_set_native_value(self, value: float) -> None:
         """Update the current value."""
         register_value = int(value / self._scale_factor)
-        await self._parser.write_data(self._register, register_value)
+        await self._device.parser.write_data(self._register, register_value)
         if self._attr_suggested_display_precision == 0:
             value = int(value)
-        self._attr_native_value = value
+        self._device._data_dict[self._name] = value / self._scale_factor
         self.async_write_ha_state()
 
     @property
     def available(self) -> bool:
         """Return if the number entity is available."""
-        return self._attr_native_value is not None
+        return self.native_value is not None
 
     @property
     def device_info(self):
@@ -123,7 +124,7 @@ async def async_setup_entry(
         unique_id = f"{item['name']}_{entry.data[CONF_MODEL]}_{serial}"
         number = SolarManagerNumber(
             name=item["name"],
-            parser=item["parser"],
+            device=item["device"],
             register=item["register"],
             unique_id=unique_id,
             device_id=serial,
