@@ -212,43 +212,53 @@ class MakeSkyBlueDevice(BaseDevice):
         return device_info
 
     async def handle_notify(self, topic: str, payload: str) -> None:
-        """Handle MQTT notifications for Modbus data."""
-        _LOGGER.debug("Received MQTT payload on topic %s: %s", topic, payload)
+        """Handle MQTT notifications for Modbus data, supporting segmented data."""
+
+        changed_entities = set()
+
         parsed_data = self.parser.parse_data(payload, self.start_address)
         _LOGGER.debug("Parsed data keys: %s", list(parsed_data.keys()))
-        for register in list(parsed_data.keys()):
+
+        for register, value in parsed_data.items():
             if register == "0x1E":
                 _LOGGER.debug("Skipping network_time register %s", register)
-                parsed_data.pop(register)
                 continue
             if register in SPECIAL_REGISTERS:
                 name = SPECIAL_REGISTERS[register]
-                value = parsed_data.pop(register)
                 processed_value = self._process_special_register(register, value)
-                self._data_dict[name] = processed_value
-                _LOGGER.debug(
-                    "Processed special register %s (%s): %s",
-                    register,
-                    name,
-                    processed_value,
-                )
-                entity = self._entities.get(name)
-                if entity is not None:
-                    entity.schedule_update_ha_state()
-        regular_data = {}
-        for register, value in parsed_data.items():
-            name = self._register_to_name.get(register)
-            if name:
-                regular_data[name] = value
-            elif register not in self._unknown_registers:
-                _LOGGER.warning("No name found for register %s", register)
-                self._unknown_registers.add(register)
-        self._data_dict.update(regular_data)
+                if processed_value is not None:
+                    if self._data_dict.get(name) != processed_value:
+                        self._data_dict[name] = processed_value
+                        _LOGGER.debug(
+                            "Updated special register %s (%s): %s",
+                            register,
+                            name,
+                            processed_value,
+                        )
+                        if name in self._entities:
+                            changed_entities.add(name)
+            else:
+                name = self._register_to_name.get(register)
+                if name:
+                    if self._data_dict.get(name) != value:
+                        self._data_dict[name] = value
+                        _LOGGER.debug(
+                            "Updated register %s (%s): %s",
+                            register,
+                            name,
+                            value,
+                        )
+                        if name in self._entities:
+                            changed_entities.add(name)
+                elif register not in self._unknown_registers:
+                    _LOGGER.warning("No name found for register %s", register)
+                    self._unknown_registers.add(register)
 
-        for name in regular_data:
+        for name in changed_entities:
             entity = self._entities.get(name)
             if entity is not None:
                 entity.schedule_update_ha_state()
+                _LOGGER.debug("Updated entity %s due to data change", name)
 
         self._reset_clear_timer()
 
