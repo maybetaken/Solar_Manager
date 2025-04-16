@@ -42,7 +42,7 @@ class ModbusProtocolHelper(ProtocolHelper):
     def parse_data(self, data: bytes, start_address: int = 0) -> dict[str, Any]:
         """Parse the given data starting from the specified address according to the protocol.
 
-        Returns a dictionary with format {name: data}.
+        Returns a dictionary with format {register_address: data}.
         """
         parsed_data = {}
         # Cache endianness and prefix
@@ -53,13 +53,14 @@ class ModbusProtocolHelper(ProtocolHelper):
 
         # Pre-compute register addresses and sort to process only relevant ones
         registers = [
-            (int(register, 16), details)
+            (register, details)
             for register, details in self.protocol_data["registers"].items()
             if int(register, 16) >= start_address
         ]
-        registers.sort()  # Ensure sequential processing
+        registers.sort(key=lambda x: int(x[0], 16))
 
-        for reg_addr, details in registers:
+        for register, details in registers:
+            reg_addr = int(register, 16)
             offset = reg_addr * 2 - start_address
             length = 2 if details["type"] == "UINT16" else 4
             if offset + length > len(data):
@@ -69,13 +70,10 @@ class ModbusProtocolHelper(ProtocolHelper):
                 value = struct.unpack(
                     f"{endian_prefix}{fmt}", data[offset : offset + length]
                 )[0]
-                parsed_data[details["name"]] = value
+                parsed_data[register] = value
             except struct.error as e:
                 _LOGGER.error(
-                    "Failed to parse register 0x%x (%s): %s",
-                    reg_addr,
-                    details["name"],
-                    e,
+                    "Failed to parse register %s (%s): %s", register, details["name"], e
                 )
                 continue
 

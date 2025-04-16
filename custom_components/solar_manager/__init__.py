@@ -25,6 +25,7 @@ _PLATFORMS: list[Platform] = [
     Platform.SWITCH,
     Platform.NUMBER,
     Platform.SELECT,
+    Platform.TIME,
 ]
 
 # Create ConfigEntry type alias with API object

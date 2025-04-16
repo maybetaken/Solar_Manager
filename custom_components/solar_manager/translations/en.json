@@ -530,21 +530,6 @@
             "battery_cutoff_voltage":{
                 "name": "电池截止电压"
             },
-            "network_time":{
-                "name": "网络时间"
-            },
-            "scheduled_force_charge_start_time":{
-                "name": "定时强制充电开始时间"
-            },
-            "scheduled_force_charge_end_time":{
-                "name": "定时强制充电结束时间"
-            },
-            "scheduled_force_discharge_start_time":{
-                "name": "定时强制放电开始时间"
-            },
-            "scheduled_force_discharge_end_time":{
-                "name": "定时强制放电结束时间"
-            },
             "mppt_charge_power":{
                 "name": "MPPT充电功率"
             },
@@ -566,6 +551,26 @@
             "vehicle_48v_generator_current_setting":{
                 "name": "车载48V发电机电流设置"
             }
+        },
+        "datetime":{
+            "network_time":{
+                "name": "网络时间"
+            }
+        },
+        "time":{
+            "scheduled_force_charge_start_time":{
+                "name": "定时强制充电开始时间"
+            },
+            "scheduled_force_charge_end_time":{
+                "name": "定时强制充电结束时间"
+            },
+            "scheduled_force_discharge_start_time":{
+                "name": "定时强制放电开始时间"
+            },
+            "scheduled_force_discharge_end_time":{
+                "name": "定时强制放电结束时间"
+            }
         }
+
     }
 }
