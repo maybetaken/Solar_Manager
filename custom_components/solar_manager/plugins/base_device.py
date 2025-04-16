@@ -47,6 +47,15 @@ class BaseDevice(ABC):
         self._entities = {}  # Store regular entities
         self._clear_task = None
 
+    async def handle_online(self, topic: str, payload: bytes) -> None:
+        """Handle device online message."""
+        _LOGGER.info("Device %s is online, sending configuration", self.sn)
+        await self.send_config()
+
+    @abstractmethod
+    async def send_config(self) -> None:
+        """Send device-specific configuration to the device."""
+
     def register_entity(self, name: str, entity: any) -> None:
         """Register a regular entity."""
         self._entities[name] = entity
@@ -86,6 +95,14 @@ class BaseDevice(ABC):
             f"{self.sn}/notify",
             self.handle_notify,
         )
+
+        await self.mqtt_manager.register_callback(
+            f"{self.sn}/online",
+            self.handle_online,
+        )
+
+        await self.send_config()
+
         # Start clear timer
         self._reset_clear_timer()
 
@@ -233,6 +250,7 @@ class BaseDevice(ABC):
         """Cleanup device."""
         self.mqtt_manager.unregister_callback(f"{self.sn}/diagnostics")
         self.mqtt_manager.unregister_callback(f"{self.sn}/notify")
+        self.mqtt_manager.unregister_callback(f"{self.sn}/online")
 
         self._diagnostic_entities.clear()
         self._entities.clear()

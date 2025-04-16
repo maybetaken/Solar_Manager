@@ -39,43 +39,53 @@ class ModbusProtocolHelper(ProtocolHelper):
             raise ValueError(f"Register {register_name} not found in protocol")
         await self.callback(register_name, value)
 
-    def parse_data(self, data: bytes, start_address: int = 0) -> dict[str, Any]:
-        """Parse the given data starting from the specified address according to the protocol.
+    def parse_data(self, data: bytes) -> dict[str, Any]:
+        """Parse TLD format Modbus data: [start_address:2][length:2][data:L*2].
 
         Returns a dictionary with format {register_address: data}.
         """
-        parsed_data = {}
-        # Cache endianness and prefix
-        endianness = self.protocol_data.get("endianness", "BE")
-        endian_prefix = ">" if endianness == "BE" else "<"
-        if endianness not in ("BE", "LE"):
-            raise ValueError(f"Unsupported endianness: {endianness}")
+        try:
+            if len(data) < 4:
+                _LOGGER.error("Payload too short for TLD format: %d bytes", len(data))
+                return {}
 
-        # Pre-compute register addresses and sort to process only relevant ones
-        registers = [
-            (register, details)
-            for register, details in self.protocol_data["registers"].items()
-            if int(register, 16) >= start_address
-        ]
-        registers.sort(key=lambda x: int(x[0], 16))
+            endianness = self.protocol_data.get("endianness", "BE")
+            endian_prefix = ">" if endianness == "BE" else "<"
+            if endianness not in ("BE", "LE"):
+                _LOGGER.warning(
+                    "Unsupported endianness: %s, defaulting to BE", endianness
+                )
+                endian_prefix = ">"
 
-        for register, details in registers:
-            reg_addr = int(register, 16)
-            offset = reg_addr * 2 - start_address
-            length = 2 if details["type"] == "UINT16" else 4
-            if offset + length > len(data):
-                break
-            fmt = "H" if details["type"] == "UINT16" else "I"
-            try:
+            start_address, length = struct.unpack(f"{endian_prefix}HH", data[:4])
+            data_bytes = data[4:]
+
+            expected_bytes = length * 2
+            if len(data_bytes) != expected_bytes:
+                _LOGGER.error(
+                    "Invalid data length: expected %d bytes, got %d",
+                    expected_bytes,
+                    len(data_bytes),
+                )
+                return {}
+
+            parsed_data = {}
+            for i in range(length):
+                register = f"0x{(start_address + i):02X}"
                 value = struct.unpack(
-                    f"{endian_prefix}{fmt}", data[offset : offset + length]
+                    f"{endian_prefix}H", data_bytes[i * 2 : (i + 1) * 2]
                 )[0]
                 parsed_data[register] = value
-            except struct.error as e:
-                _LOGGER.error(
-                    "Failed to parse register %s (%s): %s", register, details["name"], e
-                )
-                continue
+
+            _LOGGER.debug(
+                "Parsed TLD: start_address=0x%04X, length=%d, registers=%s",
+                start_address,
+                length,
+                list(parsed_data.keys()),
+            )
+        except struct.error as e:
+            _LOGGER.error("Failed to parse TLD payload: %s", e)
+            return {}
 
         return parsed_data
 

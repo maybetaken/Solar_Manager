@@ -5,6 +5,7 @@ licensed under Creative Commons
 Attribution-NonCommercial-NoDerivatives 4.0 International.
 """
 
+import json
 import logging
 from typing import Any
 
@@ -41,10 +42,26 @@ class MakeSkyBlueDevice(BaseDevice):
         self.slave_id = 1
         self.read_command = 3
         self.write_command = 6
-        self.total_length = 217
-        self.start_address = 0
         self._register_to_name = {}
         self._unknown_registers = set()
+
+    async def send_config(self) -> None:
+        """Send MakeSkyBlue-specific configuration to the device."""
+        try:
+            # 构造配置数据
+            config_data = {
+                "slave_id": self.slave_id,
+                "read_command": self.read_command,
+                "write_command": self.write_command,
+                "segments": self.parser.protocol_data.get("segments", []),
+            }
+            topic = f"{self.sn}/config"
+            payload = json.dumps(config_data)
+            await self.mqtt_manager.publish(topic, payload)
+            _LOGGER.debug("Sent config to %s: %s", topic, payload)
+            await self._send_network_time()
+        except Exception as e:
+            _LOGGER.error("Failed to send config for %s: %s", self.sn, e)
 
     def setup_protocol(self) -> None:
         """Set up Modbus protocol parameters."""
@@ -93,8 +110,6 @@ class MakeSkyBlueDevice(BaseDevice):
         self.slave_id = int(self.parser.protocol_data["slave_id"])
         self.read_command = int(self.parser.protocol_data["read_command"])
         self.write_command = int(self.parser.protocol_data["write_command"])
-        self.total_length = int(self.parser.protocol_data["register_total_length"])
-        self.start_address = int(self.parser.protocol_data["register_start_address"])
 
         self._register_to_name = {}
         for register, details in self.parser.protocol_data.get("registers", {}).items():
@@ -211,18 +226,15 @@ class MakeSkyBlueDevice(BaseDevice):
         )
         return device_info
 
-    async def handle_notify(self, topic: str, payload: str) -> None:
-        """Handle MQTT notifications for Modbus data, supporting segmented data."""
+    async def handle_notify(self, topic: str, payload: bytes) -> None:
+        """Handle MQTT notifications for Modbus data in TLD format."""
 
         changed_entities = set()
 
-        parsed_data = self.parser.parse_data(payload, self.start_address)
+        parsed_data = self.parser.parse_data(payload)
         _LOGGER.debug("Parsed data keys: %s", list(parsed_data.keys()))
 
         for register, value in parsed_data.items():
-            if register == "0x1E":
-                _LOGGER.debug("Skipping network_time register %s", register)
-                continue
             if register in SPECIAL_REGISTERS:
                 name = SPECIAL_REGISTERS[register]
                 processed_value = self._process_special_register(register, value)
