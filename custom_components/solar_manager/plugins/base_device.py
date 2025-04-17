@@ -152,7 +152,7 @@ class BaseDevice(ABC):
         try:
             self._diagnostics["ssid"] = data.get("ssid")
             self._diagnostics["rssi"] = data.get("rssi")
-            self._diagnostics["led"] = data.get("led")
+            self._diagnostics["led"] = data.get("led") == "on"
             _LOGGER.debug("Diagnostics updated for %s: %s", self.sn, self._diagnostics)
             # Reset clear timer
             self._reset_clear_timer()
@@ -187,8 +187,8 @@ class BaseDevice(ABC):
         self._diagnostics["led"] = state
         try:
             topic = f"{self.sn}/control/led"
-            payload = json.dumps({"led": state})
-            await self.mqtt_manager.publish(topic, payload)
+            data = "on" if state else "off"
+            await self.mqtt_manager.publish(topic, data)
             _LOGGER.debug("Published LED state %s to %s", state, topic)
             # Reset clear timer
             self._reset_clear_timer()
