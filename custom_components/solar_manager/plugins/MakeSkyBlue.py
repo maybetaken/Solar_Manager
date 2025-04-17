@@ -65,6 +65,7 @@ class MakeSkyBlueDevice(BaseDevice):
         self._register_to_name = {}
         self._unknown_registers = set()
         self._rate_voltage_factory = None
+        self._inverter_ac_voltage_initial = None  # Track initial value of register 2
         self.cmd_topic = f"{self.sn}/control/cmd"
 
     async def send_config(self) -> None:
@@ -258,11 +259,16 @@ class MakeSkyBlueDevice(BaseDevice):
 
     async def handle_notify(self, topic: str, payload: bytes) -> None:
         """Handle MQTT notifications for Modbus data in TLD format."""
-
         changed_entities = set()
 
         parsed_data = self.parser.parse_data(payload)
         _LOGGER.debug("Parsed data keys: %s", list(parsed_data.keys()))
+
+        # Check if register 2 (inverter_ac_voltage) is updated for the first time
+        register_2 = 0x02
+        if register_2 in parsed_data and self._inverter_ac_voltage_initial is None:
+            inverter_ac_voltage = parsed_data[register_2]
+            self._inverter_ac_voltage_initial = inverter_ac_voltage
 
         # Check if register 7 (battery_rated_voltage) is updated
         register_7 = 0x07
@@ -354,7 +360,9 @@ class MakeSkyBlueDevice(BaseDevice):
 
         self._reset_clear_timer()
 
-    def _process_special_register(self, register: str, value: Any) -> Any:
+    def _process_special_register(
+        self, register: int, value: Any
+    ) -> Any:  # Fixed type to int
         """Process a single special register and return the processed value."""
         if not isinstance(value, int):
             _LOGGER.error(
@@ -396,6 +404,31 @@ class MakeSkyBlueDevice(BaseDevice):
         _LOGGER.debug("Handling command: cmd=%s, value=%s", cmd, value)
         data: Any = None
 
+        # Validate register 2 (inverter_ac_voltage) commands
+        if cmd == 0x02:  # inverter_ac_voltage
+            if (
+                self._inverter_ac_voltage_initial is not None
+                and self._inverter_ac_voltage_initial >= 2
+            ):
+                # Restrict to 208V or higher (values 2, 3, 4, 5)
+                if value < 2:
+                    _LOGGER.error(
+                        "Inverter AC voltage value %s not allowed; must be 208V or higher (initial value %s)",
+                        value,
+                        self._inverter_ac_voltage_initial,
+                    )
+                    return
+            # Validate that the value is in the enum
+            enum_mapping = self.parser.protocol_data["registers"][0x02]["enum"]
+            valid_value = False
+            for key in enum_mapping:
+                if int(key, 16) == value:
+                    valid_value = True
+                    break
+            if not valid_value:
+                _LOGGER.error("Invalid inverter_ac_voltage value: %s", value)
+                return
+
         if isinstance(value, str):
             data = value
         elif isinstance(value, int):
@@ -416,3 +449,10 @@ class MakeSkyBlueDevice(BaseDevice):
             return
         _LOGGER.debug("Publishing to topic %s: %s", self.cmd_topic, data)
         await self.mqtt_manager.publish(self.cmd_topic, data)
+        if not isinstance(value, str):
+            self._data_dict[cmd] = (
+                value if isinstance(value, int) else int(value / scale)
+            )
+            entity_name = self._register_to_name.get(cmd)
+            if entity_name and entity_name in self._entities:
+                self._entities[entity_name].schedule_update_ha_state()
