@@ -29,10 +29,16 @@ class ProtocolHelper(ABC):
         self._update_callbacks: dict[str, Callable[[Any], None]] = {}
 
     async def load_protocol(self) -> dict[str, Any]:
-        """Load the protocol data from the file asynchronously."""
+        """Load the protocol data from the file asynchronously and convert register keys to integers."""
         async with aiofiles.open(self.protocol_file) as file:
             data = await file.read()
             self.protocol_data = json.loads(data)
+            # Convert register keys from hex strings to integers
+            if "registers" in self.protocol_data:
+                registers = self.protocol_data["registers"]
+                self.protocol_data["registers"] = {
+                    int(key, 16): value for key, value in registers.items()
+                }
             return self.protocol_data
 
     def set_update_callback(

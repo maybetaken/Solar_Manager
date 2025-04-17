@@ -21,11 +21,11 @@ from .base_device import BaseDevice
 
 _LOGGER = logging.getLogger(__name__)
 
-SPECIAL_REGISTERS = {
-    "0x20": "scheduled_force_charge_start_time",
-    "0x21": "scheduled_force_charge_end_time",
-    "0x22": "scheduled_force_discharge_start_time",
-    "0x23": "scheduled_force_discharge_end_time",
+SPECIAL_REGISTERS: dict[int, str] = {
+    0x20: "scheduled_force_charge_start_time",
+    0x21: "scheduled_force_charge_end_time",
+    0x22: "scheduled_force_discharge_start_time",
+    0x23: "scheduled_force_discharge_end_time",
 }
 
 
@@ -263,7 +263,11 @@ class MakeSkyBlueDevice(BaseDevice):
                         if name in self._entities:
                             changed_entities.add(name)
                 elif register not in self._unknown_registers:
-                    _LOGGER.warning("No name found for register %s", register)
+                    _LOGGER.warning(
+                        "No name found for register %s (hex format %s)",
+                        register,
+                        hex(register),
+                    )
                     self._unknown_registers.add(register)
 
         for name in changed_entities:

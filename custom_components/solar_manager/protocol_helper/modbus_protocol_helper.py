@@ -39,7 +39,7 @@ class ModbusProtocolHelper(ProtocolHelper):
             raise ValueError(f"Register {register_name} not found in protocol")
         await self.callback(register_name, value)
 
-    def parse_data(self, data: bytes) -> dict[str, Any]:
+    def parse_data(self, data: bytes) -> dict[int, Any]:
         """Parse TLD format Modbus data: [start_address:2][length:2][data:L*2].
 
         Returns a dictionary with format {register_address: data}.
@@ -71,7 +71,7 @@ class ModbusProtocolHelper(ProtocolHelper):
 
             parsed_data = {}
             for i in range(length):
-                register = f"0x{(start_address + i):02X}"
+                register = start_address + i
                 value = struct.unpack(
                     f"{endian_prefix}H", data_bytes[i * 2 : (i + 1) * 2]
                 )[0]
