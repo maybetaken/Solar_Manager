@@ -44,6 +44,7 @@ class MakeSkyBlueDevice(BaseDevice):
         self.write_command = 6
         self._register_to_name = {}
         self._unknown_registers = set()
+        self.cmd_topic = f"{self.sn}/control/cmd"
 
     async def send_config(self) -> None:
         """Send MakeSkyBlue-specific configuration to the device."""
@@ -73,7 +74,7 @@ class MakeSkyBlueDevice(BaseDevice):
         await self._send_network_time()
 
     async def _send_network_time(self) -> None:
-        """Send the current time to the device's network_time register (0x1E)."""
+        """Send the current time to the device's network_time register (0x1E) in two parts."""
         try:
             dt = dt_util.now()
             year = dt.year - 2024
@@ -90,6 +91,8 @@ class MakeSkyBlueDevice(BaseDevice):
                     day,
                 )
                 return
+            # Pack: Bit31~26: Year, Bit25~22: Month, Bit21~17: Day
+            # Bit16~12: Hour, Bit11~6: Minute, Bit5~0: Second
             packed_value = (
                 (year & 0x3F) << 26
                 | (month & 0xF) << 22
@@ -98,10 +101,16 @@ class MakeSkyBlueDevice(BaseDevice):
                 | (minute & 0x3F) << 6
                 | (second & 0x3F)
             )
-            topic = f"{self.sn}/{self.model}/{self.slave_id}"
-            data = f"1E{packed_value:07X}"
-            _LOGGER.error("Sending network_time to %s: %s", topic, data)
-            await self.mqtt_manager.publish(topic, data)
+            high_bytes = (packed_value >> 16) & 0xFFFF
+            low_bytes = packed_value & 0xFFFF
+
+            await self.mqtt_manager.publish(
+                self.cmd_topic, self.parser.pack_data(self.slave_id, 0x1E, high_bytes)
+            )
+            await self.mqtt_manager.publish(
+                self.cmd_topic, self.parser.pack_data(self.slave_id, 0x1F, low_bytes)
+            )
+
         except Exception as e:
             _LOGGER.error("Failed to send network_time: %s", e)
 
@@ -318,16 +327,12 @@ class MakeSkyBlueDevice(BaseDevice):
     async def handle_cmd(self, cmd: int, value: Any) -> None:
         """Handle commands from the user."""
         _LOGGER.debug("Handling command: cmd=%s, value=%s", cmd, value)
-        topic = self.sn
         data: Any = None
         if isinstance(value, str):
-            topic += "/" + cmd
             data = value
         elif isinstance(value, int):
-            topic += "/" + self.model + "/" + str(self.slave_id)
             data = self.parser.pack_data(self.slave_id, cmd, value)
         elif isinstance(value, float):
-            topic += "/" + self.model + "/" + str(self.slave_id)
             scale = (
                 self.parser.protocol_data.get("registers", {})
                 .get(cmd, {})
@@ -341,5 +346,5 @@ class MakeSkyBlueDevice(BaseDevice):
         else:
             _LOGGER.error("Unsupported value type: %s", type(value))
             return
-        _LOGGER.debug("Publishing to topic %s: %s", topic, data)
-        await self.mqtt_manager.publish(topic, data)
+        _LOGGER.debug("Publishing to topic %s: %s", self.cmd_topic, data)
+        await self.mqtt_manager.publish(self.cmd_topic, data)
