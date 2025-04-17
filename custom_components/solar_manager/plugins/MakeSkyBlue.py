@@ -28,6 +28,26 @@ SPECIAL_REGISTERS: dict[int, str] = {
     0x23: "scheduled_force_discharge_end_time",
 }
 
+# Voltage ranges for registers 8 and 9 based on platform
+voltage_ranges = {
+    "72V": {
+        "reg8": (60.0, 70.5),
+        "reg9": (72.0, 84.0),
+    },
+    "48V": {
+        "reg8": (40.0, 47.0),
+        "reg9": (48.0, 56.0),
+    },
+    "24V": {
+        "reg8": (20.0, 23.5),
+        "reg9": (24.0, 28.0),
+    },
+    "12V": {
+        "reg8": (10.0, 11.7),
+        "reg9": (12.0, 14.0),
+    },
+}
+
 
 class MakeSkyBlueDevice(BaseDevice):
     """MakeSkyBlue device class for Solar Manager."""
@@ -44,6 +64,7 @@ class MakeSkyBlueDevice(BaseDevice):
         self.write_command = 6
         self._register_to_name = {}
         self._unknown_registers = set()
+        self._rate_voltage_factory = None
         self.cmd_topic = f"{self.sn}/control/cmd"
 
     async def send_config(self) -> None:
@@ -243,6 +264,52 @@ class MakeSkyBlueDevice(BaseDevice):
         parsed_data = self.parser.parse_data(payload)
         _LOGGER.debug("Parsed data keys: %s", list(parsed_data.keys()))
 
+        # Check if register 7 (battery_rated_voltage) is updated
+        register_7 = 0x07
+        if register_7 in parsed_data:
+            rated_voltage_raw = parsed_data[register_7]
+            if rated_voltage_raw != self._rate_voltage_factory:
+                self._rate_voltage_factory = rated_voltage_raw
+                # Map raw value to voltage using enum
+                enum_mapping = self.parser.protocol_data["registers"][register_7][
+                    "enum"
+                ]
+                rated_voltage = None
+                for key, value in enum_mapping.items():
+                    if (
+                        int(key, 16)
+                        == rated_voltage_raw
+                        * self.parser.protocol_data["registers"][register_7]["scale"]
+                    ):
+                        rated_voltage = value
+                        break
+                if rated_voltage is None:
+                    _LOGGER.error("Invalid rated voltage value: %s", rated_voltage_raw)
+                else:
+                    _LOGGER.debug("Detected rated voltage: %s", rated_voltage)
+                    # Update ranges for registers 8 and 9
+                    for reg, entity_name in [
+                        (8, "battery_discharge_min_voltage"),
+                        (9, "battery_start_discharge_voltage"),
+                    ]:
+                        entity = self._entities.get(entity_name)
+                        if entity and rated_voltage in voltage_ranges:
+                            reg_key = f"reg{reg}"
+                            min_value, max_value = voltage_ranges[rated_voltage][
+                                reg_key
+                            ]
+                            # Update entity attributes (assuming entity supports dynamic range updates)
+                            entity._attr_native_min_value = min_value
+                            entity._attr_native_max_value = max_value
+                            _LOGGER.debug(
+                                "Updated range for %s (register %s): min=%s, max=%s",
+                                entity_name,
+                                reg,
+                                min_value,
+                                max_value,
+                            )
+                            changed_entities.add(entity_name)
+
         for register, value in parsed_data.items():
             if register in SPECIAL_REGISTERS:
                 name = SPECIAL_REGISTERS[register]
@@ -328,6 +395,7 @@ class MakeSkyBlueDevice(BaseDevice):
         """Handle commands from the user."""
         _LOGGER.debug("Handling command: cmd=%s, value=%s", cmd, value)
         data: Any = None
+
         if isinstance(value, str):
             data = value
         elif isinstance(value, int):
