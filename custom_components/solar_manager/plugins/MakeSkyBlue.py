@@ -315,7 +315,7 @@ class MakeSkyBlueDevice(BaseDevice):
             _LOGGER.error("Invalid time for register %s: %s", register, e)
             return None
 
-    async def handle_cmd(self, cmd: str, value: Any) -> None:
+    async def handle_cmd(self, cmd: int, value: Any) -> None:
         """Handle commands from the user."""
         _LOGGER.debug("Handling command: cmd=%s, value=%s", cmd, value)
         topic = self.sn
@@ -325,7 +325,7 @@ class MakeSkyBlueDevice(BaseDevice):
             data = value
         elif isinstance(value, int):
             topic += "/" + self.model + "/" + str(self.slave_id)
-            data = self.parser.pack_data(self.slave_id, int(cmd, 16), value)
+            data = self.parser.pack_data(self.slave_id, cmd, value)
         elif isinstance(value, float):
             topic += "/" + self.model + "/" + str(self.slave_id)
             scale = (
@@ -335,7 +335,7 @@ class MakeSkyBlueDevice(BaseDevice):
             )
             data = self.parser.pack_data(
                 self.slave_id,
-                int(cmd, 16),
+                cmd,
                 int(value / scale),
             )
         else:
