@@ -519,7 +519,7 @@
                 "name": "放电截止SOC[d19]"
             },
             "discharge_soc":{
-                "name": "放电开始SOCd[d20]"
+                "name": "放电开始SOC[d20]"
             },
             "communication_address":{
                 "name": "通信地址"
