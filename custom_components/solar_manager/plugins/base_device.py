@@ -45,7 +45,8 @@ class BaseDevice(ABC):
         self._data_dict = {}  # Store parsed data as {name: data}
         self._diagnostic_entities = {}  # Store diagnostic entities
         self._entities = {}  # Store regular entities
-        self._clear_task = None
+        self._diagnostics_clear_task = None  # Timer for diagnostics data
+        self._notify_clear_task = None  # Timer for notify data
 
     async def handle_online(self, topic: str, payload: bytes) -> None:
         """Handle device online message."""
@@ -103,25 +104,33 @@ class BaseDevice(ABC):
 
         await self.send_config()
 
-        # Start clear timer
-        self._reset_clear_timer()
+        # Start clear timers for diagnostics and notify
+        self._reset_diagnostics_clear_timer()
+        self._reset_notify_clear_timer()
 
-    def _reset_clear_timer(self) -> None:
-        """Reset the clear timer."""
-        if self._clear_task:
-            self._clear_task()
-        self._clear_task = async_track_time_interval(
-            self.hass, self._clear_data, CLEAR_INTERVAL
+    def _reset_diagnostics_clear_timer(self) -> None:
+        """Reset the diagnostics clear timer."""
+        if self._diagnostics_clear_task:
+            self._diagnostics_clear_task()
+        self._diagnostics_clear_task = async_track_time_interval(
+            self.hass, self._clear_diagnostics, CLEAR_INTERVAL
         )
 
-    async def _clear_data(self, now=None) -> None:
-        """Clear diagnostics and data after timeout."""
+    def _reset_notify_clear_timer(self) -> None:
+        """Reset the notify clear timer."""
+        if self._notify_clear_task:
+            self._notify_clear_task()
+        self._notify_clear_task = async_track_time_interval(
+            self.hass, self._clear_notify, CLEAR_INTERVAL
+        )
+
+    async def _clear_diagnostics(self, now=None) -> None:
+        """Clear diagnostics data after timeout."""
         self._diagnostics["ssid"] = None
         self._diagnostics["rssi"] = None
         self._diagnostics["led"] = None
-        self._data_dict.clear()
-        _LOGGER.debug("Cleared diagnostics and data for %s", self.sn)
-        # Update entities
+        _LOGGER.debug("Cleared diagnostics for %s", self.sn)
+        # Update diagnostic entities
         for name, entity in self._diagnostic_entities.items():
             if entity is not None:
                 entity.schedule_update_ha_state()
@@ -130,6 +139,12 @@ class BaseDevice(ABC):
                     name,
                     self.sn,
                 )
+
+    async def _clear_notify(self, now=None) -> None:
+        """Clear notify data after timeout."""
+        self._data_dict.clear()
+        _LOGGER.debug("Cleared notify data for %s", self.sn)
+        # Update regular entities
         for name, entity in self._entities.items():
             if entity is not None:
                 entity.schedule_update_ha_state()
@@ -154,8 +169,8 @@ class BaseDevice(ABC):
             self._diagnostics["rssi"] = data.get("rssi")
             self._diagnostics["led"] = data.get("led") == "on"
             _LOGGER.debug("Diagnostics updated for %s: %s", self.sn, self._diagnostics)
-            # Reset clear timer
-            self._reset_clear_timer()
+            # Reset diagnostics clear timer only
+            self._reset_diagnostics_clear_timer()
             # Directly update registered diagnostic entities
             for sensor_name, entity in self._diagnostic_entities.items():
                 if entity is not None:
@@ -190,8 +205,8 @@ class BaseDevice(ABC):
             data = "on" if state else "off"
             await self.mqtt_manager.publish(topic, data)
             _LOGGER.debug("Published LED state %s to %s", state, topic)
-            # Reset clear timer
-            self._reset_clear_timer()
+            # Reset diagnostics clear timer only
+            self._reset_diagnostics_clear_timer()
             # Update diagnostic entities
             for sensor_name, entity in self._diagnostic_entities.items():
                 if entity is not None:
@@ -254,9 +269,12 @@ class BaseDevice(ABC):
 
         self._diagnostic_entities.clear()
         self._entities.clear()
-        if self._clear_task:
-            self._clear_task()
-            self._clear_task = None
+        if self._diagnostics_clear_task:
+            self._diagnostics_clear_task()
+            self._diagnostics_clear_task = None
+        if self._notify_clear_task:
+            self._notify_clear_task()
+            self._notify_clear_task = None
         self.parser = None
         self.mqtt_manager = None
         self.protocol_data = None

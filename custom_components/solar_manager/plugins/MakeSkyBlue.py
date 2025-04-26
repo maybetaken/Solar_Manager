@@ -358,7 +358,8 @@ class MakeSkyBlueDevice(BaseDevice):
                 entity.schedule_update_ha_state()
                 _LOGGER.debug("Updated entity %s due to data change", name)
 
-        self._reset_clear_timer()
+        # Reset notify clear timer only
+        self._reset_notify_clear_timer()
 
     def _process_special_register(
         self, register: int, value: Any
