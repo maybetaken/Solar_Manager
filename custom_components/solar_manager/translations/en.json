@@ -25,10 +25,10 @@
             "name": "LED指示灯"
           },
           "anti_backflow_mode": {
-            "name": "并网状态下防逆流模式"
+            "name": "并网防逆流状态[d16]"
           },
           "energy_saving_mode": {
-            "name": "节能模式"
+            "name": "节能模式[d05]"
           },
           "system_switch": {
             "name": "系统开关机"
@@ -37,7 +37,7 @@
             "name": "复位电能计量"
           },
           "remote_anti_backflow_switch": {
-            "name": "远程防逆流开关"
+            "name": "远程防逆流开关[d22]"
           },
           "12v_relay_switch": {
             "name": "12V继电器开关"
@@ -59,7 +59,7 @@
             "ssid": {"name": "Wi-Fi 名称"},
             "rssi": {"name": "信号强度"},
             "battery_rated_voltage":{
-                "name": "电池额定电压",
+                "name": "电池额定电压[d09]",
                 "state": {
                     "72V": "72V",
                     "48V": "48V",
@@ -68,7 +68,7 @@
                   }
             },
             "inverter_output_max_power":{
-                "name": "逆变器额定功率"
+                "name": "逆变器输出最大功率[d08]"
             },
             "machine_model":{
                 "name": "设备型号",
@@ -441,7 +441,7 @@
         },
         "select":{
             "work_mode":{
-                "name": "工作模式",
+                "name": "工作模式[d01]",
                 "state":{
                     "SUB (Solar-Grid-Storage Mode)": "SUB (光伏-电网-储能模式)",
                     "SBU (Solar-Storage-Grid Mode)": "SBU (光伏-储能-电网模式)",
@@ -451,16 +451,16 @@
                 }
             },
             "grid_voltage_range":{
-                "name": "电网电压范围"
+                "name": "电网电压范围[d02]"
             },
             "inverter_ac_voltage":{
-                "name": "逆变器交流电压"
+                "name": "逆变器交流电压[d03]"
             },
             "ac_frequency":{
-                "name": "交流频率"
+                "name": "交流频率[d04]"
             },
             "charge_priority":{
-                "name": "充电优先级",
+                "name": "充电优先级[d06]",
                 "state": {
                     "CSO (Solar Priority Charging)":" CSO (光伏优先充电)",
                     "CUT (Grid Priority Charging)":" CUT (电网优先充电)",
@@ -469,16 +469,16 @@
                 }
             },
             "battery_type":{
-                "name": "电池类型",
+                "name": "电池类型[d07]",
                 "state": {
                     "Pb (Lead-Acid Battery)": "Pb (铅酸电池)",
                     "Li (Lithium Battery)": "Li (锂电池)"
                 }
             },
             "force_charge_discharge_control":{
-                "name": "强制充放电控制",
+                "name": "强制充放电控制[d21]",
                 "state":{
-                    "Normal Charging": "正常充电",
+                    "Normal Charging": "常规充电",
                     "Force Charging": "强制充电",
                     "Force Discharging": "强制放电"
                 }
@@ -501,34 +501,34 @@
                 "name": "电池充电最大电流"
             },
             "battery_discharge_min_voltage":{
-                "name": "电池放电最低电压"
+                "name": "电池放电最低电压[d11]"
             },
             "battery_start_discharge_voltage":{
-                "name": "电池启动放电电压"
+                "name": "电池开始放电电压[d12]"
             },
             "grid_to_battery_max_charge_current":{
-                "name": "电网充电最大电流"
+                "name": "电网充电最大电流[d13]"
             },
             "pv_to_battery_max_charge_current":{
-                "name": "光伏充电最大电流"
+                "name": "光伏充电最大电流[d14]"
             },
             "inverter_max_grid_current":{
-                "name": "逆变器最大电网电流"
+                "name": "逆变器最大电网电流[d18]"
             },
             "charge_soc":{
-                "name": "充电SOC"
+                "name": "放电截止SOC[d19]"
             },
             "discharge_soc":{
-                "name": "放电SOC"
+                "name": "放电开始SOCd[d20]"
             },
             "communication_address":{
                 "name": "通信地址"
             },
             "anti_backflow_grid_power":{
-                "name": "防逆流电网功率"
+                "name": "防逆流电网功率[d23]"
             },
             "battery_cutoff_voltage":{
-                "name": "电池截止电压"
+                "name": "电池截止电压[d15]"
             },
             "mppt_charge_power":{
                 "name": "MPPT充电功率"
