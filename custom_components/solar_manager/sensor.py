@@ -33,6 +33,7 @@ unit_mapping = {
     "PERCENTAGE": PERCENTAGE,
     "VOLT": UnitOfElectricPotential.VOLT,
     "WATT": UnitOfPower.WATT,
+    "KILO_WATT": UnitOfPower.KILO_WATT,
     "KILOWATT_HOUR": UnitOfEnergy.KILO_WATT_HOUR,
     "WATT_HOUR": UnitOfEnergy.WATT_HOUR,
     "CELSIUS": UnitOfTemperature.CELSIUS,

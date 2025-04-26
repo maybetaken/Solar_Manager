@@ -195,7 +195,7 @@
             "scale": 0.1,
             "sensor_type": "sensor",
             "range": "0~rated_power",
-            "unit": "WATT",
+            "unit": "KILO_WATT",
             "display_precision": 1,
             "icon": "mdi:power"
         },
