@@ -255,6 +255,16 @@ class MakeSkyBlueDevice(BaseDevice):
         _LOGGER.debug(
             "Device info entries: time=%s", device_info.get(Platform.TIME, [])
         )
+
+        device_info["sensor"].append(
+            {
+                "name": "inverter_factor",
+                "scale": 0.01,
+                "icon": "mdi:angle-acute",
+                "display_precision": 2,
+                "device": self,
+            }
+        )
         return device_info
 
     async def handle_notify(self, topic: str, payload: bytes) -> None:
@@ -315,6 +325,23 @@ class MakeSkyBlueDevice(BaseDevice):
                                 max_value,
                             )
                             changed_entities.add(entity_name)
+
+        register_6e = 0x6E
+        if register_6e in parsed_data:
+            power_factor_combined = parsed_data[register_6e]
+            inverter_factor = (power_factor_combined >> 8) & 0xFF
+            power_factor = power_factor_combined & 0xFF
+
+            if self._data_dict.get("inverter_factor") != inverter_factor:
+                self._data_dict["inverter_factor"] = inverter_factor
+                changed_entities.add("inverter_factor")
+                _LOGGER.debug("Updated inverter_factor: %s", inverter_factor)
+
+            if self._data_dict.get("power_factor") != power_factor:
+                self._data_dict["power_factor"] = power_factor
+                changed_entities.add("power_factor")
+                _LOGGER.debug("Updated power_factor: %s", power_factor)
+            del parsed_data[register_6e]
 
         for register, value in parsed_data.items():
             if register in SPECIAL_REGISTERS:

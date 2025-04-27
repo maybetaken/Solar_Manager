@@ -58,6 +58,7 @@
         "sensor":{
             "ssid": {"name": "Wi-Fi 名称"},
             "rssi": {"name": "信号强度"},
+            "inverter_factor":{"name": "逆变器功率因素"},
             "battery_rated_voltage":{
                 "name": "电池额定电压[d09]",
                 "state": {
@@ -124,7 +125,7 @@
                 "name": "逆变器电流"
             },
             "power_factor":{
-                "name": "功率因数"
+                "name": "负载功率因数"
             },
             "grid_power":{
                 "name": "电网功率"
