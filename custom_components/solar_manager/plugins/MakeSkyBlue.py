@@ -363,6 +363,26 @@ class MakeSkyBlueDevice(BaseDevice):
                             )
                             changed_entities.add(entity_name)
 
+        register_145 = 145
+        if register_145 in parsed_data:
+            value = parsed_data[register_145]
+            name = self._register_to_name.get(register_145)
+            if name and isinstance(value, int):
+                major = (value >> 10) & 0x3
+                minor = (value >> 6) & 0x0F
+                patch = value & 0x3F
+                version_str = f"V{major}.{minor}.{patch}"
+                if self._data_dict.get(name) != version_str:
+                    self._data_dict[name] = version_str
+                    _LOGGER.debug(
+                        "Updated software version (register %s): %s",
+                        register_145,
+                        version_str,
+                    )
+                    if name in self._entities:
+                        changed_entities.add(name)
+            del parsed_data[register_145]
+
         register_6e = 0x6E
         if register_6e in parsed_data:
             power_factor_combined = parsed_data[register_6e]

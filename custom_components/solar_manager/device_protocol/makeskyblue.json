@@ -898,7 +898,8 @@
                 "Bit6-Bit9": "Middle Version",
                 "Bit10-Bit15": "Major Version"
             },
-            "icon": "mdi:information"
+            "icon": "mdi:information",
+            "display_precision": null
         },
         "0xC9": {
             "name": "charge_limit_voltage",

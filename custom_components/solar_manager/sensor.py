@@ -54,7 +54,7 @@ class SolarManagerSensor(SensorEntity):
         device_id: str,
         unit: str | None = None,
         scale_factor: float = 1.0,
-        display_precision: int = 0,
+        display_precision: int | None = None,
         icon: str | None = None,
         offset: int = 0,
     ) -> None:
@@ -78,13 +78,15 @@ class SolarManagerSensor(SensorEntity):
         value = self._device.get_dict(self._name)
         if value is None:
             return None
+        if isinstance(value, str):
+            return value
         try:
             value = float(value - self._offset) * self._scale_factor
             if self._attr_suggested_display_precision == 0:
                 value = int(value)
-            return value
         except (ValueError, TypeError):
             return None
+        return value
 
     @property
     def available(self) -> bool:
