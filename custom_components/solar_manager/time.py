@@ -53,15 +53,11 @@ class SolarManagerTime(TimeEntity):
             return None
         try:
             time_str = value.get("time")
-            if not time_str or time_str == "00:00":
-                _LOGGER.debug(
-                    "No valid time for %s: %s, marking unavailable",
-                    self._name,
-                    time_str,
-                )
+            if not time_str:
+                _LOGGER.debug("No time set for %s, marking unavailable", self._name)
                 return None
             time_obj = dt_util.parse_time(time_str)
-            if time_obj is None or (time_obj.hour == 0 and time_obj.minute == 0):
+            if time_obj is None:
                 _LOGGER.warning("Invalid time for %s: %s", self._name, time_str)
                 return None
             return time_obj
@@ -84,38 +80,12 @@ class SolarManagerTime(TimeEntity):
         try:
             hour = value.hour
             minute = value.minute
-            current_value = self._device.get_dict(self._name) or {}
-            interval_days = current_value.get("interval_days", 0)
-            packed_value = (
-                (hour & 0x1F) << 11 | (minute & 0x3F) << 5 | (interval_days & 0x1F)
-            )
+            # Send hour and minute as a combined value (no interval_days packing)
+            packed_value = (hour << 8) | minute
             await self._device.parser.write_data(self._register, packed_value)
-            self._device._data_dict[self._name] = {
-                "time": value.strftime("%H:%M"),
-                "interval_days": interval_days,
-            }
             self.async_write_ha_state()
         except ValueError as e:
             _LOGGER.error("Invalid time value for %s: %s", self._name, e)
-
-    async def async_set_interval_days(self, interval_days: int):
-        """Set the interval_days attribute."""
-        try:
-            interval_days = max(0, min(interval_days, 31))
-            current_value = self._device.get_dict(self._name) or {}
-            time_str = current_value.get("time", "00:00")
-            hour, minute = map(int, time_str.split(":")) if ":" in time_str else (0, 0)
-            packed_value = (
-                (hour & 0x1F) << 11 | (minute & 0x3F) << 5 | (interval_days & 0x1F)
-            )
-            await self._device.parser.write_data(self._register, packed_value)
-            self._device._data_dict[self._name] = {
-                "time": time_str,
-                "interval_days": interval_days,
-            }
-            self.async_write_ha_state()
-        except ValueError as e:
-            _LOGGER.error("Invalid interval_days for %s: %s", self._name, e)
 
     @property
     def available(self) -> bool:
@@ -125,11 +95,9 @@ class SolarManagerTime(TimeEntity):
             _LOGGER.debug("Entity %s unavailable: value is None", self._name)
             return False
         time_str = value.get("time")
-        valid = bool(time_str and time_str != "00:00")
+        valid = bool(time_str)
         if not valid:
-            _LOGGER.debug(
-                "Entity %s unavailable: invalid time %s", self._name, time_str
-            )
+            _LOGGER.debug("Entity %s unavailable: no time set", self._name)
         return valid
 
     @property

@@ -43,9 +43,6 @@ class ModbusProtocolHelper(ProtocolHelper):
         if self.protocol_data is None:
             self.protocol_data = await self.load_protocol()
 
-        details = self.protocol_data["registers"].get(register_name)
-        if not details:
-            raise ValueError(f"Register {register_name} not found in protocol")
         await self.callback(register_name, value)
 
     def parse_data(self, data: bytes) -> dict[int, Any]:

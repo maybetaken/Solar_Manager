@@ -250,8 +250,8 @@
                 "state":{
                     "No Battery" : "无电池",
                     "Battery Present" : "电池存在",
-                    "Battery Charging" : "电池充电",
-                    "Battery Discharging" : "电池放电"
+                    "Charging" : "电池充电",
+                    "Discharging" : "电池放电"
                 }
             },
             "grid_energy_flow_direction":{
@@ -495,6 +495,12 @@
             }
         },
         "number":{
+            "force_charge_interval":{
+                "name": "定时强制充电间隔时间(天)"
+            },
+            "force_discharge_interval":{
+                "name": "定时强制放电间隔时间(天)"
+            },
             "battery_discharge_max_current":{
                 "name": "电池放电最大电流"
             },
