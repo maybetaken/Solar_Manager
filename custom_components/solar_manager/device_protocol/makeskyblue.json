@@ -492,7 +492,8 @@
             "range": "-100~100A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-dc",
+            "offset": 1000
         },
         "0x6D": {
             "name": "inverter_current",
@@ -502,7 +503,8 @@
             "range": "-100~100A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-dc",
+            "offset": 1000
         },
         "0x6E": {
             "name": "power_factor",
@@ -522,7 +524,8 @@
             "range": "-30000~30000W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "offset": 30000
         },
         "0x70": {
             "name": "load_power",
@@ -532,7 +535,8 @@
             "range": "-30000~30000W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "offset": 30000
         },
         "0x71": {
             "name": "inverter_input_output_power",
@@ -542,7 +546,8 @@
             "range": "-30000~30000W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "offset": 30000
         },
         "0x72": {
             "name": "battery_voltage",
@@ -771,7 +776,8 @@
             "range": "-40~100°C",
             "unit": "CELSIUS",
             "display_precision": 1,
-            "icon": "mdi:thermometer"
+            "icon": "mdi:thermometer",
+            "offset": 400
         },
         "0x88": {
             "name": "inverter_temperature",
@@ -781,7 +787,8 @@
             "range": "-40~100°C",
             "unit": "CELSIUS",
             "display_precision": 1,
-            "icon": "mdi:thermometer"
+            "icon": "mdi:thermometer",
+            "offset": 400
         },
         "0x89": {
             "name": "mppt1_temperature",
@@ -791,7 +798,8 @@
             "range": "-40~100°C",
             "unit": "CELSIUS",
             "display_precision": 1,
-            "icon": "mdi:thermometer"
+            "icon": "mdi:thermometer",
+            "offset": 400
         },
         "0x8A": {
             "name": "mppt2_temperature",
@@ -801,7 +809,8 @@
             "range": "-40~100°C",
             "unit": "CELSIUS",
             "display_precision": 1,
-            "icon": "mdi:thermometer"
+            "icon": "mdi:thermometer",
+            "offset": 400
         },
         "0x8B": {
             "name": "mppt3_temperature",
@@ -811,7 +820,8 @@
             "range": "-40~100°C",
             "unit": "CELSIUS",
             "display_precision": 1,
-            "icon": "mdi:thermometer"
+            "icon": "mdi:thermometer",
+            "offset": 400
         },
         "0x8C": {
             "name": "relay_status",

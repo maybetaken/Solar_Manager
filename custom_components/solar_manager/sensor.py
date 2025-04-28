@@ -56,11 +56,13 @@ class SolarManagerSensor(SensorEntity):
         scale_factor: float = 1.0,
         display_precision: int = 0,
         icon: str | None = None,
+        offset: int = 0,
     ) -> None:
         """Initialize the sensor."""
         self._device = device
         self._name = name
         self._attr_unique_id = unique_id
+        self._offset = offset
         self._device_id = device_id
         self._attr_translation_key = name
         self._attr_has_entity_name = True
@@ -77,7 +79,7 @@ class SolarManagerSensor(SensorEntity):
         if value is None:
             return None
         try:
-            value = float(value) * self._scale_factor
+            value = float(value - self._offset) * self._scale_factor
             if self._attr_suggested_display_precision == 0:
                 value = int(value)
             return value
@@ -231,6 +233,7 @@ async def async_setup_entry(
                 scale_factor=device.get("scale", 1.0),
                 display_precision=device.get("display_precision", 0),
                 icon=device.get("icon"),
+                offset=device.get("offset", 0),
             )
         sensors.append(sensor)
     async_add_entities(sensors)

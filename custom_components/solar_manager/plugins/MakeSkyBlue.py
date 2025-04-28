@@ -197,6 +197,7 @@ class MakeSkyBlueDevice(BaseDevice):
                             "icon": details.get("icon"),
                             "display_precision": details.get("display_precision", 0),
                             "device": self,
+                            "offset": details.get("offset", 0),
                         }
                     )
 
