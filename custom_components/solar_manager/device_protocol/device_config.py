@@ -13,14 +13,14 @@ DEVICE_CONFIG = {
         "protocol": "makeskyblue",
         "device_class": MakeSkyBlueDevice,
     },
-    "ChintMeter": {
-        "protocol": "chintmeter",
-        "device_class": None,
-    },
-    "REVO": {
-        "protocol": "revo",
-        "device_class": None,
-    },
+    # "ChintMeter": {
+    #     "protocol": "chintmeter",
+    #     "device_class": None,
+    # },
+    # "REVO": {
+    #     "protocol": "revo",
+    #     "device_class": None,
+    # },
 }
 
 # Derived lists and mappings
