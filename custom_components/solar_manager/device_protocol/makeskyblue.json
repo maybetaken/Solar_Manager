@@ -1,23 +1,19 @@
 {
     "endianness": "BE",
     "control_type": "MODBUS",
-    "slave_id": 1,
-    "read_command": 3,
-    "write_command": 6,
-    "register_total_length": 217,
-    "register_start_address": 0,
     "segments": [
-        {"start_address": 0, "length": 24},
-        {"start_address": 32, "length": 5},
-        {"start_address": 100, "length": 46},
-        {"start_address": 201, "length": 16}
+        {"slave_id": 1, "start_address": 0, "length": 24, "read_command": 3},
+        {"slave_id": 1, "start_address": 32, "length": 5, "read_command": 3},
+        {"slave_id": 1, "start_address": 100, "length": 46, "read_command": 3},
+        {"slave_id": 1, "start_address": 201, "length": 16, "read_command": 3}
     ],
     "registers": {
-        "0x00": {
+        "0x300000": {
             "name": "work_mode",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "select",
+            "write_command": 6,
             "enum": {
                 "0": "SUB (Solar-Grid-Storage Mode)",
                 "1": "UTI (Grid Priority Mode)",
@@ -27,22 +23,24 @@
             },
             "icon": "mdi:cog"
         },
-        "0x01": {
+        "0x300001": {
             "name": "grid_voltage_range",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "select",
+            "write_command": 6,
             "enum": {
                 "0": "WID (90~270VAC)",
                 "1": "NOR (160~240VAC)"
             },
             "icon": "mdi:lightning-bolt"
         },
-        "0x02": {
+        "0x300002": {
             "name": "inverter_ac_voltage",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "select",
+            "write_command": 6,
             "enum": {
                 "0": "110V",
                 "1": "120V",
@@ -53,18 +51,19 @@
             },
             "icon": "mdi:lightning-bolt"
         },
-        "0x03": {
+        "0x300003": {
             "name": "ac_frequency",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "select",
+            "write_command": 6,
             "enum": {
                 "0": "50Hz",
                 "1": "60Hz"
             },
             "icon": "mdi:sine-wave"
         },
-        "0x04": {
+        "0x300004": {
             "name": "energy_saving_mode",
             "type": "UINT16",
             "scale": 1,
@@ -75,11 +74,12 @@
             },
             "icon": "mdi:leaf"
         },
-        "0x05": {
+        "0x300005": {
             "name": "charge_priority",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "select",
+            "write_command": 6,
             "enum": {
                 "0": "CSO (Solar Priority Charging)",
                 "1": "CUT (Grid Priority Charging)",
@@ -88,18 +88,19 @@
             },
             "icon": "mdi:battery-charging"
         },
-        "0x06": {
+        "0x300006": {
             "name": "battery_type",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "select",
+            "write_command": 6,
             "enum": {
                 "0": "Pb (Lead-Acid Battery)",
                 "1": "Li (Lithium Battery)"
             },
             "icon": "mdi:battery"
         },
-        "0x07": {
+        "0x300007": {
             "name": "battery_rated_voltage",
             "type": "UINT16",
             "scale": 0.1,
@@ -114,11 +115,12 @@
             "display_precision": 1,
             "icon": "mdi:battery"
         },
-        "0x08": {
+        "0x300008": {
             "name": "battery_discharge_min_voltage",
             "type": "UINT16",
             "scale": 0.1,
             "sensor_type": "number",
+            "write_command": 6,
             "range": {
                 "72V_platform": "60V-70.5V",
                 "48V_platform": "40V-47V",
@@ -132,11 +134,12 @@
             "display_precision": 1,
             "icon": "mdi:battery-minus"
         },
-        "0x09": {
+        "0x300009": {
             "name": "battery_start_discharge_voltage",
             "type": "UINT16",
             "scale": 0.1,
             "sensor_type": "number",
+            "write_command": 6,
             "range": {
                 "72V_platform": "72V-84V",
                 "48V_platform": "48V-56V",
@@ -150,11 +153,12 @@
             "display_precision": 1,
             "icon": "mdi:battery-minus"
         },
-        "0x0A": {
+        "0x30000A": {
             "name": "grid_to_battery_max_charge_current",
             "type": "UINT16",
             "scale": 0.1,
             "sensor_type": "number",
+            "write_command": 6,
             "range": "0~100A",
             "min_value": 0.0,
             "max_value": 100.0,
@@ -163,11 +167,12 @@
             "display_precision": 1,
             "icon": "mdi:current-dc"
         },
-        "0x0B": {
+        "0x30000B": {
             "name": "pv_to_battery_max_charge_current",
             "type": "UINT16",
             "scale": 0.1,
             "sensor_type": "number",
+            "write_command": 6,
             "range": "0~100A",
             "min_value": 0.0,
             "max_value": 100.0,
@@ -176,11 +181,12 @@
             "display_precision": 1,
             "icon": "mdi:current-dc"
         },
-        "0x0C": {
+        "0x30000C": {
             "name": "inverter_max_grid_current",
             "type": "UINT16",
             "scale": 0.1,
             "sensor_type": "number",
+            "write_command": 6,
             "range": "0~30A",
             "min_value": 0.0,
             "max_value": 30.0,
@@ -189,7 +195,7 @@
             "display_precision": 1,
             "icon": "mdi:current-dc"
         },
-        "0x0D": {
+        "0x30000D": {
             "name": "inverter_output_max_power",
             "type": "UINT16",
             "scale": 0.1,
@@ -199,11 +205,12 @@
             "display_precision": 1,
             "icon": "mdi:power"
         },
-        "0x0E": {
+        "0x30000E": {
             "name": "charge_soc",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "number",
+            "write_command": 6,
             "range": "0~100%",
             "min_value": 0.0,
             "max_value": 100.0,
@@ -212,11 +219,12 @@
             "display_precision": 0,
             "icon": "mdi:battery-charging"
         },
-        "0x0F": {
+        "0x30000F": {
             "name": "discharge_soc",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "number",
+            "write_command": 6,
             "range": "0~90%",
             "min_value": 0.0,
             "max_value": 90.0,
@@ -225,7 +233,7 @@
             "display_precision": 0,
             "icon": "mdi:battery-charging"
         },
-        "0x10": {
+        "0x300010": {
             "name": "anti_backflow_mode",
             "type": "UINT16",
             "scale": 1,
@@ -236,7 +244,7 @@
             },
             "icon": "mdi:toggle-switch"
         },
-        "0x11": {
+        "0x300011": {
             "name": "system_switch",
             "type": "UINT16",
             "scale": 1,
@@ -247,11 +255,12 @@
             },
             "icon": "mdi:power"
         },
-        "0x12": {
+        "0x300012": {
             "name": "communication_address",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "number",
+            "write_command": 6,
             "range": "0~128",
             "min_value": 0.0,
             "max_value": 128.0,
@@ -260,7 +269,7 @@
             "display_precision": 0,
             "icon": "mdi:network"
         },
-        "0x13": {
+        "0x300013": {
             "name": "reset_energy_meter",
             "type": "UINT16",
             "scale": 1,
@@ -271,11 +280,12 @@
             },
             "icon": "mdi:autorenew"
         },
-        "0x14": {
+        "0x300014": {
             "name": "force_charge_discharge_control",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "select",
+            "write_command": 6,
             "enum": {
                 "0": "Normal Charging",
                 "1": "Force Charging",
@@ -283,7 +293,7 @@
             },
             "icon": "mdi:battery-charging"
         },
-        "0x15": {
+        "0x300015": {
             "name": "remote_anti_backflow_switch",
             "type": "UINT16",
             "scale": 1,
@@ -294,11 +304,12 @@
             },
             "icon": "mdi:toggle-switch"
         },
-        "0x16": {
+        "0x300016": {
             "name": "anti_backflow_grid_power",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "number",
+            "write_command": 6,
             "range": "20W~200W",
             "min_value": 20.0,
             "max_value": 200.0,
@@ -307,11 +318,12 @@
             "display_precision": 0,
             "icon": "mdi:power"
         },
-        "0x17": {
+        "0x300017": {
             "name": "battery_cutoff_voltage",
             "type": "UINT16",
             "scale": 0.1,
             "sensor_type": "number",
+            "write_command": 6,
             "range": {
                 "72V_platform": "76V~84V",
                 "48V_platform": "51V~59V",
@@ -325,11 +337,12 @@
             "display_precision": 1,
             "icon": "mdi:battery-minus"
         },
-        "0x20": {
+        "0x300020": {
             "name": "scheduled_force_charge_start_time",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "time",
+            "write_command": 6,
             "range": "00:00~23:59",
             "min_value": 0.0,
             "max_value": 1439.0,
@@ -338,11 +351,12 @@
             "display_precision": 0,
             "icon": "mdi:clock-start"
         },
-        "0x21": {
+        "0x300021": {
             "name": "scheduled_force_charge_end_time",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "time",
+            "write_command": 6,
             "range": "00:00~23:59",
             "min_value": 0.0,
             "max_value": 1439.0,
@@ -351,11 +365,12 @@
             "display_precision": 0,
             "icon": "mdi:clock-end"
         },
-        "0x22": {
+        "0x300022": {
             "name": "scheduled_force_discharge_start_time",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "time",
+            "write_command": 6,
             "range": "00:00~23:59",
             "min_value": 0.0,
             "max_value": 1439.0,
@@ -364,11 +379,12 @@
             "display_precision": 0,
             "icon": "mdi:clock-start"
         },
-        "0x23": {
+        "0x300023": {
             "name": "scheduled_force_discharge_end_time",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "time",
+            "write_command": 6,
             "range": "00:00~23:59",
             "min_value": 0.0,
             "max_value": 1439.0,
@@ -377,11 +393,12 @@
             "display_precision": 0,
             "icon": "mdi:clock-end"
         },
-        "0x24": {
+        "0x300024": {
             "name": "scheduled_force_charge_discharge_enable",
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "select",
+            "write_command": 6,
             "enum": {
                 "0": "Disabled",
                 "1": "Enable Scheduled Force Charging Only",
@@ -390,7 +407,7 @@
             },
             "icon": "mdi:calendar-check"
         },
-        "0x64": {
+        "0x300064": {
             "name": "machine_model",
             "type": "UINT16",
             "scale": 1,
@@ -406,7 +423,7 @@
             },
             "icon": "mdi:information"
         },
-        "0x65": {
+        "0x300065": {
             "name": "inverter_status",
             "type": "UINT16",
             "scale": 1,
@@ -421,7 +438,7 @@
             },
             "icon": "mdi:power-plug"
         },
-        "0x66": {
+        "0x300066": {
             "name": "mppt_status",
             "type": "UINT16",
             "scale": 1,
@@ -434,7 +451,7 @@
             },
             "icon": "mdi:solar-panel"
         },
-        "0x67": {
+        "0x300067": {
             "name": "bus_voltage",
             "type": "UINT16",
             "scale": 1,
@@ -444,7 +461,7 @@
             "display_precision": 0,
             "icon": "mdi:lightning-bolt"
         },
-        "0x68": {
+        "0x300068": {
             "name": "grid_frequency",
             "type": "UINT16",
             "scale": 0.1,
@@ -454,7 +471,7 @@
             "display_precision": 1,
             "icon": "mdi:sine-wave"
         },
-        "0x69": {
+        "0x300069": {
             "name": "grid_voltage",
             "type": "UINT16",
             "scale": 1,
@@ -464,7 +481,7 @@
             "display_precision": 0,
             "icon": "mdi:lightning-bolt"
         },
-        "0x6A": {
+        "0x30006A": {
             "name": "inverter_output_voltage",
             "type": "UINT16",
             "scale": 1,
@@ -474,7 +491,7 @@
             "display_precision": 0,
             "icon": "mdi:lightning-bolt"
         },
-        "0x6B": {
+        "0x30006B": {
             "name": "inverter_off_grid_load_current",
             "type": "UINT16",
             "scale": 0.1,
@@ -484,7 +501,7 @@
             "display_precision": 1,
             "icon": "mdi:current-dc"
         },
-        "0x6C": {
+        "0x30006C": {
             "name": "inverter_grid_port_current",
             "type": "UINT16",
             "scale": 0.1,
@@ -495,7 +512,7 @@
             "icon": "mdi:current-dc",
             "offset": 1000
         },
-        "0x6D": {
+        "0x30006D": {
             "name": "inverter_current",
             "type": "UINT16",
             "scale": 0.1,
@@ -506,7 +523,7 @@
             "icon": "mdi:current-dc",
             "offset": 1000
         },
-        "0x6E": {
+        "0x30006E": {
             "name": "power_factor",
             "type": "UINT16",
             "scale": 0.01,
@@ -516,7 +533,7 @@
             "display_precision": 2,
             "icon": "mdi:angle-acute"
         },
-        "0x6F": {
+        "0x30006F": {
             "name": "grid_power",
             "type": "UINT16",
             "scale": 1,
@@ -527,7 +544,7 @@
             "icon": "mdi:power",
             "offset": 30000
         },
-        "0x70": {
+        "0x300070": {
             "name": "load_power",
             "type": "UINT16",
             "scale": 1,
@@ -538,7 +555,7 @@
             "icon": "mdi:power",
             "offset": 30000
         },
-        "0x71": {
+        "0x300071": {
             "name": "inverter_input_output_power",
             "type": "UINT16",
             "scale": 1,
@@ -549,7 +566,7 @@
             "icon": "mdi:power",
             "offset": 30000
         },
-        "0x72": {
+        "0x300072": {
             "name": "battery_voltage",
             "type": "UINT16",
             "scale": 0.1,
@@ -559,7 +576,7 @@
             "display_precision": 1,
             "icon": "mdi:battery"
         },
-        "0x73": {
+        "0x300073": {
             "name": "battery_charge_discharge_current",
             "type": "INT16",
             "scale": 0.1,
@@ -569,7 +586,7 @@
             "display_precision": 1,
             "icon": "mdi:current-dc"
         },
-        "0x74": {
+        "0x300074": {
             "name": "grid_rs_voltage",
             "type": "UINT16",
             "scale": 1,
@@ -579,7 +596,7 @@
             "display_precision": 0,
             "icon": "mdi:lightning-bolt"
         },
-        "0x75": {
+        "0x300075": {
             "name": "grid_st_voltage",
             "type": "UINT16",
             "scale": 1,
@@ -589,7 +606,7 @@
             "display_precision": 0,
             "icon": "mdi:lightning-bolt"
         },
-        "0x76": {
+        "0x300076": {
             "name": "grid_tr_voltage",
             "type": "UINT16",
             "scale": 1,
@@ -599,7 +616,7 @@
             "display_precision": 0,
             "icon": "mdi:lightning-bolt"
         },
-        "0x77": {
+        "0x300077": {
             "name": "grid_rs_current",
             "type": "UINT16",
             "scale": 0.1,
@@ -609,7 +626,7 @@
             "display_precision": 1,
             "icon": "mdi:current-dc"
         },
-        "0x78": {
+        "0x300078": {
             "name": "grid_st_current",
             "type": "UINT16",
             "scale": 0.1,
@@ -619,7 +636,7 @@
             "display_precision": 1,
             "icon": "mdi:current-dc"
         },
-        "0x79": {
+        "0x300079": {
             "name": "grid_tr_current",
             "type": "UINT16",
             "scale": 0.1,
@@ -629,7 +646,7 @@
             "display_precision": 1,
             "icon": "mdi:current-dc"
         },
-        "0x7A": {
+        "0x30007A": {
             "name": "mppt1_voltage",
             "type": "UINT16",
             "scale": 0.1,
@@ -639,7 +656,7 @@
             "display_precision": 1,
             "icon": "mdi:solar-panel"
         },
-        "0x7B": {
+        "0x30007B": {
             "name": "mppt2_voltage",
             "type": "UINT16",
             "scale": 0.1,
@@ -649,7 +666,7 @@
             "display_precision": 1,
             "icon": "mdi:solar-panel"
         },
-        "0x7C": {
+        "0x30007C": {
             "name": "mppt3_voltage",
             "type": "UINT16",
             "scale": 0.1,
@@ -659,7 +676,7 @@
             "display_precision": 1,
             "icon": "mdi:solar-panel"
         },
-        "0x7D": {
+        "0x30007D": {
             "name": "mppt1_current",
             "type": "UINT16",
             "scale": 0.1,
@@ -669,7 +686,7 @@
             "display_precision": 1,
             "icon": "mdi:current-dc"
         },
-        "0x7E": {
+        "0x30007E": {
             "name": "mppt2_current",
             "type": "UINT16",
             "scale": 0.1,
@@ -679,7 +696,7 @@
             "display_precision": 1,
             "icon": "mdi:current-dc"
         },
-        "0x7F": {
+        "0x30007F": {
             "name": "mppt3_current",
             "type": "UINT16",
             "scale": 0.1,
@@ -689,7 +706,7 @@
             "display_precision": 1,
             "icon": "mdi:current-dc"
         },
-        "0x80": {
+        "0x300080": {
             "name": "mppt1_power",
             "type": "UINT16",
             "scale": 1,
@@ -699,7 +716,7 @@
             "display_precision": 0,
             "icon": "mdi:power"
         },
-        "0x81": {
+        "0x300081": {
             "name": "mppt2_power",
             "type": "UINT16",
             "scale": 1,
@@ -709,7 +726,7 @@
             "display_precision": 0,
             "icon": "mdi:power"
         },
-        "0x82": {
+        "0x300082": {
             "name": "mppt3_power",
             "type": "UINT16",
             "scale": 1,
@@ -719,7 +736,7 @@
             "display_precision": 0,
             "icon": "mdi:power"
         },
-        "0x83": {
+        "0x300083": {
             "name": "mppt_daily_generation",
             "type": "UINT16",
             "scale": 0.1,
@@ -729,7 +746,7 @@
             "display_precision": 1,
             "icon": "mdi:solar-power"
         },
-        "0x84": {
+        "0x300084": {
             "name": "mppt_cumulative_generation",
             "type": "UINT32",
             "scale": 0.1,
@@ -739,7 +756,7 @@
             "display_precision": 1,
             "icon": "mdi:solar-power"
         },
-        "0x86": {
+        "0x300086": {
             "name": "system_fault",
             "type": "UINT16",
             "scale": 1,
@@ -768,7 +785,7 @@
             },
             "icon": "mdi:alert"
         },
-        "0x87": {
+        "0x300087": {
             "name": "dc_dc_temperature",
             "type": "UINT16",
             "scale": 0.1,
@@ -779,7 +796,7 @@
             "icon": "mdi:thermometer",
             "offset": 400
         },
-        "0x88": {
+        "0x300088": {
             "name": "inverter_temperature",
             "type": "UINT16",
             "scale": 0.1,
@@ -790,7 +807,7 @@
             "icon": "mdi:thermometer",
             "offset": 400
         },
-        "0x89": {
+        "0x300089": {
             "name": "mppt1_temperature",
             "type": "UINT16",
             "scale": 0.1,
@@ -801,7 +818,7 @@
             "icon": "mdi:thermometer",
             "offset": 400
         },
-        "0x8A": {
+        "0x30008A": {
             "name": "mppt2_temperature",
             "type": "UINT16",
             "scale": 0.1,
@@ -812,7 +829,7 @@
             "icon": "mdi:thermometer",
             "offset": 400
         },
-        "0x8B": {
+        "0x30008B": {
             "name": "mppt3_temperature",
             "type": "UINT16",
             "scale": 0.1,
@@ -823,7 +840,7 @@
             "icon": "mdi:thermometer",
             "offset": 400
         },
-        "0x8C": {
+        "0x30008C": {
             "name": "relay_status",
             "type": "UINT16",
             "scale": 1,
@@ -839,7 +856,7 @@
             },
             "icon": "mdi:electric-switch"
         },
-        "0x8D": {
+        "0x30008D": {
             "name": "pv_energy_flow_direction",
             "type": "UINT16",
             "scale": 1,
@@ -851,7 +868,7 @@
             },
             "icon": "mdi:solar-panel"
         },
-        "0x8E": {
+        "0x30008E": {
             "name": "battery_energy_flow_direction",
             "type": "UINT16",
             "scale": 1,
@@ -864,7 +881,7 @@
             },
             "icon": "mdi:battery"
         },
-        "0x8F": {
+        "0x30008F": {
             "name": "grid_energy_flow_direction",
             "type": "UINT16",
             "scale": 1,
@@ -877,7 +894,7 @@
             },
             "icon": "mdi:transmission-tower"
         },
-        "0x90": {
+        "0x300090": {
             "name": "load_energy_flow_direction",
             "type": "UINT16",
             "scale": 1,
@@ -888,7 +905,7 @@
             },
             "icon": "mdi:power-plug"
         },
-        "0x91": {
+        "0x300091": {
             "name": "software_version",
             "type": "UINT16",
             "scale": 1,
@@ -901,7 +918,7 @@
             "icon": "mdi:information",
             "display_precision": null
         },
-        "0xC9": {
+        "0x3000C9": {
             "name": "charge_limit_voltage",
             "type": "UINT16",
             "scale": 0.01,
@@ -911,7 +928,7 @@
             "display_precision": 2,
             "icon": "mdi:battery"
         },
-        "0xCA": {
+        "0x3000CA": {
             "name": "charge_limit_current",
             "type": "UINT16",
             "scale": 0.01,
@@ -921,7 +938,7 @@
             "display_precision": 2,
             "icon": "mdi:current-dc"
         },
-        "0xCB": {
+        "0x3000CB": {
             "name": "discharge_limit_voltage",
             "type": "UINT16",
             "scale": 0.01,
@@ -931,7 +948,7 @@
             "display_precision": 2,
             "icon": "mdi:battery"
         },
-        "0xCC": {
+        "0x3000CC": {
             "name": "discharge_limit_current",
             "type": "UINT16",
             "scale": 0.01,
@@ -941,7 +958,7 @@
             "display_precision": 2,
             "icon": "mdi:current-dc"
         },
-        "0xCD": {
+        "0x3000CD": {
             "name": "battery_total_voltage",
             "type": "UINT16",
             "scale": 0.01,
@@ -951,7 +968,7 @@
             "display_precision": 2,
             "icon": "mdi:battery"
         },
-        "0xCE": {
+        "0x3000CE": {
             "name": "battery_total_current",
             "type": "UINT16",
             "scale": 0.01,
@@ -961,7 +978,7 @@
             "display_precision": 2,
             "icon": "mdi:current-dc"
         },
-        "0xCF": {
+        "0x3000CF": {
             "name": "max_temperature",
             "type": "UINT16",
             "scale": 0.1,
@@ -971,7 +988,7 @@
             "display_precision": 1,
             "icon": "mdi:thermometer"
         },
-        "0xD0": {
+        "0x3000D0": {
             "name": "soc",
             "type": "UINT16",
             "scale": 1,
@@ -981,7 +998,7 @@
             "display_precision": 0,
             "icon": "mdi:battery-charging"
         },
-        "0xD1": {
+        "0x3000D1": {
             "name": "soh",
             "type": "UINT16",
             "scale": 1,
@@ -991,7 +1008,7 @@
             "display_precision": 0,
             "icon": "mdi:battery-heart"
         },
-        "0xD2": {
+        "0x3000D2": {
             "name": "remaining_capacity",
             "type": "UINT16",
             "scale": 0.01,
@@ -1001,7 +1018,7 @@
             "display_precision": 2,
             "icon": "mdi:battery"
         },
-        "0xD3": {
+        "0x3000D3": {
             "name": "full_charge_capacity",
             "type": "UINT16",
             "scale": 0.01,
@@ -1011,7 +1028,7 @@
             "display_precision": 2,
             "icon": "mdi:battery"
         },
-        "0xD4": {
+        "0x3000D4": {
             "name": "design_capacity",
             "type": "UINT16",
             "scale": 0.01,
@@ -1021,7 +1038,7 @@
             "display_precision": 2,
             "icon": "mdi:battery"
         },
-        "0xD5": {
+        "0x3000D5": {
             "name": "cycle_count",
             "type": "UINT16",
             "scale": 1,
@@ -1031,7 +1048,7 @@
             "display_precision": 0,
             "icon": "mdi:counter"
         },
-        "0xD6": {
+        "0x3000D6": {
             "name": "alarm_flag",
             "type": "UINT16",
             "scale": 1,
@@ -1054,7 +1071,7 @@
             },
             "icon": "mdi:alert"
         },
-        "0xD7": {
+        "0x3000D7": {
             "name": "protection_flag",
             "type": "UINT16",
             "scale": 1,
@@ -1077,7 +1094,7 @@
             },
             "icon": "mdi:shield-alert"
         },
-        "0xD8": {
+        "0x3000D8": {
             "name": "fault_status",
             "type": "UINT16",
             "scale": 1,

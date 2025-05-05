@@ -51,7 +51,7 @@ class ModbusProtocolHelper(ProtocolHelper):
         Returns a dictionary with format {register_address: value}.
         """
         try:
-            if len(data) < 4:
+            if len(data) < 6:
                 _LOGGER.error("Payload too short for TLD format: %d bytes", len(data))
                 return {}
 
@@ -65,14 +65,17 @@ class ModbusProtocolHelper(ProtocolHelper):
                 endian_prefix = ">"
 
             # Unpack start address and length
-            start_address, length = struct.unpack(f"{endian_prefix}HH", data[:4])
-            data_bytes = data[4:]
+            _, read_command, start_address, length = struct.unpack(
+                f"{endian_prefix}BBHH", data[:6]
+            )
+            data_bytes = data[6:]
+            read_command = read_command << 20
 
             parsed_data = {}
             byte_offset = 0
             i = 0
             while i < length:
-                register_address = start_address + i
+                register_address = read_command + start_address + i
                 # Use integer register_address directly for lookup
                 register_info = self.protocol_data["registers"].get(register_address)
 
@@ -182,9 +185,11 @@ class ModbusProtocolHelper(ProtocolHelper):
 
         return parsed_data
 
-    def pack_data(self, slave_id: int, address: int, value: int) -> bytes:
+    def pack_data(
+        self, slave_id: int, address: int, value: int, write_command: int = 6
+    ) -> bytes:
         """Pack data according to the protocol."""
-        write_command = self.protocol_data["write_command"]
+        address = address & 0xFFFF
         packed_data = (
             struct.pack(">B", slave_id)
             + struct.pack(">B", write_command)

@@ -22,35 +22,35 @@ from .base_device import BaseDevice
 _LOGGER = logging.getLogger(__name__)
 
 SPECIAL_REGISTERS: dict[int, str] = {
-    0x20: "scheduled_force_charge_start_time",
-    0x21: "scheduled_force_charge_end_time",
-    0x22: "scheduled_force_discharge_start_time",
-    0x23: "scheduled_force_discharge_end_time",
+    0x300020: "scheduled_force_charge_start_time",
+    0x300021: "scheduled_force_charge_end_time",
+    0x300022: "scheduled_force_discharge_start_time",
+    0x300023: "scheduled_force_discharge_end_time",
 }
 
 # Pseudo-registers for interval_days to distinguish from time commands
 PSEUDO_REGISTERS: dict[int, tuple[str, int]] = {
-    0x10020: ("force_charge_interval", 0x20),  # Maps to real register 0x20
-    0x10022: ("force_discharge_interval", 0x22),  # Maps to real register 0x22
+    0x10020: ("force_charge_interval", 0x300020),  # Maps to real register 0x20
+    0x10022: ("force_discharge_interval", 0x300022),  # Maps to real register 0x22
 }
 
 # Voltage ranges for registers 8 and 9 based on platform
 voltage_ranges = {
     "72V": {
-        "reg8": (60.0, 70.5),
-        "reg9": (72.0, 84.0),
+        0x300008: (60.0, 70.5),
+        0x300009: (72.0, 84.0),
     },
     "48V": {
-        "reg8": (40.0, 47.0),
-        "reg9": (48.0, 56.0),
+        0x300008: (40.0, 47.0),
+        0x300009: (48.0, 56.0),
     },
     "24V": {
-        "reg8": (20.0, 23.5),
-        "reg9": (24.0, 28.0),
+        0x300008: (20.0, 23.5),
+        0x300009: (24.0, 28.0),
     },
     "12V": {
-        "reg8": (10.0, 11.7),
-        "reg9": (12.0, 14.0),
+        0x300008: (10.0, 11.7),
+        0x300009: (12.0, 14.0),
     },
 }
 
@@ -66,8 +66,6 @@ class MakeSkyBlueDevice(BaseDevice):
         self.parser = ModbusProtocolHelper(hass, protocol_file)
         self.setup_protocol()
         self.slave_id = 1
-        self.read_command = 3
-        self.write_command = 6
         self._register_to_name = {}
         self._unknown_registers = set()
         self._rate_voltage_factory = None
@@ -79,9 +77,6 @@ class MakeSkyBlueDevice(BaseDevice):
         try:
             # Construct configuration data
             config_data = {
-                "slave_id": self.slave_id,
-                "read_command": self.read_command,
-                "write_command": self.write_command,
                 "segments": self.parser.protocol_data.get("segments", []),
             }
             topic = f"{self.sn}/config"
@@ -144,10 +139,6 @@ class MakeSkyBlueDevice(BaseDevice):
 
     async def unpack_device_info(self) -> dict[str, list[dict[str, Any]]]:
         """Unpack device information into different groups."""
-        self.slave_id = int(self.parser.protocol_data["slave_id"])
-        self.read_command = int(self.parser.protocol_data["read_command"])
-        self.write_command = int(self.parser.protocol_data["write_command"])
-
         self._register_to_name = {}
         for register, details in self.parser.protocol_data.get("registers", {}).items():
             name = details.get("name")
@@ -312,13 +303,13 @@ class MakeSkyBlueDevice(BaseDevice):
         _LOGGER.debug("Parsed data keys: %s", list(parsed_data.keys()))
 
         # Check if register 2 (inverter_ac_voltage) is updated for the first time
-        register_2 = 0x02
+        register_2 = 0x300002
         if register_2 in parsed_data and self._inverter_ac_voltage_initial is None:
             inverter_ac_voltage = parsed_data[register_2]
             self._inverter_ac_voltage_initial = inverter_ac_voltage
 
         # Check if register 7 (battery_rated_voltage) is updated
-        register_7 = 0x07
+        register_7 = 0x300007
         if register_7 in parsed_data:
             rated_voltage_raw = parsed_data[register_7]
             if rated_voltage_raw != self._rate_voltage_factory:
@@ -342,15 +333,12 @@ class MakeSkyBlueDevice(BaseDevice):
                     _LOGGER.debug("Detected rated voltage: %s", rated_voltage)
                     # Update ranges for registers 8 and 9
                     for reg, entity_name in [
-                        (8, "battery_discharge_min_voltage"),
-                        (9, "battery_start_discharge_voltage"),
+                        (0x300008, "battery_discharge_min_voltage"),
+                        (0x300009, "battery_start_discharge_voltage"),
                     ]:
                         entity = self._entities.get(entity_name)
                         if entity and rated_voltage in voltage_ranges:
-                            reg_key = f"reg{reg}"
-                            min_value, max_value = voltage_ranges[rated_voltage][
-                                reg_key
-                            ]
+                            min_value, max_value = voltage_ranges[rated_voltage][reg]
                             # Update entity attributes (assuming entity supports dynamic range updates)
                             entity._attr_native_min_value = min_value
                             entity._attr_native_max_value = max_value
@@ -363,7 +351,7 @@ class MakeSkyBlueDevice(BaseDevice):
                             )
                             changed_entities.add(entity_name)
 
-        register_145 = 145
+        register_145 = 0x300091
         if register_145 in parsed_data:
             value = parsed_data[register_145]
             name = self._register_to_name.get(register_145)
@@ -383,7 +371,7 @@ class MakeSkyBlueDevice(BaseDevice):
                         changed_entities.add(name)
             del parsed_data[register_145]
 
-        register_6e = 0x6E
+        register_6e = 0x30006E
         if register_6e in parsed_data:
             power_factor_combined = parsed_data[register_6e]
             inverter_factor = (power_factor_combined >> 8) & 0xFF
@@ -417,9 +405,9 @@ class MakeSkyBlueDevice(BaseDevice):
                             changed_entities.add(name)
 
                     interval_name = None
-                    if register == 0x20:
+                    if register == 0x300020:
                         interval_name = "force_charge_interval"
-                    elif register == 0x22:
+                    elif register == 0x300022:
                         interval_name = "force_discharge_interval"
                     if interval_name and interval_name in self._entities:
                         interval_days = processed_value.get("interval_days", None)
@@ -505,15 +493,15 @@ class MakeSkyBlueDevice(BaseDevice):
         _LOGGER.debug("Handling command: cmd=%s, value=%s", cmd, value)
         data: Any = None
 
-        if cmd in [0x21, 0x23]:
+        if cmd in [0x300021, 0x300023]:
             hour = (value >> 8) & 0xFF
             minute = value & 0xFF
             value = (hour & 0x1F) << 11 | (minute & 0x3F) << 5 | (0 & 0x1F)
 
         # Handle time and interval commands for registers 0x20, 0x22, and pseudo-registers
-        if cmd in [0x20, 0x22, 0x10020, 0x10022]:
+        if cmd in [0x300020, 0x300022, 0x10020, 0x10022]:
             # Determine the real register and entity name
-            if cmd in [0x20, 0x22]:
+            if cmd in [0x300020, 0x300022]:
                 real_register = cmd
                 entity_name = self._register_to_name.get(cmd)
             else:  # Pseudo-register for interval_days
@@ -533,7 +521,7 @@ class MakeSkyBlueDevice(BaseDevice):
             minute = 0
 
             # Handle time entity command (hour and minute)
-            if cmd in [0x20, 0x22]:
+            if cmd in [0x300020, 0x300022]:
                 if not isinstance(value, int) or value > 0xFFFF:
                     _LOGGER.error("Invalid time value for register %s: %s", cmd, value)
                     return
@@ -577,7 +565,7 @@ class MakeSkyBlueDevice(BaseDevice):
             # Update data dictionary
             interval_name = (
                 "force_charge_interval"
-                if real_register == 0x20
+                if real_register == 0x300020
                 else "force_discharge_interval"
             )
             self._data_dict[entity_name] = {
@@ -600,7 +588,7 @@ class MakeSkyBlueDevice(BaseDevice):
                 self._entities[interval_name].schedule_update_ha_state()
 
         # Validate register 2 (inverter_ac_voltage) commands
-        if cmd == 0x02:  # inverter_ac_voltage
+        if cmd == 0x300002:  # inverter_ac_voltage
             if (
                 self._inverter_ac_voltage_initial is not None
                 and self._inverter_ac_voltage_initial >= 2
@@ -614,7 +602,7 @@ class MakeSkyBlueDevice(BaseDevice):
                     )
                     return
             # Validate that the value is in the enum
-            enum_mapping = self.parser.protocol_data["registers"][0x02]["enum"]
+            enum_mapping = self.parser.protocol_data["registers"][0x300002]["enum"]
             valid_value = False
             for key in enum_mapping:
                 if int(key, 16) == value:
@@ -645,7 +633,12 @@ class MakeSkyBlueDevice(BaseDevice):
             return
         _LOGGER.debug("Publishing to topic %s: %s", self.cmd_topic, data)
         await self.mqtt_manager.publish(self.cmd_topic, data)
-        if not isinstance(value, str) and cmd not in [0x20, 0x22, 0x10020, 0x10022]:
+        if not isinstance(value, str) and cmd not in [
+            0x300020,
+            0x300022,
+            0x10020,
+            0x10022,
+        ]:
             self._data_dict[cmd] = (
                 value if isinstance(value, int) else int(value / scale)
             )
