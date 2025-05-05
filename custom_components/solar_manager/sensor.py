@@ -49,6 +49,7 @@ class SolarManagerSensor(SensorEntity):
     def __init__(
         self,
         name: str,
+        model: str,
         device: Any,
         unique_id: str,
         device_id: str,
@@ -61,6 +62,7 @@ class SolarManagerSensor(SensorEntity):
         """Initialize the sensor."""
         self._device = device
         self._name = name
+        self._model = model
         self._attr_unique_id = unique_id
         self._offset = offset
         self._device_id = device_id
@@ -98,9 +100,9 @@ class SolarManagerSensor(SensorEntity):
         """Return device information about this entity."""
         return {
             "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"Solar Manager {self._device_id}",
-            "manufacturer": "Solar Manager Inc.",
-            "model": "Modbus Device",
+            "name": f"{self._model} {self._device_id}",
+            "manufacturer": "@maybetaken",
+            "model": self._model,
             "sw_version": "1.0",
         }
 
@@ -111,6 +113,7 @@ class SolarManagerEnumSensor(SolarManagerSensor):
     def __init__(
         self,
         name: str,
+        model: str,
         device: Any,
         unique_id: str,
         device_id: str,
@@ -122,6 +125,7 @@ class SolarManagerEnumSensor(SolarManagerSensor):
         """Initialize the enum sensor."""
         super().__init__(
             name,
+            model,
             device,
             unique_id,
             device_id,
@@ -152,6 +156,7 @@ class SolarManagerDiagnosticSensor(SensorEntity):
     def __init__(
         self,
         name: str,
+        model: str,
         device: Any,
         unique_id: str,
         device_id: str,
@@ -160,6 +165,7 @@ class SolarManagerDiagnosticSensor(SensorEntity):
     ) -> None:
         """Initialize the diagnostic sensor."""
         self._device = device
+        self._model = model
         self._sensor_name = name.lower()
         self._attr_unique_id = unique_id
         self._attr_icon = icon
@@ -190,9 +196,9 @@ class SolarManagerDiagnosticSensor(SensorEntity):
         """Return device information about this entity."""
         return {
             "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"Solar Manager {self._device_id}",
-            "manufacturer": "Solar Manager Inc.",
-            "model": "Modbus Device",
+            "name": f"{self._model} {self._device_id}",
+            "manufacturer": "@maybetaken",
+            "model": self._model,
             "sw_version": "1.0",
         }
 
@@ -203,11 +209,13 @@ async def async_setup_entry(
     """Set up Solar Manager sensor from a config entry."""
     sensors = []
     serial = entry.data[CONF_SERIAL]
+    model = entry.data[CONF_MODEL]
     for device in hass.data[DOMAIN][serial].get(Platform.SENSOR, []):
-        unique_id = f"{device['name']}_{entry.data[CONF_MODEL]}_{serial}"
+        unique_id = f"{device['name']}_{model}_{serial}"
         if device.get("diagnostic"):
             sensor = SolarManagerDiagnosticSensor(
                 name=device["name"],
+                model=model,
                 device=device["device"],
                 unique_id=unique_id,
                 device_id=serial,
@@ -217,6 +225,7 @@ async def async_setup_entry(
         elif "enum_mapping" in device:
             sensor = SolarManagerEnumSensor(
                 name=device["name"],
+                model=model,
                 device=device["device"],
                 unique_id=unique_id,
                 device_id=serial,
@@ -228,6 +237,7 @@ async def async_setup_entry(
         else:
             sensor = SolarManagerSensor(
                 name=device["name"],
+                model=model,
                 device=device["device"],
                 unique_id=unique_id,
                 device_id=serial,

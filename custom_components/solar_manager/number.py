@@ -42,6 +42,7 @@ class SolarManagerNumber(NumberEntity):
     def __init__(
         self,
         name: str,
+        model: str,
         device: Any,
         register: str,
         unique_id: str,
@@ -56,6 +57,7 @@ class SolarManagerNumber(NumberEntity):
     ) -> None:
         """Initialize the number."""
         self._attr_mode = "box"
+        self._model = model
         self._device = device
         self._name = name
         self._register = register
@@ -107,9 +109,9 @@ class SolarManagerNumber(NumberEntity):
         """Return device information about this entity."""
         return {
             "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"Solar Manager {self._device_id}",
+            "name": f"{self._model} {self._device_id}",
             "manufacturer": "@maybetaken",
-            "model": "Modbus Device",
+            "model": self._model,
             "sw_version": "1.0",
         }
 
@@ -120,18 +122,20 @@ async def async_setup_entry(
     """Set up Solar Manager number from a config entry."""
     numbers = []
     serial = entry.data[CONF_SERIAL]
+    model = entry.data[CONF_MODEL]
     for item in hass.data[DOMAIN][serial].get(Platform.NUMBER, []):
         unit = item.get("unit")
-        unique_id = f"{item['name']}_{entry.data[CONF_MODEL]}_{serial}"
+        unique_id = f"{item['name']}_{model}_{serial}"
         number = SolarManagerNumber(
             name=item["name"],
+            model=model,
             device=item["device"],
             register=item["register"],
             unique_id=unique_id,
             device_id=serial,
             min_value=item.get("min_value", 0.0),
             max_value=item.get("max_value", 100.0),
-            unit=unit_mapping.get(unit),
+            unit=unit_mapping.get(unit, unit),
             step=item.get("step", 1.0),
             scale_factor=item.get("scale", 1.0),
             display_precision=item.get("display_precision", 0),

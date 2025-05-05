@@ -22,6 +22,7 @@ class SolarManagerSelect(SelectEntity):
     def __init__(
         self,
         name: str,
+        model: str,
         device: Any,
         register: str,
         options: list[str],
@@ -33,6 +34,7 @@ class SolarManagerSelect(SelectEntity):
         """Initialize the select."""
         self._device = device
         self._name = name
+        self._model = model
         self._register = register
         self._attr_options = options
         self._attr_unique_id = unique_id
@@ -75,9 +77,9 @@ class SolarManagerSelect(SelectEntity):
         """Return device information about this entity."""
         return {
             "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"Solar Manager {self._device_id}",
-            "manufacturer": "Solar Manager Inc.",
-            "model": "Modbus Device",
+            "name": f"{self._model} {self._device_id}",
+            "manufacturer": "@maybetaken",
+            "model": self._model,
             "sw_version": "1.0",
         }
 
@@ -88,10 +90,12 @@ async def async_setup_entry(
     """Set up Solar Manager select from a config entry."""
     selects = []
     serial = entry.data[CONF_SERIAL]
+    model = entry.data[CONF_MODEL]
     for item in hass.data[DOMAIN][serial].get(Platform.SELECT, []):
-        unique_id = f"{item['name']}_{entry.data[CONF_MODEL]}_{serial}"
+        unique_id = f"{item['name']}_{model}_{serial}"
         select = SolarManagerSelect(
             name=item["name"],
+            model=model,
             device=item["device"],
             register=item["register"],
             options=item["options"],

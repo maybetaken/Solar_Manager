@@ -23,6 +23,7 @@ class SolarManagerTime(TimeEntity):
     def __init__(
         self,
         name: str,
+        model: str,
         device: Any,
         register: str,
         unique_id: str,
@@ -35,6 +36,7 @@ class SolarManagerTime(TimeEntity):
             raise ValueError(f"Invalid entity name: {name}")
         self._device = device
         self._name = name
+        self._model = model
         self._register = register
         self._attr_unique_id = unique_id
         self._device_id = device_id
@@ -105,9 +107,9 @@ class SolarManagerTime(TimeEntity):
         """Return device information about this entity."""
         return {
             "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"Solar Manager {self._device_id}",
-            "manufacturer": "Solar Manager Inc.",
-            "model": "Modbus Device",
+            "name": f"{self._model} {self._device_id}",
+            "manufacturer": "@maybetaken",
+            "model": self._model,
             "sw_version": "1.0",
         }
 
@@ -118,6 +120,7 @@ async def async_setup_entry(
     """Set up Solar Manager time entities from a config entry."""
     entities = []
     serial = entry.data[CONF_SERIAL]
+    model = entry.data[CONF_MODEL]
     time_items = hass.data[DOMAIN][serial].get(Platform.TIME, [])
     _LOGGER.debug("Time items for serial %s: %s", serial, time_items)
     for item in time_items:
@@ -125,9 +128,10 @@ async def async_setup_entry(
         if not name or not isinstance(name, str) or not name.strip():
             _LOGGER.error("Skipping entity with invalid name: %s, item=%s", name, item)
             continue
-        unique_id = f"{name}_{entry.data[CONF_MODEL]}_{serial}"
+        unique_id = f"{name}_{model}_{serial}"
         entity = SolarManagerTime(
             name=name,
+            model=model,
             device=item["device"],
             register=item.get("register"),
             unique_id=unique_id,

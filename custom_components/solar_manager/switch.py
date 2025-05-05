@@ -23,6 +23,7 @@ class SolarManagerSwitch(SwitchEntity):
     def __init__(
         self,
         name: str,
+        model: str,
         device: Any,
         register: str,
         unique_id: str,
@@ -32,6 +33,7 @@ class SolarManagerSwitch(SwitchEntity):
         """Initialize the switch."""
         self._device = device
         self._name = name
+        self._model = model
         self._register = register
         self._attr_unique_id = unique_id
         self._device_id = device_id
@@ -73,9 +75,9 @@ class SolarManagerSwitch(SwitchEntity):
         """Return device information about this entity."""
         return {
             "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"Solar Manager {self._device_id}",
-            "manufacturer": "Solar Manager Inc.",
-            "model": "Modbus Device",
+            "name": f"{self._model} {self._device_id}",
+            "manufacturer": "@maybetaken",
+            "model": self._model,
             "sw_version": "1.0",
         }
 
@@ -86,6 +88,7 @@ class SolarManagerDiagnosticSwitch(SwitchEntity):
     def __init__(
         self,
         name: str,
+        model: str,
         device: Any,
         unique_id: str,
         device_id: str,
@@ -93,6 +96,7 @@ class SolarManagerDiagnosticSwitch(SwitchEntity):
     ) -> None:
         """Initialize the diagnostic switch."""
         self._device = device
+        self._model = model
         self._attr_unique_id = unique_id
         self._attr_icon = icon
         self._attr_entity_category = EntityCategory.DIAGNOSTIC
@@ -127,9 +131,9 @@ class SolarManagerDiagnosticSwitch(SwitchEntity):
         """Return device information about this entity."""
         return {
             "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"Solar Manager {self._device_id}",
-            "manufacturer": "Solar Manager Inc.",
-            "model": "Modbus Device",
+            "name": f"{self._model} {self._device_id}",
+            "manufacturer": "@maybetaken",
+            "model": self._model,
             "sw_version": "1.0",
         }
 
@@ -140,11 +144,13 @@ async def async_setup_entry(
     """Set up Solar Manager switch from a config entry."""
     switches = []
     serial = entry.data[CONF_SERIAL]
+    model = entry.data[CONF_MODEL]
     for item in hass.data[DOMAIN][serial].get(Platform.SWITCH, []):
-        unique_id = f"{item['name']}_{entry.data[CONF_MODEL]}_{serial}"
+        unique_id = f"{item['name']}_{model}_{serial}"
         if item.get("diagnostic"):
             switch = SolarManagerDiagnosticSwitch(
                 name=item["name"],
+                model=model,
                 device=item["device"],
                 unique_id=unique_id,
                 device_id=serial,
@@ -153,6 +159,7 @@ async def async_setup_entry(
         else:
             switch = SolarManagerSwitch(
                 name=item["name"],
+                model=model,
                 device=item["device"],
                 register=item["register"],
                 unique_id=unique_id,
