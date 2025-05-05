@@ -99,7 +99,14 @@ async def async_unload_entry(
         _LOGGER.warning(f"Try to unload non-existent serial: {serial}")
         return True
 
-    unload_ok = await hass.config_entries.async_unload_platforms(entry, _PLATFORMS)
+    # Only unload platforms that were actually set up for this device
+    platforms_to_unload = [
+        platform for platform in _PLATFORMS if platform in hass.data[DOMAIN][serial]
+    ]
+    unload_ok = await hass.config_entries.async_unload_platforms(
+        entry, platforms_to_unload
+    )
+
     if unload_ok:
         # Clean up devices
         devices = hass.data[DOMAIN][serial].get("devices", [])
