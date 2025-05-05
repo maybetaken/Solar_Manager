@@ -1,0 +1,243 @@
+{
+    "endianness": "BE",
+    "control_type": "MODBUS",
+    "segments": [
+        {"slave_id": 1, "start_address": 1, "length": 1, "read_command": 4},
+        {"slave_id": 1, "start_address": 5, "length": 8, "read_command": 4},
+        {"slave_id": 1, "start_address": 26, "length": 1, "read_command": 4},
+        {"slave_id": 1, "start_address": 1, "length": 10, "read_command": 3}
+    ],
+    "registers": {
+        "0x400001": {
+            "name": "mppt_fault_status",
+            "type": "UINT16",
+            "scale": 1,
+            "sensor_type": "sensor",
+            "enum": {
+                "0x0000": "Battery Undervoltage",
+                "0x0001": "Battery Overvoltage",
+                "0x0002": "Machine Over-Temperature",
+                "0x0003": "Input PV Overvoltage",
+                "0x0004": "Output Overcurrent Protection",
+                "0x0005": "Output Short Circuit",
+                "0x0006": "Normal Status"
+            },
+            "icon": "mdi:alert"
+        },
+        "0x400005": {
+            "name": "battery_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "sensor_type": "sensor",
+            "unit": "VOLT",
+            "display_precision": 1,
+            "icon": "mdi:battery"
+        },
+        "0x400006": {
+            "name": "battery_current",
+            "type": "INT16",
+            "scale": 0.1,
+            "sensor_type": "sensor",
+            "unit": "AMPERE",
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
+        },
+        "0x400007": {
+            "name": "pv_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "sensor_type": "sensor",
+            "unit": "VOLT",
+            "display_precision": 1,
+            "icon": "mdi:solar-power"
+        },
+        "0x400008": {
+            "name": "charge_power",
+            "type": "UINT16",
+            "scale": 1,
+            "sensor_type": "sensor",
+            "unit": "WATT",
+            "display_precision": 0,
+            "icon": "mdi:power"
+        },
+        "0x400009": {
+            "name": "mppt_temperature",
+            "type": "INT16",
+            "scale": 0.1,
+            "sensor_type": "sensor",
+            "unit": "CELSIUS",
+            "display_precision": 1,
+            "icon": "mdi:thermometer"
+        },
+        "0x40000A": {
+            "name": "mppt_cumulative_generation",
+            "type": "UINT16",
+            "scale": 1,
+            "sensor_type": "sensor",
+            "unit": "KILOWATT_HOUR",
+            "display_precision": 0,
+            "icon": "mdi:solar-power"
+        },
+        "0x40000B": {
+            "name": "mppt_out_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "sensor_type": "sensor",
+            "unit": "AMPERE",
+            "display_precision": 1,
+            "icon": "mdi:lightning-bolt"
+        },
+        "0x40000C": {
+            "name": "mppt_work_status",
+            "type": "UINT16",
+            "scale": 0.1,
+            "sensor_type": "sensor",
+            "enum": {
+                "0x0000": "Shutdown",
+                "0x0001": "Pre-Charging",
+                "0x0002": "Constant Current Charging",
+                "0x0003": "Constant Voltage Charging",
+                "0x0004": "MPPT Tracking",
+                "0x0005": "Bus Constant Voltage",
+                "0x0006": "Float Charging"
+            },
+            "icon": "mdi:battery-charging"
+        },
+        "0x40001A": {
+            "name": "mppt_daily_generation",
+            "type": "UINT16",
+            "scale": 0.1,
+            "sensor_type": "sensor",
+            "unit": "KILOWATT_HOUR",
+            "display_precision": 1,
+            "icon": "mdi:solar-power"
+        },
+        "0x300001": {
+            "name": "mppt_equalization_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "write_command": 6,
+            "sensor_type": "number",
+            "min_value": 0,
+            "max_value": 6553.5,
+            "unit": "VOLT",
+            "step": 0.1,
+            "display_precision": 1,
+            "icon": "mdi:solar-panel"
+        },
+        "0x300002": {
+            "name": "mppt_float_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "write_command": 6,
+            "sensor_type": "number",
+            "min_value": 0,
+            "max_value": 6553.5,
+            "unit": "VOLT",
+            "step": 0.1,
+            "display_precision": 1,
+            "icon": "mdi:solar-panel"
+        },
+        "0x300003": {
+            "name": "out_time_set",
+            "type": "UINT16",
+            "scale": 1,
+            "write_command": 6,
+            "sensor_type": "number",
+            "min_value": 0,
+            "max_value": 65535,
+            "unit": "h",
+            "step": 1,
+            "display_precision": 0,
+            "icon": "mdi:clock-start"
+        },
+        "0x300004": {
+            "name": "mppt_charge_current",
+            "type": "UINT16",
+            "scale": 0.1,
+            "write_command": 6,
+            "sensor_type": "number",
+            "min_value": 0,
+            "max_value": 6553.5,
+            "unit": "AMPERE",
+            "step": 0.1,
+            "display_precision": 1,
+            "icon": "mdi:current-dc"
+        },
+        "0x300005": {
+            "name": "battery_low_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "write_command": 6,
+            "sensor_type": "number",
+            "min_value": 0,
+            "max_value": 6553.5,
+            "unit": "VOLT",
+            "step": 0.1,
+            "display_precision": 1,
+            "icon": "mdi:battery-minus"
+        },
+        "0x300006": {
+            "name": "battery_recover_voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "write_command": 6,
+            "sensor_type": "number",
+            "min_value": 0,
+            "max_value": 6553.5,
+            "unit": "VOLT",
+            "step": 0.1,
+            "display_precision": 1,
+            "icon": "mdi:battery"
+        },
+        "0x300007": {
+            "name": "communication_address",
+            "type": "UINT16",
+            "scale": 1,
+            "sensor_type": "number",
+            "write_command": 6,
+            "min_value": 1,
+            "max_value": 256,
+            "unit": null,
+            "step": 1,
+            "display_precision": 0,
+            "icon": "mdi:network"
+        },
+        "0x300008": {
+            "name": "mppt_battery_type",
+            "type": "UINT16",
+            "scale": 1,
+            "sensor_type": "select",
+            "write_command": 6,
+            "enum": {
+                "0": "Pb (Lead-Acid Battery)",
+                "1": "Li (Lithium Battery)"
+            },
+            "icon": "mdi:battery"
+        },
+        "0x300009": {
+            "name": "battery_number",
+            "type": "UINT16",
+            "scale": 1,
+            "sensor_type": "number",
+            "min_value":1,
+            "max_value":8,
+            "write_command": 6,
+            "display_precision":0,
+            "icon": "mdi:battery"
+        },
+        "0x30000A": {
+            "name": "calibrate_battery_voltage",
+            "type": "UINT16",
+            "scale": 1,
+            "write_command": 6,
+            "sensor_type": "number",
+            "unit": "VOLT",
+            "step": 0.1,
+            "min_value":0,
+            "max_value":6553.5,
+            "display_precision": 1,
+            "icon": "mdi:car-battery"
+        }
+    }
+}

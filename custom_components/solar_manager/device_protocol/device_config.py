@@ -6,12 +6,17 @@ Attribution-NonCommercial-NoDerivatives 4.0 International.
 """
 
 from custom_components.solar_manager.plugins.MakeSkyBlue import MakeSkyBlueDevice
+from custom_components.solar_manager.plugins.MakeSkyBlueMppt import MakeSkyBlueMppt
 
 # Unified device configuration
 DEVICE_CONFIG = {
     "MakeSkyBlue": {
         "protocol": "makeskyblue",
         "device_class": MakeSkyBlueDevice,
+    },
+    "MakeSkyBlue MPPT": {
+        "protocol": "makeskybluemppt",
+        "device_class": MakeSkyBlueMppt,
     },
     # "ChintMeter": {
     #     "protocol": "chintmeter",

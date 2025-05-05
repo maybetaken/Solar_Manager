@@ -193,6 +193,12 @@
             "mppt_cumulative_generation": {
                 "name": "MPPT Cumulative Generation"
             },
+            "charge_power":{
+                "name": "MPPT Charge Power"
+            },
+            "mppt_out_current":{
+                "name": "MPPT Out Current"
+            },
             "system_fault": {
                 "name": "System Fault",
                 "state": {
@@ -294,6 +300,9 @@
             "current_mppt_pv_voltage": {
                 "name": "Current MPPT PV Voltage"
             },
+            "pv_voltage": {
+                "name": "PV Voltage"
+            },
             "mppt_temperature": {
                 "name": "MPPT Temperature"
             },
@@ -335,6 +344,9 @@
             },
             "48v_battery_current": {
                 "name": "48V Battery Current"
+            },
+            "battery_current": {
+                "name": "Battery Current"
             },
             "48v_battery_voltage": {
                 "name": "48V Battery Voltage"
@@ -476,6 +488,13 @@
                     "Li (Lithium Battery)": "Li (Lithium Battery)"
                 }
             },
+            "mppt_battery_type": {
+                "name": "Battery Type",
+                "state": {
+                    "Pb (Lead-Acid Battery)": "Pb (Lead-Acid Battery)",
+                    "Li (Lithium Battery)": "Li (Lithium Battery)"
+                }
+            },
             "force_charge_discharge_control": {
                 "name": "Force Charge/Discharge Control [d21]",
                 "state": {
@@ -557,6 +576,30 @@
             },
             "vehicle_48v_generator_current_setting": {
                 "name": "Vehicle 48V Generator Current Setting"
+            },
+            "mppt_equalization_voltage":{
+                "name": "MPPT Equalization Voltage"
+            },
+            "mppt_float_voltage":{
+                "name": "MPPT Float Voltage"
+            },
+            "out_time_set":{
+                "name": "Output Time Setting"
+            },
+            "mppt_charge_current":{
+                "name": "MPPT Charge Current"
+            },
+            "battery_low_voltage":{
+                "name": "Undervoltage Protection Voltage"
+            },
+            "battery_recover_voltage":{
+                "name": "Undervoltage Recovery Voltage"
+            },
+            "battery_number":{
+                "name": "Battery Number"
+            },
+            "calibrate_battery_voltage":{
+                "name": "Calibrate Battery Voltage "
             }
         },
         "datetime": {

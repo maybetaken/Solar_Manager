@@ -193,6 +193,12 @@
             "mppt_cumulative_generation":{
                 "name": "MPPT累计发电量"
             },
+            "charge_power":{
+                "name": "MPPT充电功率"
+            },
+            "mppt_out_current":{
+                "name": "MPPT输出电流"
+            },
             "system_fault":{
                 "name": "系统故障",
                 "state": {
@@ -294,6 +300,9 @@
             "current_mppt_pv_voltage":{
                 "name": "当前MPPT光伏电压"
             },
+            "pv_voltage":{
+                "name": "光伏电压"
+            },
             "mppt_temperature":{
                 "name": "MPPT温度"
             },
@@ -335,6 +344,9 @@
             },
             "48v_battery_current":{
                 "name": "48V电池电流"
+            },
+            "battery_current":{
+                "name": "电池电流"
             },
             "48v_battery_voltage":{
                 "name": "48V电池电压"
@@ -476,6 +488,13 @@
                     "Li (Lithium Battery)": "Li (锂电池)"
                 }
             },
+            "mppt_battery_type":{
+                "name": "电池类型",
+                "state": {
+                    "Pb (Lead-Acid Battery)": "Pb (铅酸电池)",
+                    "Li (Lithium Battery)": "Li (锂电池)"
+                }
+            },
             "force_charge_discharge_control":{
                 "name": "强制充放电控制[d21]",
                 "state":{
@@ -557,6 +576,30 @@
             },
             "vehicle_48v_generator_current_setting":{
                 "name": "车载48V发电机电流设置"
+            },
+            "mppt_equalization_voltage":{
+                "name": "MPPT均充电压"
+            },
+            "mppt_float_voltage":{
+                "name": "MPPT浮充电压"
+            },
+            "out_time_set":{
+                "name": "输出定时时间"
+            },
+            "mppt_charge_current":{
+                "name": "MPPT充电电流"
+            },
+            "battery_low_voltage":{
+                "name": "欠压保护电压"
+            },
+            "battery_recover_voltage":{
+                "name": "欠压恢复电压"
+            },
+            "battery_number":{
+                "name": "电池数量"
+            },
+            "calibrate_battery_voltage":{
+                "name": "校准电压"
             }
         },
         "datetime":{
