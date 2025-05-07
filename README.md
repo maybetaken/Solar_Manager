@@ -2,7 +2,7 @@
   <img src="https://storage.ko-fi.com/cdn/kofi3.png?v=3" alt="Support me on Ko-fi" height="36" style="border:0px;">
 </a>
 
-# Solar Manager
+# <img src="https://github.com/home-assistant/brands/blob/master/custom_integrations/solar_manager/icon.png" width="32" height="32"> Solar Manager
 
 Solar Manager is a Home Assistant integration designed to manage and monitor solar devices.
 It supports multiple device protocols, providing real-time data collection, device control, and diagnostic features.
