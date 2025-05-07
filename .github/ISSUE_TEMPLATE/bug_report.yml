@@ -1,0 +1,54 @@
+name: Bug Report
+description: Report a problem or error
+title: "[Bug] Brief description of the issue"
+labels: ["bug"]
+assignees:
+  - @maybetaken
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Problem Description
+      description: Please describe the issue in detail.
+      placeholder: For example: Clicking button X causes a crash...
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: List the steps to reproduce the issue.
+      placeholder: |
+        1. Open page X
+        2. Click button Y
+        3. Observe error Z
+    validations:
+      required: true
+  - type: dropdown
+    id: version
+    attributes:
+      label: Version
+      description: Which version of the software are you using?
+      options:
+        - v1.0.0
+        - v1.1.0
+        - Other (please specify below)
+      default: 0
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or Screenshots
+      description: Provide relevant logs, error messages, or screenshots.
+      render: shell
+    validations:
+      required: false
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Confirmation
+      description: Please confirm the following.
+      options:
+        - label: I have searched existing Issues and found no similar issues
+          required: true
