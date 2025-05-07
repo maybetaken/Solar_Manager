@@ -3,7 +3,7 @@ description: Report a problem or error
 title: "[Bug] Brief description of the issue"
 labels: ["bug"]
 assignees:
-  - @maybetaken
+  - maybetaken
 body:
   - type: textarea
     id: description
