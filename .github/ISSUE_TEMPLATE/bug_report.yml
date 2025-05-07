@@ -10,7 +10,7 @@ body:
     attributes:
       label: Problem Description
       description: Please describe the issue in detail.
-      placeholder: For example: Clicking button X causes a crash...
+      placeholder: "For example: Clicking button X causes a crash..."
     validations:
       required: true
   - type: textarea
@@ -30,10 +30,10 @@ body:
       label: Version
       description: Which version of the software are you using?
       options:
+        - v0.0.1
         - v1.0.0
         - v1.1.0
         - Other (please specify below)
-      default: 0
     validations:
       required: true
   - type: textarea
@@ -50,5 +50,5 @@ body:
       label: Confirmation
       description: Please confirm the following.
       options:
-        - label: I have searched existing Issues and found no similar issues
+        - label: "I have searched existing Issues and found no similar issues"
           required: true
