@@ -8,7 +8,7 @@ body:
     attributes:
       label: Feature Description
       description: Describe the feature or improvement you would like to see.
-      placeholder: For example: Add an export data button...
+      placeholder: "For example: Add an export data button..."
     validations:
       required: true
   - type: textarea
@@ -16,7 +16,7 @@ body:
     attributes:
       label: Use Case
       description: How will this feature help users?
-      placeholder: For example: Allow users to save data locally...
+      placeholder: "For example: Allow users to save data locally..."
     validations:
       required: true
   - type: checkboxes
