@@ -1,6 +1,6 @@
 {
   "name": "Solar Manager",
-  "country": "ALL",
+  "hacs": "2.0.5",
   "homeassistant": "2025.2.2",
-  "iot_class": "push"
+  "render_readme": true
 }
