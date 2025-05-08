@@ -1,5 +1,4 @@
 {
-  "_license": "Solar Manager or solar_manager © 2025 by @maybetaken is licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International.",
   "domain": "solar_manager",
   "name": "Solar Manager",
   "version": "0.0.1",
@@ -11,5 +10,6 @@
   "issue_tracker": "https://github.com/maybetaken/Solar_Manager/issues",
   "quality_scale": "bronze",
   "dependencies": ["mqtt"],
-  "requirements": ["crcmod>=1.7", "aiofiles>=24.1.0"]
+  "requirements": ["crcmod>=1.7", "aiofiles>=24.1.0"],
+  "description": "Solar Manager or solar_manager © 2025 by @maybetaken is licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International."
 }
