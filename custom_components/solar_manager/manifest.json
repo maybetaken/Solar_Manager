@@ -1,15 +1,15 @@
 {
   "domain": "solar_manager",
   "name": "Solar Manager",
-  "version": "0.0.1",
   "codeowners": [
     "@maybetaken"
   ],
   "config_flow": true,
+  "dependencies": ["mqtt"],
   "documentation": "https://github.com/maybetaken/Solar_Manager",
+  "iot_class": "local_push",
   "issue_tracker": "https://github.com/maybetaken/Solar_Manager/issues",
   "quality_scale": "bronze",
-  "dependencies": ["mqtt"],
   "requirements": ["crcmod>=1.7", "aiofiles>=24.1.0"],
-  "iot_class": "local_push"
+  "version": "0.0.1"
 }
