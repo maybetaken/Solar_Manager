@@ -11,5 +11,5 @@
   "quality_scale": "bronze",
   "dependencies": ["mqtt"],
   "requirements": ["crcmod>=1.7", "aiofiles>=24.1.0"],
-  "description": "Solar Manager or solar_manager © 2025 by @maybetaken is licensed under Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International."
+  "iot_class": "local_push"
 }
