@@ -1,9 +1,6 @@
 {
   "name": "Solar Manager",
-  "country": "any",
-  "domain": "solar_manager",
-  "codeowners": ["@maybetaken"],
+  "country": "ALL",
   "homeassistant": "2025.2.2",
-  "integration_type": "integration",
   "iot_class": "push"
 }
