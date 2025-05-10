@@ -14,13 +14,13 @@
             "scale": 1,
             "sensor_type": "sensor",
             "enum": {
-                "0x0000": "Battery Undervoltage",
-                "0x0001": "Battery Overvoltage",
-                "0x0002": "Machine Over-Temperature",
-                "0x0003": "Input PV Overvoltage",
-                "0x0004": "Output Overcurrent Protection",
-                "0x0005": "Output Short Circuit",
-                "0x0006": "Normal Status"
+                "0x0000": "battery_undervoltage",
+                "0x0001": "battery_overvoltage",
+                "0x0002": "machine_over_temperature",
+                "0x0003": "input_pv_overvoltage",
+                "0x0004": "output_overcurrent_protection",
+                "0x0005": "output_short_circuit",
+                "0x0006": "normal_status"
             },
             "icon": "mdi:alert"
         },
@@ -93,13 +93,13 @@
             "scale": 0.1,
             "sensor_type": "sensor",
             "enum": {
-                "0x0000": "Shutdown",
-                "0x0001": "Pre-Charging",
-                "0x0002": "Constant Current Charging",
-                "0x0003": "Constant Voltage Charging",
-                "0x0004": "MPPT Tracking",
-                "0x0005": "Bus Constant Voltage",
-                "0x0006": "Float Charging"
+                "0x0000": "shutdown",
+                "0x0001": "pre_charging",
+                "0x0002": "constant_current_charging",
+                "0x0003": "constant_voltage_charging",
+                "0x0004": "mppt_tracking",
+                "0x0005": "bus_constant_voltage",
+                "0x0006": "float_charging"
             },
             "icon": "mdi:battery-charging"
         },
@@ -210,8 +210,8 @@
             "sensor_type": "select",
             "write_command": 6,
             "enum": {
-                "0": "Pb (Lead-Acid Battery)",
-                "1": "Li (Lithium Battery)"
+                "0": "pb_lead_acid_battery",
+                "1": "li_lithium_battery"
             },
             "icon": "mdi:battery"
         },

@@ -62,10 +62,10 @@
             "battery_rated_voltage": {
                 "name": "Battery Rated Voltage [d09]",
                 "state": {
-                    "72V": "72V",
-                    "48V": "48V",
-                    "24V": "24V",
-                    "12V": "12V"
+                    "72v": "72V",
+                    "48v": "48V",
+                    "24v": "24V",
+                    "12v": "12V"
                 }
             },
             "inverter_output_max_power": {
@@ -74,33 +74,33 @@
             "machine_model": {
                 "name": "Device Model",
                 "state": {
-                    "2.2kW Platform": "2.2kW Platform",
-                    "3.5kW Platform": "3.5kW Platform",
-                    "5.0kW Platform": "5.0kW Platform",
-                    "7.5kW Platform": "7.5kW Platform",
-                    "8.0kW Platform": "8.0kW Platform",
-                    "10.0kW Platform": "10.0kW Platform",
-                    "12.0kW Platform": "12.0kW Platform"
+                    "2_2kw_platform": "2.2kW Platform",
+                    "3_5kw_platform": "3.5kW Platform",
+                    "5_0kw_platform": "5.0kW Platform",
+                    "7_5kw_platform": "7.5kW Platform",
+                    "8_0kw_platform": "8.0kW Platform",
+                    "10_0kw_platform": "10.0kW Platform",
+                    "12_0kw_platform": "12.0kW Platform"
                 }
             },
             "inverter_status": {
                 "name": "Inverter Status",
                 "state": {
-                    "Shutdown": "Shutdown",
-                    "Inverting": "Inverting",
-                    "Charging": "Charging",
-                    "Anti-Backflow": "Anti-Backflow",
-                    "Bypass": "Bypass",
-                    "Off-Grid": "Off-Grid"
+                    "shutdown": "Shutdown",
+                    "inverting": "Inverting",
+                    "charging": "Charging",
+                    "anti_backflow": "Anti-Backflow",
+                    "bypass": "Bypass",
+                    "off_grid": "Off-Grid"
                 }
             },
             "mppt_status": {
                 "name": "MPPT Status",
                 "state": {
-                    "Constant Voltage": "Constant Voltage",
-                    "Full Load": "Full Load",
-                    "Current Limiting": "Current Limiting",
-                    "Tracking": "Tracking"
+                    "constant_voltage": "Constant Voltage",
+                    "full_load": "Full Load",
+                    "current_limiting": "Current Limiting",
+                    "tracking": "Tracking"
                 }
             },
             "bus_voltage": {
@@ -193,36 +193,36 @@
             "mppt_cumulative_generation": {
                 "name": "MPPT Cumulative Generation"
             },
-            "charge_power":{
+            "charge_power": {
                 "name": "MPPT Charge Power"
             },
-            "mppt_out_current":{
+            "mppt_out_current": {
                 "name": "MPPT Out Current"
             },
             "system_fault": {
                 "name": "System Fault",
                 "state": {
-                    "Min Input Voltage Protection": "Minimum Input Voltage Protection",
-                    "Max Input Voltage Protection": "Maximum Input Voltage Protection",
-                    "Input Overfrequency Protection": "Input Overfrequency Protection",
-                    "Input Underfrequency Protection": "Input Underfrequency Protection",
-                    "Grid Switchover": "Grid Switchover",
-                    "Inverter Short Circuit": "Inverter Short Circuit",
-                    "Input Overcurrent": "Input Overcurrent",
-                    "Inverter Bus Overvoltage": "Inverter Bus Overvoltage",
-                    "PV1 Input Overvoltage": "PV1 Input Overvoltage",
-                    "PV2 Input Overvoltage": "PV2 Input Overvoltage",
-                    "PV1 Overcurrent Protection": "PV1 Overcurrent Protection",
-                    "PV2 Overcurrent Protection": "PV2 Overcurrent Protection",
-                    "Charging Overcurrent Protection": "Charging Overcurrent Protection",
-                    "Charging Overvoltage Protection": "Charging Overvoltage Protection",
-                    "Battery Voltage Protection": "Battery Voltage Protection",
-                    "INV Over-Temperature Protection": "Inverter Over-Temperature Protection",
-                    "MPP1 Over-Temperature Protection": "MPPT1 Over-Temperature Protection",
-                    "MPP2 Over-Temperature Protection": "MPPT2 Over-Temperature Protection",
-                    "MPP3 Over-Temperature Protection": "MPPT3 Over-Temperature Protection",
-                    "BMS Fault": "Battery Management System Fault",
-                    "No Fault": "No Fault"
+                    "min_input_voltage_protection": "Minimum Input Voltage Protection",
+                    "max_input_voltage_protection": "Maximum Input Voltage Protection",
+                    "input_overfrequency_protection": "Input Overfrequency Protection",
+                    "input_underfrequency_protection": "Input Underfrequency Protection",
+                    "grid_switchover": "Grid Switchover",
+                    "inverter_short_circuit": "Inverter Short Circuit",
+                    "input_overcurrent": "Input Overcurrent",
+                    "inverter_bus_overvoltage": "Inverter Bus Overvoltage",
+                    "pv1_input_overvoltage": "PV1 Input Overvoltage",
+                    "pv2_input_overvoltage": "PV2 Input Overvoltage",
+                    "pv1_overcurrent_protection": "PV1 Overcurrent Protection",
+                    "pv2_overcurrent_protection": "PV2 Overcurrent Protection",
+                    "charging_overcurrent_protection": "Charging Overcurrent Protection",
+                    "charging_overvoltage_protection": "Charging Overvoltage Protection",
+                    "battery_voltage_protection": "Battery Voltage Protection",
+                    "inv_over_temperature_protection": "Inverter Over-Temperature Protection",
+                    "mpp1_over_temperature_protection": "MPPT1 Over-Temperature Protection",
+                    "mpp2_over_temperature_protection": "MPPT2 Over-Temperature Protection",
+                    "mpp3_over_temperature_protection": "MPPT3 Over-Temperature Protection",
+                    "bms_fault": "Battery Management System Fault",
+                    "no_fault": "No Fault"
                 }
             },
             "dc_dc_temperature": {
@@ -246,34 +246,34 @@
             "pv_energy_flow_direction": {
                 "name": "PV Energy Flow Direction",
                 "state": {
-                    "No PV": "No PV",
-                    "PV Present": "PV Present",
-                    "PV Generating": "PV Generating"
+                    "no_pv": "No PV",
+                    "pv_present": "PV Present",
+                    "pv_generating": "PV Generating"
                 }
             },
             "battery_energy_flow_direction": {
                 "name": "Battery Energy Flow Direction",
                 "state": {
-                    "No Battery": "No Battery",
-                    "Battery Present": "Battery Present",
-                    "Charging": "Charging",
-                    "Discharging": "Discharging"
+                    "no_battery": "No Battery",
+                    "battery_present": "Battery Present",
+                    "charging": "Charging",
+                    "discharging": "Discharging"
                 }
             },
             "grid_energy_flow_direction": {
                 "name": "Grid Energy Flow Direction",
                 "state": {
-                    "No Grid": "No Grid",
-                    "Grid Present": "Grid Present",
-                    "Grid to Inverter (Forward)": "Grid to Inverter (Forward)",
-                    "Inverter to Grid (Reverse)": "Inverter to Grid (Reverse)"
+                    "no_grid": "No Grid",
+                    "grid_present": "Grid Present",
+                    "grid_to_inverter_forward": "Grid to Inverter (Forward)",
+                    "inverter_to_grid_reverse": "Inverter to Grid (Reverse)"
                 }
             },
             "load_energy_flow_direction": {
                 "name": "Load Energy Flow Direction",
                 "state": {
-                    "No Load": "No Load",
-                    "Load Present": "Load Present"
+                    "no_load": "No Load",
+                    "load_present": "Load Present"
                 }
             },
             "software_version": {
@@ -282,13 +282,13 @@
             "mppt_fault_status": {
                 "name": "MPPT Fault Status",
                 "state": {
-                    "Battery Undervoltage": "Battery Undervoltage",
-                    "Battery Overvoltage": "Battery Overvoltage",
-                    "Machine Over-Temperature": "Machine Over-Temperature",
-                    "Input PV Overvoltage": "Input PV Overvoltage",
-                    "Output Overcurrent Protection": "Output Overcurrent Protection",
-                    "Output Short Circuit": "Output Short Circuit",
-                    "Normal Status": "Normal Status"
+                    "battery_undervoltage": "Battery Undervoltage",
+                    "battery_overvoltage": "Battery Overvoltage",
+                    "machine_over_temperature": "Machine Over-Temperature",
+                    "input_pv_overvoltage": "Input PV Overvoltage",
+                    "output_overcurrent_protection": "Output Overcurrent Protection",
+                    "output_short_circuit": "Output Short Circuit",
+                    "normal_status": "Normal Status"
                 }
             },
             "current_mppt_battery_voltage": {
@@ -315,13 +315,13 @@
             "mppt_work_status": {
                 "name": "MPPT Work Status",
                 "state": {
-                    "Shutdown": "Shutdown",
-                    "Pre-Charging": "Pre-Charging",
-                    "Constant Current Charging": "Constant Current Charging",
-                    "Constant Voltage Charging": "Constant Voltage Charging",
-                    "MPPT Tracking": "MPPT Tracking",
-                    "Bus Constant Voltage": "Bus Constant Voltage",
-                    "Float Charging": "Float Charging"
+                    "shutdown": "Shutdown",
+                    "pre_charging": "Pre-Charging",
+                    "constant_current_charging": "Constant Current Charging",
+                    "constant_voltage_charging": "Constant Voltage Charging",
+                    "mppt_tracking": "MPPT Tracking",
+                    "bus_constant_voltage": "Bus Constant Voltage",
+                    "float_charging": "Float Charging"
                 }
             },
             "vehicle_dcdc_program_version": {
@@ -456,11 +456,11 @@
             "work_mode": {
                 "name": "Work Mode [d01]",
                 "state": {
-                    "SUB (Solar-Grid-Storage Mode)": "SUB (Solar-Grid-Storage Mode)",
-                    "SBU (Solar-Storage-Grid Mode)": "SBU (Solar-Storage-Grid Mode)",
-                    "UTI (Grid Priority Mode)": "UTI (Grid Priority Mode)",
-                    "NBU (No Battery AC Coupling Mode)": "NBU (No Battery AC Coupling Mode)",
-                    "ONI (Pure Inverter Mode)": "ONI (Pure Inverter Mode)"
+                    "sub_solar_grid_storage": "SUB (Solar-Grid-Storage Mode)",
+                    "uti_grid_priority": "UTI (Grid Priority Mode)",
+                    "sbu_solar_storage_grid": "SBU (Solar-Storage-Grid Mode)",
+                    "nbu_no_battery_ac_coupling": "NBU (No Battery AC Coupling Mode)",
+                    "oni_pure_inverter": "ONI (Pure Inverter Mode)"
                 }
             },
             "grid_voltage_range": {
@@ -475,41 +475,41 @@
             "charge_priority": {
                 "name": "Charge Priority [d06]",
                 "state": {
-                    "CSO (Solar Priority Charging)": "CSO (Solar Priority Charging)",
-                    "CUT (Grid Priority Charging)": "CUT (Grid Priority Charging)",
-                    "SNU (Solar and Grid Charging Together)": "SNU (Solar and Grid Charging Together)",
-                    "OSO (Solar Only Charging)": "OSO (Solar Only Charging)"
+                    "cso_solar_priority_charging": "CSO (Solar Priority Charging)",
+                    "cut_grid_priority_charging": "CUT (Grid Priority Charging)",
+                    "snu_solar_and_grid_charging": "SNU (Solar and Grid Charging Together)",
+                    "oso_solar_only_charging": "OSO (Solar Only Charging)"
                 }
             },
             "battery_type": {
                 "name": "Battery Type [d07]",
                 "state": {
-                    "Pb (Lead-Acid Battery)": "Pb (Lead-Acid Battery)",
-                    "Li (Lithium Battery)": "Li (Lithium Battery)"
+                    "pb_lead_acid_battery": "Pb (Lead-Acid Battery)",
+                    "li_lithium_battery": "Li (Lithium Battery)"
                 }
             },
             "mppt_battery_type": {
                 "name": "Battery Type",
                 "state": {
-                    "Pb (Lead-Acid Battery)": "Pb (Lead-Acid Battery)",
-                    "Li (Lithium Battery)": "Li (Lithium Battery)"
+                    "pb_lead_acid_battery": "Pb (Lead-Acid Battery)",
+                    "li_lithium_battery": "Li (Lithium Battery)"
                 }
             },
             "force_charge_discharge_control": {
                 "name": "Force Charge/Discharge Control [d21]",
                 "state": {
-                    "Normal Charging": "Normal Charging",
-                    "Force Charging": "Force Charging",
-                    "Force Discharging": "Force Discharging"
+                    "normal_charging": "Normal Charging",
+                    "force_charging": "Force Charging",
+                    "force_discharging": "Force Discharging"
                 }
             },
             "scheduled_force_charge_discharge_enable": {
                 "name": "Scheduled Force Charge/Discharge Enable",
                 "state": {
-                    "Disabled": "Disabled",
-                    "Enable Scheduled Force Charging Only": "Enable Scheduled Force Charging Only",
-                    "Enable Scheduled Force Discharging Only": "Enable Scheduled Force Discharging Only",
-                    "Enable Both Scheduled Force Charging and Discharging": "Enable Both Scheduled Force Charging and Discharging"
+                    "disabled": "Disabled",
+                    "enable_scheduled_force_charging_only": "Enable Scheduled Force Charging Only",
+                    "enable_scheduled_force_discharging_only": "Enable Scheduled Force Discharging Only",
+                    "enable_both_scheduled_force_charging_and_discharging": "Enable Both Scheduled Force Charging and Discharging"
                 }
             }
         },
@@ -577,28 +577,28 @@
             "vehicle_48v_generator_current_setting": {
                 "name": "Vehicle 48V Generator Current Setting"
             },
-            "mppt_equalization_voltage":{
+            "mppt_equalization_voltage": {
                 "name": "MPPT Equalization Voltage"
             },
-            "mppt_float_voltage":{
+            "mppt_float_voltage": {
                 "name": "MPPT Float Voltage"
             },
-            "out_time_set":{
+            "out_time_set": {
                 "name": "Output Time Setting"
             },
-            "mppt_charge_current":{
+            "mppt_charge_current": {
                 "name": "MPPT Charge Current"
             },
-            "battery_low_voltage":{
+            "battery_low_voltage": {
                 "name": "Undervoltage Protection Voltage"
             },
-            "battery_recover_voltage":{
+            "battery_recover_voltage": {
                 "name": "Undervoltage Recovery Voltage"
             },
-            "battery_number":{
+            "battery_number": {
                 "name": "Battery Number"
             },
-            "calibrate_battery_voltage":{
+            "calibrate_battery_voltage": {
                 "name": "Calibrate Battery Voltage "
             }
         },

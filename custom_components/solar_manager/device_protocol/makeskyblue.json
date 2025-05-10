@@ -15,11 +15,11 @@
             "sensor_type": "select",
             "write_command": 6,
             "enum": {
-                "0": "SUB (Solar-Grid-Storage Mode)",
-                "1": "UTI (Grid Priority Mode)",
-                "2": "SBU (Solar-Storage-Grid Mode)",
-                "3": "NBU (No Battery AC Coupling Mode)",
-                "4": "ONI (Pure Inverter Mode)"
+                "0": "sub_solar_grid_storage",
+                "1": "uti_grid_priority",
+                "2": "sbu_solar_storage_grid",
+                "3": "nbu_no_battery_ac_coupling",
+                "4": "oni_pure_inverter"
             },
             "icon": "mdi:cog"
         },
@@ -81,10 +81,10 @@
             "sensor_type": "select",
             "write_command": 6,
             "enum": {
-                "0": "CSO (Solar Priority Charging)",
-                "1": "CUT (Grid Priority Charging)",
-                "2": "SNU (Solar and Grid Charging Together)",
-                "3": "OSO (Solar Only Charging)"
+                "0": "cso_solar_priority_charging",
+                "1": "cut_grid_priority_charging",
+                "2": "snu_solar_and_grid_charging",
+                "3": "oso_solar_only_charging"
             },
             "icon": "mdi:battery-charging"
         },
@@ -95,8 +95,8 @@
             "sensor_type": "select",
             "write_command": 6,
             "enum": {
-                "0": "Pb (Lead-Acid Battery)",
-                "1": "Li (Lithium Battery)"
+                "0": "pb_lead_acid_battery",
+                "1": "li_lithium_battery"
             },
             "icon": "mdi:battery"
         },
@@ -106,10 +106,10 @@
             "scale": 0.1,
             "sensor_type": "sensor",
             "enum": {
-                "0x48": "72V",
-                "0x30": "48V",
-                "0x18": "24V",
-                "0x0C": "12V"
+                "0x48": "72v",
+                "0x30": "48v",
+                "0x18": "24v",
+                "0x0C": "12v"
             },
             "unit": "VOLT",
             "display_precision": 1,
@@ -193,7 +193,7 @@
             "unit": "AMPERE",
             "step": 0.1,
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-ac"
         },
         "0x30000D": {
             "name": "inverter_output_max_power",
@@ -287,9 +287,9 @@
             "sensor_type": "select",
             "write_command": 6,
             "enum": {
-                "0": "Normal Charging",
-                "1": "Force Charging",
-                "2": "Force Discharging"
+                "0": "normal_charging",
+                "1": "force_charging",
+                "2": "force_discharging"
             },
             "icon": "mdi:battery-charging"
         },
@@ -400,10 +400,10 @@
             "sensor_type": "select",
             "write_command": 6,
             "enum": {
-                "0": "Disabled",
-                "1": "Enable Scheduled Force Charging Only",
-                "2": "Enable Scheduled Force Discharging Only",
-                "3": "Enable Both Scheduled Force Charging and Discharging"
+                "0": "disabled",
+                "1": "enable_scheduled_force_charging_only",
+                "2": "enable_scheduled_force_discharging_only",
+                "3": "enable_both_scheduled_force_charging_and_discharging"
             },
             "icon": "mdi:calendar-check"
         },
@@ -413,13 +413,13 @@
             "scale": 1,
             "sensor_type": "sensor",
             "enum": {
-                "0": "2.2kW Platform",
-                "1": "3.5kW Platform",
-                "2": "5.0kW Platform",
-                "3": "7.5kW Platform",
-                "4": "8.0kW Platform",
-                "5": "10.0kW Platform",
-                "6": "12.0kW Platform"
+                "0": "2_2kw_platform",
+                "1": "3_5kw_platform",
+                "2": "5_0kw_platform",
+                "3": "7_5kw_platform",
+                "4": "8_0kw_platform",
+                "5": "10_0kw_platform",
+                "6": "12_0kw_platform"
             },
             "icon": "mdi:information"
         },
@@ -429,12 +429,12 @@
             "scale": 1,
             "sensor_type": "sensor",
             "enum": {
-                "0": "Shutdown",
-                "1": "Inverting",
-                "2": "Charging",
-                "3": "Anti-Backflow",
-                "4": "Bypass",
-                "5": "Off-Grid"
+                "0": "shutdown",
+                "1": "inverting",
+                "2": "charging",
+                "3": "anti_backflow",
+                "4": "bypass",
+                "5": "off_grid"
             },
             "icon": "mdi:power-plug"
         },
@@ -444,10 +444,10 @@
             "scale": 1,
             "sensor_type": "sensor",
             "enum": {
-                "0": "Constant Voltage",
-                "1": "Full Load",
-                "2": "Current Limiting",
-                "3": "Tracking"
+                "0": "constant_voltage",
+                "1": "full_load",
+                "2": "current_limiting",
+                "3": "tracking"
             },
             "icon": "mdi:solar-panel"
         },
@@ -499,7 +499,7 @@
             "range": "0~60A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-ac"
         },
         "0x30006C": {
             "name": "inverter_grid_port_current",
@@ -509,7 +509,7 @@
             "range": "-100~100A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc",
+            "icon": "mdi:current-ac",
             "offset": 1000
         },
         "0x30006D": {
@@ -520,7 +520,7 @@
             "range": "-100~100A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc",
+            "icon": "mdi:current-ac",
             "offset": 1000
         },
         "0x30006E": {
@@ -762,26 +762,27 @@
             "scale": 1,
             "sensor_type": "sensor",
             "enum": {
-                "0": "Min Input Voltage Protection",
-                "1": "Max Input Voltage Protection",
-                "2": "Input Overfrequency Protection",
-                "3": "Input Underfrequency Protection",
-                "4": "Grid Switchover",
-                "5": "Inverter Short Circuit",
-                "6": "Input Overcurrent",
-                "7": "Inverter Bus Overvoltage",
-                "8": "PV1 Input Overvoltage",
-                "9": "PV2 Input Overvoltage",
-                "10": "PV1 Overcurrent Protection",
-                "11": "PV2 Overcurrent Protection",
-                "12": "Charging Overcurrent Protection",
-                "13": "Charging Overvoltage Protection",
-                "14": "Battery Voltage Protection",
-                "15": "INV Over-Temperature Protection",
-                "16": "MPP1 Over-Temperature Protection",
-                "17": "MPP2 Over-Temperature Protection",
-                "18": "BMS Fault",
-                "99": "No Fault"
+                "0": "min_input_voltage_protection",
+                "1": "max_input_voltage_protection",
+                "2": "input_overfrequency_protection",
+                "3": "input_underfrequency_protection",
+                "4": "grid_switchover",
+                "5": "inverter_short_circuit",
+                "6": "input_overcurrent",
+                "7": "inverter_bus_overvoltage",
+                "8": "pv1_input_overvoltage",
+                "9": "pv2_input_overvoltage",
+                "10": "pv1_overcurrent_protection",
+                "11": "pv2_overcurrent_protection",
+                "12": "charging_overcurrent_protection",
+                "13": "charging_overvoltage_protection",
+                "14": "battery_voltage_protection",
+                "15": "inv_over_temperature_protection",
+                "16": "mpp1_over_temperature_protection",
+                "17": "mpp2_over_temperature_protection",
+                "18": "mpp3_over_temperature_protection",
+                "19": "bms_fault",
+                "99": "no_fault"
             },
             "icon": "mdi:alert"
         },
@@ -862,9 +863,9 @@
             "scale": 1,
             "sensor_type": "sensor",
             "enum": {
-                "0": "No PV",
-                "1": "PV Present",
-                "2": "PV Generating"
+                "0": "no_pv",
+                "1": "pv_present",
+                "2": "pv_generating"
             },
             "icon": "mdi:solar-panel"
         },
@@ -874,10 +875,10 @@
             "scale": 1,
             "sensor_type": "sensor",
             "enum": {
-                "0": "No Battery",
-                "1": "Battery Present",
-                "2": "Charging",
-                "3": "Discharging"
+                "0": "no_battery",
+                "1": "battery_present",
+                "2": "charging",
+                "3": "discharging"
             },
             "icon": "mdi:battery"
         },
@@ -887,10 +888,10 @@
             "scale": 1,
             "sensor_type": "sensor",
             "enum": {
-                "0": "No Grid",
-                "1": "Grid Present",
-                "2": "Grid to Inverter (Forward)",
-                "3": "Inverter to Grid (Reverse)"
+                "0": "no_grid",
+                "1": "grid_present",
+                "2": "grid_to_inverter_forward",
+                "3": "inverter_to_grid_reverse"
             },
             "icon": "mdi:transmission-tower"
         },
@@ -900,8 +901,8 @@
             "scale": 1,
             "sensor_type": "sensor",
             "enum": {
-                "0": "No Load",
-                "1": "Load Present"
+                "0": "no_load",
+                "1": "load_present"
             },
             "icon": "mdi:power-plug"
         },
