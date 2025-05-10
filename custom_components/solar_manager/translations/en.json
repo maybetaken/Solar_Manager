@@ -599,7 +599,7 @@
                 "name": "Battery Number"
             },
             "calibrate_battery_voltage": {
-                "name": "Calibrate Battery Voltage "
+                "name": "Calibrate Battery Voltage"
             }
         },
         "datetime": {
