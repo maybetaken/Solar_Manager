@@ -24,8 +24,8 @@ jobs:
 
       - name: Prepare Release Package
         run: |
-          mkdir -p dist
-          zip -r dist/solar_manager.zip custom_components/solar_manager
+          cd custom_components/solar_manager
+          zip -r ../../dist/solar_manager.zip .
         shell: bash
 
       - name: Create Release and Upload Asset
@@ -35,7 +35,7 @@ jobs:
           name: Release ${{ github.ref_name }}
           body: |
             This release is automatically generated from the master branch.
-            The ZIP file contains the `custom_components/solar_manager` directory.
+            The ZIP file contains the contents of the `solar_manager` directory.
           draft: false
           prerelease: false
           files: dist/solar_manager.zip
