@@ -357,29 +357,29 @@
             "fault": {
                 "name": "Fault",
                 "state": {
-                    "No Fault": "No Fault",
-                    "12V Battery Side Input Overvoltage": "12V Battery Side Input Overvoltage",
-                    "12V Battery Side Input Undervoltage": "12V Battery Side Input Undervoltage",
-                    "Vehicle 48V Generator Side Input Overvoltage": "Vehicle 48V Generator Side Input Overvoltage",
-                    "Vehicle 48V Generator Side Input Undervoltage": "Vehicle 48V Generator Side Input Undervoltage",
-                    "48V Battery Side Input Overvoltage": "48V Battery Side Input Overvoltage",
-                    "48V Battery Side Input Undervoltage": "48V Battery Side Input Undervoltage",
-                    "System Over-Temperature": "System Over-Temperature",
-                    "Vehicle 48V Generator Side Input Overcurrent": "Vehicle 48V Generator Side Input Overcurrent",
-                    "12V Battery Charge Current Overcurrent": "12V Battery Charge Current Overcurrent",
-                    "12V Battery Discharge Current Overcurrent": "12V Battery Discharge Current Overcurrent",
-                    "External Generator Over-Temperature": "External Generator Over-Temperature"
+                    "no_fault": "No Fault",
+                    "12v_battery_side_input_overvoltage": "12V Battery Side Input Overvoltage",
+                    "12v_battery_side_input_undervoltage": "12V Battery Side Input Undervoltage",
+                    "vehicle_48v_generator_side_input_overvoltage": "Vehicle 48V Generator Side Input Overvoltage",
+                    "vehicle_48v_generator_side_input_undervoltage": "Vehicle 48V Generator Side Input Undervoltage",
+                    "48v_battery_side_input_overvoltage": "48V Battery Side Input Overvoltage",
+                    "48v_battery_side_input_undervoltage": "48V Battery Side Input Undervoltage",
+                    "system_over_temperature": "System Over-Temperature",
+                    "vehicle_48v_generator_side_input_overcurrent": "Vehicle 48V Generator Side Input Overcurrent",
+                    "12v_battery_charge_current_overcurrent": "12V Battery Charge Current Overcurrent",
+                    "12v_battery_discharge_current_overcurrent": "12V Battery Discharge Current Overcurrent",
+                    "external_generator_over_temperature": "External Generator Over-Temperature"
                 }
             },
             "machine_current_status": {
                 "name": "Device Current Status",
                 "state": {
-                    "Not Working": "Not Working",
-                    "Forward Constant Current": "Forward Constant Current",
-                    "Reverse Constant Current": "Reverse Constant Current",
-                    "Vehicle 48V Generator Constant Current 5": "Vehicle 48V Generator Constant Current 5",
-                    "Vehicle 48V Generator Constant Current 6": "Vehicle 48V Generator Constant Current 6",
-                    "Vehicle 48V Generator Constant Current 8": "Vehicle 48V Generator Constant Current 8"
+                    "not_working": "Not Working",
+                    "forward_constant_current": "Forward Constant Current",
+                    "reverse_constant_current": "Reverse Constant Current",
+                    "vehicle_48v_generator_constant_current_5": "Vehicle 48V Generator Constant Current 5",
+                    "vehicle_48v_generator_constant_current_6": "Vehicle 48V Generator Constant Current 6",
+                    "vehicle_48v_generator_constant_current_8": "Vehicle 48V Generator Constant Current 8"
                 }
             },
             "protection_parameter_modify_switch": {
