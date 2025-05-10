@@ -24,6 +24,7 @@ jobs:
 
       - name: Prepare Release Package
         run: |
+          mkdir -p dist
           cd custom_components/solar_manager
           zip -r ../../dist/solar_manager.zip .
         shell: bash
