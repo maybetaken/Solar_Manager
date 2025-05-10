@@ -15,37 +15,43 @@ It supports multiple device protocols, providing real-time data collection, devi
 - **Diagnostics**: Offers diagnostic information like signal strength and fault status.
 - **Automation Integration**: Seamlessly integrates with Home Assistant automation.
 
-## Installation
+## Supported Devices
 
-1. Ensure the [MQTT integration](https://www.home-assistant.io/integrations/mqtt/) is installed.
-2. Add the Solar Manager integration to your Home Assistant configuration.
-3. Follow the setup wizard to add and configure your devices.
+- [x] **MakeSkyBlue (每天蓝)**
+- [x] **MakeSkyBlue MPPT (每天蓝 MPPT)**
+- [ ] **Megarevo** （迈格瑞能）: In progress
+
+## Installationion
+
+1. Ensure the [MQTT integration](https://www.home-assistant.io/integrations/mqtt/) is installed.Ensure the [MQTT integration](https://www.home-assistant.io/integrations/mqtt/) is installed.
+2. Add the Solar Manager integration to your Home Assistant configuration.2. Add the Solar Manager integration to your Home Assistant configuration.
+3. Follow the setup wizard to add and configure your devices.etup wizard to add and configure your devices.
 
 ## Supported Devices
 
 - MakeSkyBlue series
-- For other supported device models, refer to the documentation.
+- For other supported device models, refer to the documentation.- For other supported device models, refer to the documentation.
 
-## Usage
+## Usage## Usage
 
-- Connect ESP32 device to the internet through the `ESP Config` WeChat mini-program or `EspBlufi` application. If you don't have this device, please contact me at 296496296@qq.com.
-- Currently, the MQTT broker only supports HA local versions. Recommended local MQTT broker: Mosquitto.
-- Set up your Home Assistant network as `host`; otherwise, your ESP32 device will not be able to connect to HA.
-- Once the preparation is done, you can connect through the Serial Number.
+- Connect ESP32 device to the internet through the `ESP Config` WeChat mini-program or `EspBlufi` application. If you don't have this device, please contact me at 296496296@qq.com.WeChat mini-program or `EspBlufi` application. If you don't have this device, please contact me at 296496296@qq.com.
+- Currently, the MQTT broker only supports HA local versions. Recommended local MQTT broker: Mosquitto.- Currently, the MQTT broker only supports HA local versions. Recommended local MQTT broker: Mosquitto.
+- Set up your Home Assistant network as `host`; otherwise, your ESP32 device will not be able to connect to HA. your Home Assistant network as `host`; otherwise, your ESP32 device will not be able to connect to HA.
+- Once the preparation is done, you can connect through the Serial Number.- Once the preparation is done, you can connect through the Serial Number.
 
 **Note**: Please enter the correct Serial Number in the ESP32 device.
 
-- If your HA doesn't support remote monitoring, please check the `Discussions` section. For users in China, you can use `贝锐花生壳`.
+- If your HA doesn't support remote monitoring, please check the `Discussions` section. For users in China, you can use `贝锐花生壳`.ons` section. For users in China, you can use `贝锐花生壳`.
 
-**If you are not familiar with the settings, please do not change them.**
+**If you are not familiar with the settings, please do not change them.**m.**
 
 ## Disclaimer
 
-This project is for educational purposes only. The data obtained from the devices may not be accurate. Any improper operation or inaccuracy that causes issues, including but not limited to device damage, explosions, fires, etc., is not the responsibility of the author.
-Please do not use this project for commercial purposes. Any form of disassembly, tampering, or attempts to access the contents of the ESP32 module provided by the author will be considered illegal.
-By installing and using the device or integration, you agree to this disclaimer.
+This project is for educational purposes only. The data obtained from the devices may not be accurate. Any improper operation or inaccuracy that causes issues, including but not limited to device damage, explosions, fires, etc., is not the responsibility of the author. devices may not be accurate. Any improper operation or inaccuracy that causes issues, including but not limited to device damage, explosions, fires, etc., is not the responsibility of the author.
+Please do not use this project for commercial purposes. Any form of disassembly, tampering, or attempts to access the contents of the ESP32 module provided by the author will be considered illegal.Please do not use this project for commercial purposes. Any form of disassembly, tampering, or attempts to access the contents of the ESP32 module provided by the author will be considered illegal.
+By installing and using the device or integration, you agree to this disclaimer. and using the device or integration, you agree to this disclaimer.
 
 ## Support and Feedback
 
-If you enjoy this project, consider supporting us on [Ko-fi](https://ko-fi.com/maybetaken).
-For issues or suggestions, please submit them to the project's GitHub repository.
+If you enjoy this project, consider supporting us on [Ko-fi](https://ko-fi.com/maybetaken).aybetaken).
+For issues or suggestions, please submit them to the project's GitHub repository.For issues or suggestions, please submit them to the project's GitHub repository.
