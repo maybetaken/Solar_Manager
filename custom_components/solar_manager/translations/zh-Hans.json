@@ -20,6 +20,14 @@
         }
     },
     "entity": {
+        "button": {
+            "restart": {
+                "name": "重启设备"
+            },
+            "reconfig": {
+                "name": "重置设备"
+            }
+        },
         "switch": {
           "led": {
             "name": "LED指示灯"

@@ -20,6 +20,7 @@ from .ssdp import SSDPBroadcaster
 
 # List the platforms that you want to support.
 _PLATFORMS: list[Platform] = [
+    Platform.BUTTON,
     Platform.SENSOR,
     Platform.LIGHT,
     Platform.SWITCH,

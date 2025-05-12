@@ -197,6 +197,11 @@ class BaseDevice(ABC):
         """Return data for the given name from data_dict."""
         return self._data_dict.get(name)
 
+    async def perform_action(self, action_name: str) -> None:
+        """Perform an action based on the action name."""
+        topic = f"{self.sn}/control/" + action_name
+        await self.mqtt_manager.publish(topic, action_name)
+
     async def set_led(self, state: bool) -> None:
         """Set LED state via MQTT."""
         self._diagnostics["led"] = state
@@ -226,6 +231,7 @@ class BaseDevice(ABC):
             "number": [],
             "select": [],
             "switch": [],
+            "button": [],
         }
 
         device_info["sensor"].extend(
@@ -248,6 +254,22 @@ class BaseDevice(ABC):
                 "name": "LED",
                 "diagnostic": True,
                 "icon": "mdi:led-on",
+            }
+        )
+
+        device_info["button"].append(
+            {
+                "name": "restart",
+                "diagnostic": True,
+                "icon": "mdi:restart",
+            }
+        )
+
+        device_info["button"].append(
+            {
+                "name": "reconfig",
+                "diagnostic": True,
+                "icon": "mdi:restore-alert",
             }
         )
 

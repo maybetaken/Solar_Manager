@@ -20,6 +20,14 @@
         }
     },
     "entity": {
+        "button": {
+            "restart": {
+                "name": "Restart"
+            },
+            "reconfig": {
+                "name": "Reset device"
+            }
+        },
         "switch": {
           "led": {
             "name": "LED Indicator"
