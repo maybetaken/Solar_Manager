@@ -43,11 +43,11 @@ It supports multiple device protocols, providing real-time data collection, devi
 **If you are not familiar with the settings, please do not change them.**
 
 ## Example for MakeSkyBlue MPPT
-![Controls](./.img/controls.png)
+![Controls](./.img/controls.jpg)
 
-![Sensors](./.img/sensors.png)
+![Sensors](./.img/sensors.jpg)
 
-![Wifi](./.img/wifi.png)
+![Wifi](./.img/wifi.jpg)
 
 ## Disclaimer
 
