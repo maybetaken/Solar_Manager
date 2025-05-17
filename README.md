@@ -42,6 +42,13 @@ It supports multiple device protocols, providing real-time data collection, devi
 
 **If you are not familiar with the settings, please do not change them.**
 
+## Example for MakeSkyBlue MPPT
+![Controls](./.img/controls.png)
+
+![Sensors](./.img/sensors.png)
+
+![Wifi](./.img/wifi.png)
+
 ## Disclaimer
 
 This project is for educational purposes only. The data obtained from the devices may not be accurate. Any improper operation or inaccuracy that causes issues, including but not limited to device damage, explosions, fires, etc., is not the responsibility of the author. devices may not be accurate. Any improper operation or inaccuracy that causes issues, including but not limited to device damage, explosions, fires, etc., is not the responsibility of the author.
