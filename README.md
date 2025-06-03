@@ -26,8 +26,8 @@ It supports multiple device protocols, providing real-time data collection, devi
 ## Installationion
 
 1. Ensure the [MQTT integration](https://www.home-assistant.io/integrations/mqtt/) is installed.Ensure the [MQTT integration](https://www.home-assistant.io/integrations/mqtt/) is installed.
-2. Add the Solar Manager integration to your Home Assistant configuration.2. Add the Solar Manager integration to your Home Assistant configuration.
-3. Follow the setup wizard to add and configure your devices.etup wizard to add and configure your devices.
+2. Add the Solar Manager integration to your Home Assistant configuration.
+3. Follow the setup wizard to add and configure your devices.
 
 ## Usage
 
@@ -45,9 +45,7 @@ It supports multiple device protocols, providing real-time data collection, devi
 ## Example for MakeSkyBlue MPPT
 ![Controls](./.img/controls.jpg)
 
-![Sensors](./.img/sensors.jpg)
-
-![Wifi](./.img/wifi.jpg)
+<img src="./.img/sensors.jpg" alt="Sensors" width="300"> <img src="./.img/wifi.jpg" alt="Wifi" width="300">
 
 ## Disclaimer
 
