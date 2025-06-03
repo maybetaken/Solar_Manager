@@ -19,8 +19,8 @@ from homeassistant.helpers.event import async_track_time_interval
 
 _LOGGER = logging.getLogger(__name__)
 
-# Clear diagnostics and data after 30 seconds of no updates
-CLEAR_INTERVAL = timedelta(seconds=30)
+# Clear diagnostics and data after 120 seconds of no updates
+CLEAR_INTERVAL = timedelta(seconds=120)
 
 
 class BaseDevice(ABC):
