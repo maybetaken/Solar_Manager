@@ -36,11 +36,14 @@ type SolarManagerConfigEntry = ConfigEntry
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     """Set up the Solar Manager integration."""
     hass.data.setdefault(DOMAIN, {})
-    # Initialize SSDP broadcaster for the entire integration
-    if "broadcaster" not in hass.data[DOMAIN]:
-        broadcaster = SSDPBroadcaster(hass, interval=5.0)
-        hass.data[DOMAIN]["broadcaster"] = broadcaster
-        await broadcaster.start()
+
+    solar_cfg = config.get(DOMAIN, {})
+    if solar_cfg.get("ssdpbroadcaster", True): 
+        # Initialize SSDP broadcaster for the entire integration
+        if "broadcaster" not in hass.data[DOMAIN]:
+            broadcaster = SSDPBroadcaster(hass, interval=5.0)
+            hass.data[DOMAIN]["broadcaster"] = broadcaster
+            await broadcaster.start()
     return True
 
 
