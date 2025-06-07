@@ -80,10 +80,6 @@ class ModbusProtocolHelper(ProtocolHelper):
                 register_info = self.protocol_data["registers"].get(register_address)
 
                 if not register_info:
-                    _LOGGER.warning(
-                        "No register info for address 0x%04X, skipping",
-                        register_address,
-                    )
                     # Skip 2 bytes (assume UINT16 size for unknown registers)
                     byte_offset += 2
                     i += 1
