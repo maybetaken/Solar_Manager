@@ -49,33 +49,22 @@ class SolarManagerTime(TimeEntity):
     @property
     def native_value(self):
         """Return the state of the time entity."""
-        value = self._device.get_dict(self._name)
-        _LOGGER.debug("Native value for %s: %s", self._name, value)
-        if value is None:
+        time_str = self._device.get_dict(self._name)
+        _LOGGER.debug("Native value for %s: %s", self._name, time_str)
+        if time_str is None:
             return None
         try:
-            time_str = value.get("time")
-            if not time_str:
-                _LOGGER.debug("No time set for %s, marking unavailable", self._name)
-                return None
             time_obj = dt_util.parse_time(time_str)
             if time_obj is None:
                 _LOGGER.warning("Invalid time for %s: %s", self._name, time_str)
                 return None
-            return time_obj
+
         except (ValueError, TypeError, AttributeError) as e:
             _LOGGER.error(
-                "Failed to parse time for %s: %s, value=%s", self._name, e, value
+                "Failed to parse time for %s: %s, time_str=%s", self._name, e, time_str
             )
             return None
-
-    @property
-    def extra_state_attributes(self):
-        """Return additional state attributes."""
-        value = self._device.get_dict(self._name)
-        if value and isinstance(value, dict):
-            return {"interval_days": value.get("interval_days", 0)}
-        return {}
+        return time_obj
 
     async def async_set_value(self, value):
         """Set a new time value."""
@@ -92,11 +81,10 @@ class SolarManagerTime(TimeEntity):
     @property
     def available(self) -> bool:
         """Return if the entity is available."""
-        value = self._device.get_dict(self._name)
-        if value is None:
+        time_str = self._device.get_dict(self._name)
+        if time_str is None:
             _LOGGER.debug("Entity %s unavailable: value is None", self._name)
             return False
-        time_str = value.get("time")
         valid = bool(time_str)
         if not valid:
             _LOGGER.debug("Entity %s unavailable: no time set", self._name)

@@ -28,13 +28,11 @@ SPECIAL_REGISTERS: dict[int, str] = {
     0x300023: "scheduled_force_discharge_end_time",
 }
 
-# Pseudo-registers for interval_days to distinguish from time commands
 PSEUDO_REGISTERS: dict[int, tuple[str, int]] = {
     0x10020: ("force_charge_interval", 0x300020),  # Maps to real register 0x20
     0x10022: ("force_discharge_interval", 0x300022),  # Maps to real register 0x22
 }
 
-# Voltage ranges for registers 8 and 9 based on platform
 voltage_ranges = {
     "72v": {
         0x300008: (60.0, 70.5),
@@ -69,13 +67,12 @@ class MakeSkyBlueDevice(BaseDevice):
         self._register_to_name = {}
         self._unknown_registers = set()
         self._rate_voltage_factory = None
-        self._inverter_ac_voltage_initial = None  # Track initial value of register 2
+        self._inverter_ac_voltage_initial = None
         self.cmd_topic = f"{self.sn}/control/cmd"
 
     async def send_config(self) -> None:
         """Send MakeSkyBlue-specific configuration to the device."""
         try:
-            # Construct configuration data
             config_data = {
                 "segments": self.parser.protocol_data.get("segments", []),
             }
@@ -133,7 +130,6 @@ class MakeSkyBlueDevice(BaseDevice):
             await self.mqtt_manager.publish(
                 self.cmd_topic, self.parser.pack_data(self.slave_id, 0x1F, low_bytes)
             )
-
         except Exception as e:
             _LOGGER.error("Failed to send network_time: %s", e)
 
@@ -250,10 +246,6 @@ class MakeSkyBlueDevice(BaseDevice):
                     "Added time entity for register %s: name=%s", register, name
                 )
 
-        _LOGGER.debug(
-            "Device info entries: time=%s", device_info.get(Platform.TIME, [])
-        )
-
         device_info["sensor"].append(
             {
                 "name": "inverter_factor",
@@ -275,7 +267,7 @@ class MakeSkyBlueDevice(BaseDevice):
                 "display_precision": 0,
                 "icon": "mdi:timer-sync",
                 "device": self,
-                "register": 0x10020,  # Pseudo-register for force_charge_interval
+                "register": 0x10020,
             }
         )
 
@@ -290,7 +282,7 @@ class MakeSkyBlueDevice(BaseDevice):
                 "display_precision": 0,
                 "icon": "mdi:timer-sync",
                 "device": self,
-                "register": 0x10022,  # Pseudo-register for force_discharge_interval
+                "register": 0x10022,
             }
         )
         return device_info
@@ -391,8 +383,11 @@ class MakeSkyBlueDevice(BaseDevice):
         for register, value in parsed_data.items():
             if register in SPECIAL_REGISTERS:
                 name = SPECIAL_REGISTERS[register]
-                processed_value = self._process_special_register(register, value)
+                processed_value, interval_days = self._process_special_register(
+                    register, value
+                )
                 if processed_value is not None:
+                    # Store time string for time entity
                     if self._data_dict.get(name) != processed_value:
                         self._data_dict[name] = processed_value
                         _LOGGER.debug(
@@ -404,19 +399,19 @@ class MakeSkyBlueDevice(BaseDevice):
                         if name in self._entities:
                             changed_entities.add(name)
 
-                    interval_name = None
-                    if register == 0x300020:
-                        interval_name = "force_charge_interval"
-                    elif register == 0x300022:
-                        interval_name = "force_discharge_interval"
-                    if interval_name and interval_name in self._entities:
-                        interval_days = processed_value.get("interval_days", None)
-                        if 0 <= interval_days <= 31:
+                    # Store interval_days for corresponding interval entity
+                    if register in [0x300020, 0x300022]:
+                        interval_name = (
+                            "force_charge_interval"
+                            if register == 0x300020
+                            else "force_discharge_interval"
+                        )
+                        if interval_days is not None and 0 <= interval_days <= 31:
                             if self._data_dict.get(interval_name) != interval_days:
                                 self._data_dict[interval_name] = interval_days
                                 changed_entities.add(interval_name)
                                 _LOGGER.debug(
-                                    "Update %s: %s", interval_name, interval_days
+                                    "Updated %s: %s", interval_name, interval_days
                                 )
                         else:
                             _LOGGER.error(
@@ -451,149 +446,146 @@ class MakeSkyBlueDevice(BaseDevice):
                 entity.schedule_update_ha_state()
                 _LOGGER.debug("Updated entity %s due to data change", name)
 
-        # Reset notify clear timer only
         self._reset_notify_clear_timer()
 
-    def _process_special_register(self, register: int, value: Any) -> Any:
-        """Process a single special register and return the processed value."""
+    def _process_special_register(
+        self, register: int, value: Any
+    ) -> tuple[str | None, int | None]:
+        """Process a single special register and return the time string and interval_days."""
         if not isinstance(value, int):
             _LOGGER.error(
                 "Invalid value type for register %s: %s", register, type(value)
             )
-            return None
+            return None, None
 
         _LOGGER.debug("Processing register %s with raw value: 0x%04X", register, value)
 
-        # Scheduled times (UINT16): 0x20, 0x21, 0x22, 0x23
         hour = (value >> 11) & 0x1F
         minute = (value >> 5) & 0x3F
-        interval_days = value & 0x1F
-        if not (0 <= hour <= 23 and 0 <= minute <= 59 and 0 <= interval_days <= 31):
+        interval_days = value & 0x1F if register in [0x300020, 0x300022] else None
+        if not (0 <= hour <= 23 and 0 <= minute <= 59):
             _LOGGER.error(
-                "Invalid time for register %s: hour=%s, minute=%s, interval_days=%s",
+                "Invalid time for register %s: hour=%s, minute=%s",
                 register,
                 hour,
                 minute,
-                interval_days,
             )
-            return None
+            return None, None
+        if interval_days is not None and not (0 <= interval_days <= 31):
+            _LOGGER.error(
+                "Invalid interval_days for register %s: %s", register, interval_days
+            )
+            return None, None
+
         try:
             from datetime import time
 
             time_str = time(hour, minute).strftime("%H:%M")
-            processed = {"time": time_str, "interval_days": interval_days}
-            _LOGGER.debug("Processed scheduled time for %s: %s", register, processed)
-            return processed
+            _LOGGER.debug(
+                "Processed scheduled time for %s: time=%s, interval_days=%s",
+                register,
+                time_str,
+                interval_days,
+            )
+            return time_str, interval_days
         except ValueError as e:
             _LOGGER.error("Invalid time for register %s: %s", register, e)
-            return None
+            return None, None
 
     async def handle_cmd(self, cmd: int, value: Any) -> None:
         """Handle commands from the user."""
         _LOGGER.debug("Handling command: cmd=%s, value=%s", cmd, value)
         data: Any = None
 
-        if cmd in [0x300021, 0x300023]:
+        # Handle time commands for registers 0x20, 0x21, 0x22, 0x23
+        if cmd in [0x300020, 0x300021, 0x300022, 0x300023]:
+            if not isinstance(value, int) or value > 0xFFFF:
+                _LOGGER.error("Invalid time value for register %s: %s", cmd, value)
+                return
             hour = (value >> 8) & 0xFF
             minute = value & 0xFF
-            value = (hour & 0x1F) << 11 | (minute & 0x3F) << 5 | (0 & 0x1F)
-
-        # Handle time and interval commands for registers 0x20, 0x22, and pseudo-registers
-        if cmd in [0x300020, 0x300022, 0x10020, 0x10022]:
-            # Determine the real register and entity name
-            if cmd in [0x300020, 0x300022]:
-                real_register = cmd
-                entity_name = self._register_to_name.get(cmd)
-            else:  # Pseudo-register for interval_days
-                interval_name, real_register = PSEUDO_REGISTERS.get(cmd, (None, None))
-                if not interval_name or not real_register:
-                    _LOGGER.error("Invalid pseudo-register %s", cmd)
-                    return
-                entity_name = self._register_to_name.get(real_register)
-
-            if not entity_name:
-                _LOGGER.error("No entity name found for register %s", cmd)
-                return
-
-            current_data = self._data_dict.get(entity_name, {})
-            interval_days = current_data.get("interval_days", 0)
-            hour = 0
-            minute = 0
-
-            # Handle time entity command (hour and minute)
-            if cmd in [0x300020, 0x300022]:
-                if not isinstance(value, int) or value > 0xFFFF:
-                    _LOGGER.error("Invalid time value for register %s: %s", cmd, value)
-                    return
-                hour = (value >> 8) & 0xFF
-                minute = value & 0xFF
-                if not (0 <= hour <= 23 and 0 <= minute <= 59):
-                    _LOGGER.error(
-                        "Invalid time for register %s: hour=%s, minute=%s",
-                        cmd,
-                        hour,
-                        minute,
-                    )
-                    return
-            # Handle number entity command (interval_days)
-            elif cmd in [0x10020, 0x10022]:
-                if not isinstance(value, int) or not (0 <= value <= 31):
-                    _LOGGER.error(
-                        "Invalid interval_days for register %s: %s", cmd, value
-                    )
-                    return
-                interval_days = value
-                time_str = current_data.get("time", "00:00")
-                hour, minute = (
-                    map(int, time_str.split(":")) if ":" in time_str else (0, 0)
+            if not (0 <= hour <= 23 and 0 <= minute <= 59):
+                _LOGGER.error(
+                    "Invalid time for register %s: hour=%s, minute=%s",
+                    cmd,
+                    hour,
+                    minute,
                 )
-                if not (0 <= hour <= 23 and 0 <= minute <= 59):
+                return
+            # For registers 0x20 and 0x22, preserve existing interval_days
+            interval_days = 0
+            if cmd in [0x300020, 0x300022]:
+                interval_name = (
+                    "force_charge_interval"
+                    if cmd == 0x300020
+                    else "force_discharge_interval"
+                )
+                interval_days = self._data_dict.get(interval_name, 0)
+                if not (0 <= interval_days <= 31):
                     _LOGGER.error(
-                        "Invalid stored time for register %s (%s): %s",
-                        real_register,
-                        entity_name,
-                        time_str,
+                        "Invalid stored interval_days for %s: %s",
+                        interval_name,
+                        interval_days,
                     )
-                    return
-
+                    interval_days = 0
             # Pack the value: hour (5 bits), minute (6 bits), interval_days (5 bits)
+            packed_value = (
+                (hour & 0x1F) << 11
+                | (minute & 0x3F) << 5
+                | ((int)(interval_days) & 0x1F)
+            )
+            data = self.parser.pack_data(self.slave_id, cmd, packed_value)
+            # Update _data_dict with time string
+            time_str = f"{hour:02d}:{minute:02d}"
+            entity_name = self._register_to_name.get(cmd)
+            if entity_name:
+                self._data_dict[entity_name] = time_str
+                _LOGGER.debug("Updated %s: time=%s", entity_name, time_str)
+                if entity_name in self._entities:
+                    self._entities[entity_name].schedule_update_ha_state()
+
+        # Handle interval commands for pseudo-registers 0x10020, 0x10022
+        elif cmd in [0x10020, 0x10022]:
+            interval_name, real_register = PSEUDO_REGISTERS.get(cmd, (None, None))
+            if not interval_name or not real_register:
+                _LOGGER.error("Invalid pseudo-register %s", cmd)
+                return
+            if not isinstance(value, int) or not (0 <= value <= 31):
+                _LOGGER.error("Invalid interval_days for register %s: %s", cmd, value)
+                return
+            interval_days = value
+            entity_name = self._register_to_name.get(real_register)
+            if not entity_name:
+                _LOGGER.error("No entity name found for register %s", real_register)
+                return
+            # Get current time from _data_dict
+            time_str = self._data_dict.get(entity_name, "00:00")
+            hour, minute = map(int, time_str.split(":")) if ":" in time_str else (0, 0)
+            if not (0 <= hour <= 23 and 0 <= minute <= 59):
+                _LOGGER.error(
+                    "Invalid stored time for %s (%s): %s",
+                    real_register,
+                    entity_name,
+                    time_str,
+                )
+                return
+            # Pack the value with existing time and new interval_days
             packed_value = (
                 (hour & 0x1F) << 11 | (minute & 0x3F) << 5 | (interval_days & 0x1F)
             )
             data = self.parser.pack_data(self.slave_id, real_register, packed_value)
-
-            # Update data dictionary
-            interval_name = (
-                "force_charge_interval"
-                if real_register == 0x300020
-                else "force_discharge_interval"
-            )
-            self._data_dict[entity_name] = {
-                "time": f"{hour:02d}:{minute:02d}",
-                "interval_days": interval_days,
-            }
+            # Update _data_dict for interval entity
             self._data_dict[interval_name] = interval_days
-            _LOGGER.debug(
-                "Updated %s: time=%s:%s, interval_days=%s",
-                entity_name,
-                hour,
-                minute,
-                interval_days,
-            )
-
-            # Schedule updates for both entities
-            if entity_name in self._entities:
-                self._entities[entity_name].schedule_update_ha_state()
+            _LOGGER.debug("Updated %s: interval_days=%s", interval_name, interval_days)
             if interval_name in self._entities:
                 self._entities[interval_name].schedule_update_ha_state()
 
         # Validate register 2 (inverter_ac_voltage) commands
-        if cmd == 0x300002:  # inverter_ac_voltage
+        elif cmd == 0x300002:
             if (
                 self._inverter_ac_voltage_initial is not None
                 and self._inverter_ac_voltage_initial >= 2
             ):
-                # Restrict to 208V or higher (values 2, 3, 4, 5)
                 if value < 2:
                     _LOGGER.error(
                         "Inverter AC voltage value %s not allowed; must be 208V or higher (initial value %s)",
@@ -601,7 +593,6 @@ class MakeSkyBlueDevice(BaseDevice):
                         self._inverter_ac_voltage_initial,
                     )
                     return
-            # Validate that the value is in the enum
             enum_mapping = self.parser.protocol_data["registers"][0x300002]["enum"]
             valid_value = False
             for key in enum_mapping:
@@ -611,37 +602,43 @@ class MakeSkyBlueDevice(BaseDevice):
             if not valid_value:
                 _LOGGER.error("Invalid inverter_ac_voltage value: %s", value)
                 return
+            data = self.parser.pack_data(self.slave_id, cmd, value)
 
-        if isinstance(value, str):
-            data = value
-        elif isinstance(value, int):
-            if data is None:  # If data wasn't set in the interval logic above
-                data = self.parser.pack_data(self.slave_id, cmd, value)
-        elif isinstance(value, float):
-            scale = (
-                self.parser.protocol_data.get("registers", {})
-                .get(cmd, {})
-                .get("scale", 1.0)
-            )
-            data = self.parser.pack_data(
-                self.slave_id,
-                cmd,
-                int(value / scale),
-            )
+        # Handle other register types
         else:
-            _LOGGER.error("Unsupported value type: %s", type(value))
-            return
-        _LOGGER.debug("Publishing to topic %s: %s", self.cmd_topic, data)
-        await self.mqtt_manager.publish(self.cmd_topic, data)
-        if not isinstance(value, str) and cmd not in [
-            0x300020,
-            0x300022,
-            0x10020,
-            0x10022,
-        ]:
-            self._data_dict[cmd] = (
-                value if isinstance(value, int) else int(value / scale)
-            )
-            entity_name = self._register_to_name.get(cmd)
-            if entity_name and entity_name in self._entities:
-                self._entities[entity_name].schedule_update_ha_state()
+            if isinstance(value, str):
+                data = value
+            elif isinstance(value, int):
+                data = self.parser.pack_data(self.slave_id, cmd, value)
+            elif isinstance(value, float):
+                scale = (
+                    self.parser.protocol_data.get("registers", {})
+                    .get(cmd, {})
+                    .get("scale", 1.0)
+                )
+                data = self.parser.pack_data(
+                    self.slave_id,
+                    cmd,
+                    int(value / scale),
+                )
+            else:
+                _LOGGER.error("Unsupported value type: %s", type(value))
+                return
+
+        if data is not None:
+            _LOGGER.debug("Publishing to topic %s: %s", self.cmd_topic, data)
+            await self.mqtt_manager.publish(self.cmd_topic, data)
+            if not isinstance(value, str) and cmd not in [
+                0x300020,
+                0x300021,
+                0x300022,
+                0x300023,
+                0x10020,
+                0x10022,
+            ]:
+                self._data_dict[cmd] = (
+                    value if isinstance(value, int) else int(value / scale)
+                )
+                entity_name = self._register_to_name.get(cmd)
+                if entity_name and entity_name in self._entities:
+                    self._entities[entity_name].schedule_update_ha_state()
