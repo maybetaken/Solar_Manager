@@ -167,14 +167,6 @@ class ModbusProtocolHelper(ProtocolHelper):
                         value,
                     )
 
-            # Validate total data length
-            if byte_offset != len(data_bytes):
-                _LOGGER.warning(
-                    "Data length mismatch: processed %d bytes, expected %d",
-                    byte_offset,
-                    len(data_bytes),
-                )
-
         except struct.error as e:
             _LOGGER.error("Failed to parse TLD payload: %s", e)
             return {}
