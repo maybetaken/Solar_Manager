@@ -7,7 +7,7 @@
             "cannot_connect": "Failed to connect",
             "invalid_auth": "Invalid authentication",
             "unknown": "Unexpected error",
-            "mqtt_not_ready": "MQTT is not ready, Please download the MQTT integration first"
+            "mqtt_not_ready": "MQTT is not ready, please configure the MQTT integration first!"
         },
         "step": {
             "user": {
@@ -25,43 +25,73 @@
                 "name": "Restart"
             },
             "reconfig": {
-                "name": "Reset device"
+                "name": "Reset Device"
+            },
+                        "restore_factory_setting": {
+                "name": "Restore Factory Setting"
+            },
+            "clear_record": {
+                "name": "Clear Record"
+            },
+            "clear_statistical": {
+                "name": "Clear Statistical Data"
+            },
+            "clear_arc_alarm": {
+                "name": "Clear arc alarm"
             }
         },
         "switch": {
-          "led": {
-            "name": "LED Indicator"
-          },
-          "anti_backflow_mode": {
-            "name": "Grid-Tied Anti-Backflow Status [d16]"
-          },
-          "energy_saving_mode": {
-            "name": "Energy-Saving Mode [d05]"
-          },
-          "system_switch": {
-            "name": "System Power Switch"
-          },
-          "reset_energy_meter": {
-            "name": "Reset Energy Meter"
-          },
-          "remote_anti_backflow_switch": {
-            "name": "Remote Anti-Backflow Switch [d22]"
-          },
-          "12v_relay_switch": {
-            "name": "12V Relay Switch"
-          },
-          "dc_switch": {
-            "name": "DC Switch"
-          },
-          "dc_reset": {
-            "name": "DC Reset"
-          },
-          "vehicle_48v_generator_switch": {
-            "name": "Vehicle 48V Generator Switch"
-          },
-          "vehicle_48v_generator_reset": {
-            "name": "Vehicle 48V Generator Reset"
-          }
+            "led": {
+                "name": "LED Indicator"
+            },
+            "anti_backflow_mode": {
+                "name": "Grid-Tied Anti-Backflow Status [d16]"
+            },
+            "energy_saving_mode": {
+                "name": "Energy-Saving Mode [d05]"
+            },
+            "system_switch": {
+                "name": "System Power Switch"
+            },
+            "reset_energy_meter": {
+                "name": "Reset Energy Meter"
+            },
+            "remote_anti_backflow_switch": {
+                "name": "Remote Anti-Backflow Switch [d22]"
+            },
+            "12v_relay_switch": {
+                "name": "12V Relay Switch"
+            },
+            "dc_switch": {
+                "name": "DC Switch"
+            },
+            "dc_reset": {
+                "name": "DC Reset"
+            },
+            "vehicle_48v_generator_switch": {
+                "name": "Vehicle 48V Generator Switch"
+            },
+            "vehicle_48v_generator_reset": {
+                "name": "Vehicle 48V Generator Reset"
+            },
+            "anti_reflux": {
+                "name": "Anti Reflux"
+            },
+            "eps_backup_enable": {
+                "name": "EPS/Backup Enable"
+            },
+            "battery_awaken": {
+                "name": "Battery Awaken"
+            },
+            "reactive_type": {
+                "name": "Reactive Type"
+            },
+            "arc_enable": {
+                "name": "Arc Enable"
+            },
+            "on_off_button_en": {
+                "name": "On/Off Button Enable"
+            }
         },
         "sensor": {
             "ssid": {"name": "Wi-Fi Name"},
@@ -205,7 +235,7 @@
                 "name": "MPPT Charge Power"
             },
             "mppt_out_current": {
-                "name": "MPPT Out Current"
+                "name": "MPPT Output Current"
             },
             "system_fault": {
                 "name": "System Fault",
@@ -458,6 +488,399 @@
             },
             "fault_status": {
                 "name": "Fault Status"
+            },
+            "grid_a_voltage": {
+                "name": "Grid A Phase Voltage"
+            },
+            "grid_a_current": {
+                "name": "Grid A Phase Current"
+            },
+            "grid_a_power": {
+                "name": "Grid A Phase Power"
+            },
+            "grid_b_voltage": {
+                "name": "Grid B Phase Voltage"
+            },
+            "grid_b_current": {
+                "name": "Grid B Phase Current"
+            },
+            "grid_b_power": {
+                "name": "Grid B Phase Power"
+            },
+            "grid_c_voltage": {
+                "name": "Grid C Phase Voltage"
+            },
+            "grid_c_current": {
+                "name": "Grid C Phase Current"
+            },
+            "grid_c_power": {
+                "name": "Grid C Phase Power"
+            },
+            "inverter_inside_temperature": {
+                "name": "Inverter Inside Temperature"
+            },
+            "load_a_voltage": {
+                "name": "Load A Phase Voltage"
+            },
+            "load_a_current": {
+                "name": "Load A Phase Current"
+            },
+            "load_a_power": {
+                "name": "Load A Phase Power"
+            },
+            "load_a_rate": {
+                "name": "Load A Phase Rate"
+            },
+            "load_b_voltage": {
+                "name": "Load B Phase Voltage"
+            },
+            "load_b_current": {
+                "name": "Load B Phase Current"
+            },
+            "load_b_power": {
+                "name": "Load B Phase Power"
+            },
+            "load_b_rate": {
+                "name": "Load B Phase Rate"
+            },
+            "load_c_voltage": {
+                "name": "Load C Phase Voltage"
+            },
+            "load_c_current": {
+                "name": "Load C Phase Current"
+            },
+            "load_c_power": {
+                "name": "Load C Phase Power"
+            },
+            "load_c_rate": {
+                "name": "Load C Phase Rate"
+            },
+            "generator_port_voltage_a": {
+                "name": "Generator Port A Phase Voltage"
+            },
+            "generator_port_voltage_b": {
+                "name": "Generator Port B Phase Voltage"
+            },
+            "generator_port_voltage_c": {
+                "name": "Generator Port C Phase Voltage"
+            },
+            "pv1_voltage": {
+                "name": "PV1 Voltage"
+            },
+            "pv1_current": {
+                "name": "PV1 Current"
+            },
+            "pv1_power": {
+                "name": "PV1 Power"
+            },
+            "pv2_voltage": {
+                "name": "PV2 Voltage"
+            },
+            "pv2_current": {
+                "name": "PV2 Current"
+            },
+            "pv2_power": {
+                "name": "PV2 Power"
+            },
+            "pv3_voltage": {
+                "name": "PV3 Voltage"
+            },
+            "pv3_current": {
+                "name": "PV3 Current"
+            },
+            "pv3_power": {
+                "name": "PV3 Power"
+            },
+            "pv4_voltage": {
+                "name": "PV4 Voltage"
+            },
+            "pv4_current": {
+                "name": "PV4 Current"
+            },
+            "pv4_power": {
+                "name": "PV4 Power"
+            },
+            "bms_battery_voltage": {
+                "name": "BMS Battery Voltage"
+            },
+            "bms_battery_current": {
+                "name": "BMS Battery Current"
+            },
+            "battery_current_1": {
+                "name": "Battery Current 1"
+            },
+            "battery_current_2": {
+                "name": "Battery Current 2"
+            },
+            "battery_current_3": {
+                "name": "Battery Current 3"
+            },
+            "battery_soc": {
+                "name": "Battery State of Charge (SOC)"
+            },
+            "bms_battery_temperature": {
+                "name": "BMS Battery Temperature"
+            },
+            "bms_charge_voltage": {
+                "name": "BMS Charge Voltage"
+            },
+            "bms_charge_current_limit": {
+                "name": "BMS Charge Current Limit"
+            },
+            "bms_discharge_current_limit": {
+                "name": "BMS Discharge Current Limit"
+            },
+            "battery_power": {
+                "name": "Battery Power"
+            },
+            "bms_cell_max_voltage": {
+                "name": "BMS Cell Maximum Voltage"
+            },
+            "bms_cell_min_voltage": {
+                "name": "BMS Cell Minimum Voltage"
+            },
+            "bms_cell_max_temperature": {
+                "name": "BMS Cell Maximum Temperature"
+            },
+            "bms_cell_min_temperature": {
+                "name": "BMS Cell Minimum Temperature"
+            },
+            "positive_bus_voltage": {
+                "name": "Positive Bus Voltage"
+            },
+            "negative_bus_voltage": {
+                "name": "Negative Bus Voltage"
+            },
+            "dcdc_temperature": {
+                "name": "DCDC Temperature"
+            },
+            "pv_day_energy": {
+                "name": "PV Daily Energy"
+            },
+            "grid_day_energy": {
+                "name": "Grid Daily Energy"
+            },
+            "load_day_energy": {
+                "name": "Load Daily Energy"
+            },
+            "pv_month_energy": {
+                "name": "PV Monthly Energy"
+            },
+            "grid_month_energy": {
+                "name": "Grid Monthly Energy"
+            },
+            "load_month_energy": {
+                "name": "Load Monthly Energy"
+            },
+            "pv_year_energy": {
+                "name": "PV Yearly Energy"
+            },
+            "grid_year_energy": {
+                "name": "Grid Yearly Energy"
+            },
+            "load_year_energy": {
+                "name": "Load Yearly Energy"
+            },
+            "pv_total_energy": {
+                "name": "PV Total Energy"
+            },
+            "grid_total_energy": {
+                "name": "Grid Total Energy"
+            },
+            "load_total_energy": {
+                "name": "Load Total Energy"
+            },
+            "purchasing_day_energy": {
+                "name": "Purchasing Daily Energy"
+            },
+            "battery_charge_day_energy": {
+                "name": "Battery Charge Daily Energy"
+            },
+            "battery_discharge_day_energy": {
+                "name": "Battery Discharge Daily Energy"
+            },
+            "purchasing_month_energy": {
+                "name": "Purchasing Monthly Energy"
+            },
+            "battery_charge_month_energy": {
+                "name": "Battery Charge Monthly Energy"
+            },
+            "battery_discharge_month_energy": {
+                "name": "Battery Discharge Monthly Energy"
+            },
+            "purchasing_year_energy": {
+                "name": "Purchasing Yearly Energy"
+            },
+            "battery_charge_year_energy": {
+                "name": "Battery Charge Yearly Energy"
+            },
+            "battery_discharge_year_energy": {
+                "name": "Battery Discharge Yearly Energy"
+            },
+            "purchasing_total_energy": {
+                "name": "Purchasing Total Energy"
+            },
+            "battery_charge_total_energy": {
+                "name": "Battery Charge Total Energy"
+            },
+            "battery_discharge_total_energy": {
+                "name": "Battery Discharge Total Energy"
+            },
+            "inverter_a_voltage": {
+                "name": "Inverter A Phase Voltage"
+            },
+            "inverter_a_current": {
+                "name": "Inverter A Phase Current"
+            },
+            "inverter_a_power": {
+                "name": "Inverter A Phase Power"
+            },
+            "inverter_b_voltage": {
+                "name": "Inverter B Phase Voltage"
+            },
+            "inverter_b_current": {
+                "name": "Inverter B Phase Current"
+            },
+            "inverter_b_power": {
+                "name": "Inverter B Phase Power"
+            },
+            "inverter_c_voltage": {
+                "name": "Inverter C Phase Voltage"
+            },
+            "inverter_c_current": {
+                "name": "Inverter C Phase Current"
+            },
+            "inverter_c_power": {
+                "name": "Inverter C Phase Power"
+            },
+            "inverter_a_frequency": {
+                "name": "Inverter A Phase Frequency"
+            },
+            "inverter_b_frequency": {
+                "name": "Inverter B Phase Frequency"
+            },
+            "inverter_c_frequency": {
+                "name": "Inverter C Phase Frequency"
+            },
+            "leak_current": {
+                "name": "Leak Current"
+            },
+            "battery_grid_dod": {
+                "name": "Battery Grid Depth of Discharge"
+            },
+            "battery_discharge_power": {
+                "name": "Battery Discharge Power"
+            },
+            "battery_type": {
+                "name": "Battery Type"
+            },
+            "battery_capacity": {
+                "name": "Battery Capacity"
+            },
+            "charge_voltage": {
+                "name": "Charge Voltage"
+            },
+            "discharge_voltage": {
+                "name": "Discharge Voltage"
+            },
+            "charge_cut_off_voltage": {
+                "name": "Charge Cutoff Voltage"
+            },
+            "discharge_cut_off_voltage": {
+                "name": "Discharge Cutoff Voltage"
+            },
+            "charge_current_limit": {
+                "name": "Charge Current Limit"
+            },
+            "discharge_current_limit": {
+                "name": "Discharge Current Limit"
+            },
+            "grid_voltage_low": {
+                "name": "Grid Voltage Low Limit"
+            },
+            "grid_voltage_high": {
+                "name": "Grid Voltage High Limit"
+            },
+            "grid_frequency_low": {
+                "name": "Grid Frequency Low Limit"
+            },
+            "grid_frequency_high": {
+                "name": "Grid Frequency High Limit"
+            },
+            "grid_connect_time": {
+                "name": "Grid Connect Time"
+            },
+            "grid_disconnect_time": {
+                "name": "Grid Disconnect Time"
+            },
+            "pv_voltage_low": {
+                "name": "PV Voltage Low Limit"
+            },
+            "pv_voltage_high": {
+                "name": "PV Voltage High Limit"
+            },
+            "pv_power_limit": {
+                "name": "PV Power Limit"
+            },
+            "battery_temperature_high": {
+                "name": "Battery Temperature High Limit"
+            },
+            "battery_temperature_low": {
+                "name": "Battery Temperature Low Limit"
+            },
+            "bms_communication_type": {
+                "name": "BMS Communication Type"
+            },
+            "bms_protocol_number": {
+                "name": "BMS Protocol Number"
+            },
+            "battery_number": {
+                "name": "Battery Number"
+            },
+            "parallel_number": {
+                "name": "Parallel Number"
+            },
+            "parallel_address": {
+                "name": "Parallel Address"
+            },
+            "parallel_mode": {
+                "name": "Parallel Mode"
+            },
+            "export_limit_enable": {
+                "name": "Export Limit Enable"
+            },
+            "export_limit_power": {
+                "name": "Export Limit Power"
+            },
+            "force_charge_enable": {
+                "name": "Force Charge Enable"
+            },
+            "force_discharge_enable": {
+                "name": "Force Discharge Enable"
+            },
+            "force_charge_power": {
+                "name": "Force Charge Power"
+            },
+            "force_discharge_power": {
+                "name": "Force Discharge Power"
+            },
+            "time_of_use_enable": {
+                "name": "Time of Use Enable"
+            },
+            "time_of_use_charge_power_1": {
+                "name": "Time of Use Charge Power 1"
+            },
+            "time_of_use_discharge_power_1": {
+                "name": "Time of Use Discharge Power 1"
+            },
+            "time_of_use_start_hour_1": {
+                "name": "Time of Use Start Hour 1"
+            },
+            "time_of_use_start_minute_1": {
+                "name": "Time of Use Start Minute 1"
+            },
+            "time_of_use_end_hour_1": {
+                "name": "Time of Use End Hour 1"
             }
         },
         "select": {
@@ -519,9 +942,106 @@
                     "enable_scheduled_force_discharging_only": "Enable Scheduled Force Discharging Only",
                     "enable_both_scheduled_force_charging_and_discharging": "Enable Both Scheduled Force Charging and Discharging"
                 }
+            },
+            "work_mode_megarevo": {
+                "name": "Work Mode",
+                "state": {
+                    "0": "Self Consume",
+                    "1": "Peak Shift",
+                    "2": "Battery Priority"
+                }
+            },
+            "bms_communication_type": {
+                "name": "BMS Communication Type",
+                "state": {
+                    "0": "CAN",
+                    "1": "RS485"
+                }
+            },
+            "parallel_mode": {
+                "name": "Parallel Mode",
+                "state": {
+                    "0": "Single",
+                    "1": "Parallel"
+                }
+            },
+            "export_limit_enable": {
+                "name": "Export Limit Enable",
+                "state": {
+                    "0": "Disable",
+                    "1": "Enable"
+                }
+            },
+            "force_charge_enable": {
+                "name": "Force Charge Enable",
+                "state": {
+                    "0": "Disable",
+                    "1": "Enable"
+                }
+            },
+            "force_discharge_enable": {
+                "name": "Force Discharge Enable",
+                "state": {
+                    "0": "Disable",
+                    "1": "Enable"
+                }
+            },
+            "time_of_use_enable": {
+                "name": "Time of Use Enable",
+                "state": {
+                    "0": "Disable",
+                    "1": "Enable"
+                }
+            },
+            "language": {
+                "name": "Language",
+                "state": {
+                    "0x1411": "Chinese",
+                    "0x1422": "English"
+                }
+            },
+            "pv_input_type": {
+                "name": "PV Input Type",
+                "state": {
+                    "0": "Independent",
+                    "1": "Parallel",
+                    "2": "CV"
+                }
+            },
+            "bat_type": {
+                "name": "Battery Type",
+                "state": {
+                    "0": "DC Source",
+                    "1": "Lead-Acid",
+                    "2": "Lithium"
+                }
+            },
+            "grid_set": {
+                "name": "Grid set"
             }
         },
         "number": {
+            "year": {
+                "name": "Year"
+            },
+            "month": {
+                "name": "Month"
+            },
+            "day": {
+                "name": "Day"
+            },
+            "hour": {
+                "name": "Hour"
+            },
+            "minute": {
+                "name": "Minute"
+            },
+            "second": {
+                "name": "Second"
+            },
+            "week": {
+                "name": "Week"
+            },
             "force_charge_interval": {
                 "name": "Scheduled Force Charge Interval (Days)"
             },
@@ -608,6 +1128,156 @@
             },
             "calibrate_battery_voltage": {
                 "name": "Calibrate Battery Voltage"
+            },
+            "battery_grid_dod": {
+                "name": "Battery Grid Depth of Discharge"
+            },
+            "battery_capacity": {
+                "name": "Battery Capacity"
+            },
+            "charge_voltage": {
+                "name": "Charge Voltage"
+            },
+            "discharge_voltage": {
+                "name": "Discharge Voltage"
+            },
+            "charge_cut_off_voltage": {
+                "name": "Charge Cut-off Voltage"
+            },
+            "discharge_cut_off_voltage": {
+                "name": "Discharge Cut-off Voltage"
+            },
+            "charge_current_limit": {
+                "name": "Charge Current Limit"
+            },
+            "discharge_current_limit": {
+                "name": "Discharge Current Limit"
+            },
+            "grid_voltage_low": {
+                "name": "Grid Voltage Low Limit"
+            },
+            "grid_voltage_high": {
+                "name": "Grid Voltage High Limit"
+            },
+            "grid_frequency_low": {
+                "name": "Grid Frequency Low Limit"
+            },
+            "grid_frequency_high": {
+                "name": "Grid Frequency High Limit"
+            },
+            "grid_connect_time": {
+                "name": "Grid Connect Time"
+            },
+            "grid_disconnect_time": {
+                "name": "Grid Disconnect Time"
+            },
+            "pv_voltage_low": {
+                "name": "PV Voltage Low Limit"
+            },
+            "pv_voltage_high": {
+                "name": "PV Voltage High Limit"
+            },
+            "pv_power_limit": {
+                "name": "PV Power Limit"
+            },
+            "battery_charge_current": {
+                "name": "Battery Charge Current"
+            },
+            "battery_temperature_high": {
+                "name": "Battery Temperature High Limit"
+            },
+            "battery_temperature_low": {
+                "name": "Battery Temperature Low Limit"
+            },
+            "bms_protocol_number": {
+                "name": "BMS Protocol Number"
+            },
+            "parallel_number": {
+                "name": "Parallel Number"
+            },
+            "parallel_address": {
+                "name": "Parallel Address"
+            },
+            "export_limit_power": {
+                "name": "Export Limit Power"
+            },
+            "force_charge_power": {
+                "name": "Force Charge Power"
+            },
+            "force_discharge_power": {
+                "name": "Force Discharge Power"
+            },
+            "time_of_use_charge_power_1": {
+                "name": "Time of Use Charge Power 1"
+            },
+            "time_of_use_discharge_power_1": {
+                "name": "Time of Use Discharge Power 1"
+            },
+            "time_of_use_start_hour_1": {
+                "name": "Time of Use Start Hour 1"
+            },
+            "time_of_use_start_minute_1": {
+                "name": "Time of Use Start Minute 1"
+            },
+            "time_of_use_end_hour_1": {
+                "name": "Time of Use End Hour 1"
+            },
+            "bat_bootbay": {
+                "name": "Battery Bootbay"
+            },
+            "off_grid_dod": {
+                "name": "Off-grid DOD"
+            },
+            "lead_acid_bat_ah_setting": {
+                "name": "Lead-Acid Battery AH Setting"
+            },
+            "lead_acid_bat_end_off_voltage": {
+                "name": "Lead-Acid Battery End-off Voltage"
+            },
+            "rs485_bat_charge_voltage": {
+                "name": "RS485 Battery Charge Voltage"
+            },
+            "rs485_bat_limite_cur_for_charge_voltage": {
+                "name": "RS485 Battery Limit Current for Charge Voltage"
+            },
+            "rs485_max_charge_current": {
+                "name": "RS485 Max Charge Current"
+            },
+            "rs485_max_discharge_current": {
+                "name": "RS485 Max Discharge Current"
+            },
+            "rs485_bms_version": {
+                "name": "RS485 BMS Version"
+            },
+            "grid_charge_power": {
+                "name": "Grid Charge Power"
+            },
+            "us_standard" : {
+                "name": "US Standard"
+            },
+            "power_factor": {
+                "name": "Power factor"
+            },
+            "reactive_power": {
+                "name": "Reactive Power"
+            },
+            "lead_acid_bat_charge_voltage": {
+                "name": "Lead-Acid Battery Charge Voltage"
+            },
+            "lead_acid_bat_charge_protect_voltage": {
+                "name": "Lead-Acid Battery Charge Protect Voltage"
+            },
+            "bat_eod_hyst": {
+                "name": "Bat eodhyst"
+            },
+            "reactive_type": {
+                "name": "Reactive Type"
+            },
+            "grid_standard": {
+                "name": "Grid Standard"
+            },
+            "grid_function": {
+                "name": "Grid Function"
             }
         },
         "datetime": {
@@ -627,6 +1297,42 @@
             },
             "scheduled_force_discharge_end_time": {
                 "name": "Scheduled Force Discharge End Time"
+            },
+            "charge_time1_start": {
+                "name": "Charge Time 1 Start"
+            },
+            "charge_time1_end": {
+                "name": "Charge Time 1 End"
+            },
+            "discharge_time1_start": {
+                "name": "Discharge Time 1 Start"
+            },
+            "discharge_time1_end": {
+                "name": "Discharge Time 1 End"
+            },
+            "charge_time2_start": {
+                "name": "Charge Time 2 Start"
+            },
+            "charge_time2_end": {
+                "name": "Charge Time 2 End"
+            },
+            "discharge_time2_start": {
+                "name": "Discharge Time 2 Start"
+            },
+            "discharge_time2_end": {
+                "name": "Discharge Time 2 End"
+            },
+            "charge_time3_start": {
+                "name": "Charge Time 3 Start"
+            },
+            "charge_time3_end": {
+                "name": "Charge Time 3 End"
+            },
+            "discharge_time3_start": {
+                "name": "Discharge Time 3 Start"
+            },
+            "discharge_time3_end": {
+                "name": "Discharge Time 3 End"
             }
         }
     }

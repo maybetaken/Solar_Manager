@@ -7,6 +7,7 @@ Attribution-NonCommercial-NoDerivatives 4.0 International.
 
 from custom_components.solar_manager.plugins.MakeSkyBlue import MakeSkyBlueDevice
 from custom_components.solar_manager.plugins.MakeSkyBlueMppt import MakeSkyBlueMppt
+from custom_components.solar_manager.plugins.Megarevo import Megarevo
 
 # Unified device configuration
 DEVICE_CONFIG = {
@@ -18,12 +19,12 @@ DEVICE_CONFIG = {
         "protocol": "makeskybluemppt",
         "device_class": MakeSkyBlueMppt,
     },
+    "Megarevo": {
+        "protocol": "megarevo",
+        "device_class": Megarevo,
+    },
     # "ChintMeter": {
     #     "protocol": "chintmeter",
-    #     "device_class": None,
-    # },
-    # "REVO": {
-    #     "protocol": "revo",
     #     "device_class": None,
     # },
 }

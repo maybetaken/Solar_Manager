@@ -4,15 +4,15 @@
             "already_configured": "设备已配置"
         },
         "error": {
-            "cannot_connect": "无法连接",
-            "invalid_auth": "无效的身份验证",
-            "unknown": "无法连接到设备",
-            "mqtt_not_ready": "MQTT未准备好, 请先配置MQTT集成!"
+            "cannot_connect": "连接失败",
+            "invalid_auth": "认证无效",
+            "unknown": "未知错误",
+            "mqtt_not_ready": "MQTT 未就绪，请先配置 MQTT 集成！"
         },
         "step": {
             "user": {
                 "data": {
-                    "host": "设备IP地址",
+                    "host": "主机",
                     "password": "密码",
                     "username": "用户名"
                 }
@@ -22,53 +22,80 @@
     "entity": {
         "button": {
             "restart": {
-                "name": "重启设备"
+                "name": "重启"
             },
             "reconfig": {
                 "name": "重置设备"
+            },
+            "restore_factory_setting": {
+                "name": "恢复出厂设置"
+            },
+            "clear_record": {
+                "name": "清除记录"
+            },
+            "clear_statistical": {
+                "name": "清除能量统计"
+            },
+            "clear_arc_alarm": {
+                "name": "清除拉弧告警"
             }
         },
         "switch": {
-          "led": {
-            "name": "LED指示灯"
-          },
-          "anti_backflow_mode": {
-            "name": "并网防逆流状态[d16]"
-          },
-          "energy_saving_mode": {
-            "name": "节能模式[d05]"
-          },
-          "system_switch": {
-            "name": "系统开关机"
-          },
-          "reset_energy_meter": {
-            "name": "复位电能计量"
-          },
-          "remote_anti_backflow_switch": {
-            "name": "远程防逆流开关[d22]"
-          },
-          "12v_relay_switch": {
-            "name": "12V继电器开关"
-          },
-          "dc_switch": {
-            "name": "DC开关"
-          },
-          "dc_reset": {
-            "name": "DC复位"
-          },
-          "vehicle_48v_generator_switch": {
-            "name": "车载48V发电机开关"
-          },
-          "vehicle_48v_generator_reset": {
-            "name": "车载48V发电机复位"
-          }
+            "led": {
+                "name": "LED 指示灯"
+            },
+            "anti_backflow_mode": {
+                "name": "并网防逆流状态 [d16]"
+            },
+            "energy_saving_mode": {
+                "name": "节能模式 [d05]"
+            },
+            "system_switch": {
+                "name": "系统电源开关"
+            },
+            "reset_energy_meter": {
+                "name": "重置电表"
+            },
+            "remote_anti_backflow_switch": {
+                "name": "远程防逆流开关 [d22]"
+            },
+            "12v_relay_switch": {
+                "name": "12V 继电器开关"
+            },
+            "dc_switch": {
+                "name": "直流开关"
+            },
+            "dc_reset": {
+                "name": "直流重置"
+            },
+            "vehicle_48v_generator_switch": {
+                "name": "车辆 48V 发电机开关"
+            },
+            "vehicle_48v_generator_reset": {
+                "name": "车辆 48V 发电机重置"
+            },
+            "anti_reflux": {
+                "name": "防逆流"
+            },
+            "eps_backup_enable": {
+                "name": "EPS/备用电源启用"
+            },
+            "battery_awaken": {
+                "name": "电池唤醒"
+            },
+            "arc_enable": {
+                "name": "拉弧检测启用"
+            },
+            "on_off_button_en": {
+                "name": "开关按钮启用"
+            }
         },
         "sensor": {
             "ssid": {"name": "Wi-Fi 名称"},
             "rssi": {"name": "信号强度"},
-            "inverter_factor": {"name": "逆变器功率因素"},
+            "inverter_factor": {"name": "逆变器功率因数"},
             "battery_rated_voltage": {
-                "name": "电池额定电压[d09]",
+                "name": "电池额定电压 [d09]",
                 "state": {
                     "72v": "72V",
                     "48v": "48V",
@@ -77,7 +104,7 @@
                 }
             },
             "inverter_output_max_power": {
-                "name": "逆变器输出最大功率[d08]"
+                "name": "逆变器输出最大功率 [d08]"
             },
             "machine_model": {
                 "name": "设备型号",
@@ -94,7 +121,7 @@
             "inverter_status": {
                 "name": "逆变器状态",
                 "state": {
-                    "shutdown": "停机",
+                    "shutdown": "关闭",
                     "inverting": "逆变",
                     "charging": "充电",
                     "anti_backflow": "防逆流",
@@ -103,7 +130,7 @@
                 }
             },
             "mppt_status": {
-                "name": "MPPT状态",
+                "name": "MPPT 状态",
                 "state": {
                     "constant_voltage": "恒压",
                     "full_load": "满载",
@@ -112,7 +139,7 @@
                 }
             },
             "bus_voltage": {
-                "name": "总线电压"
+                "name": "母线电压"
             },
             "grid_frequency": {
                 "name": "电网频率"
@@ -127,7 +154,7 @@
                 "name": "离网负载电流"
             },
             "inverter_grid_port_current": {
-                "name": "并网端口电流"
+                "name": "电网端口电流"
             },
             "inverter_current": {
                 "name": "逆变器电流"
@@ -142,7 +169,7 @@
                 "name": "负载功率"
             },
             "inverter_input_output_power": {
-                "name": "逆变器输入输出功率"
+                "name": "逆变器输入/输出功率"
             },
             "battery_voltage": {
                 "name": "电池电压"
@@ -151,134 +178,134 @@
                 "name": "电池充放电电流"
             },
             "grid_rs_voltage": {
-                "name": "电网RS相电压"
+                "name": "电网 RS 相电压"
             },
             "grid_st_voltage": {
-                "name": "电网ST相电压"
+                "name": "电网 ST 相电压"
             },
             "grid_tr_voltage": {
-                "name": "电网TR相电压"
+                "name": "电网 TR 相电压"
             },
             "grid_rs_current": {
-                "name": "电网RS相电流"
+                "name": "电网 RS 相电流"
             },
             "grid_st_current": {
-                "name": "电网ST相电流"
+                "name": "电网 ST 相电流"
             },
             "grid_tr_current": {
-                "name": "电网TR相电流"
+                "name": "电网 TR 相电流"
             },
             "mppt1_voltage": {
-                "name": "MPPT1电压"
+                "name": "MPPT1 电压"
             },
             "mppt2_voltage": {
-                "name": "MPPT2电压"
+                "name": "MPPT2 电压"
             },
             "mppt3_voltage": {
-                "name": "MPPT3电压"
+                "name": "MPPT3 电压"
             },
             "mppt1_current": {
-                "name": "MPPT1电流"
+                "name": "MPPT1 电流"
             },
             "mppt2_current": {
-                "name": "MPPT2电流"
+                "name": "MPPT2 电流"
             },
             "mppt3_current": {
-                "name": "MPPT3电流"
+                "name": "MPPT3 电流"
             },
             "mppt1_power": {
-                "name": "MPPT1功率"
+                "name": "MPPT1 功率"
             },
             "mppt2_power": {
-                "name": "MPPT2功率"
+                "name": "MPPT2 功率"
             },
             "mppt3_power": {
-                "name": "MPPT3功率"
+                "name": "MPPT3 功率"
             },
             "mppt_daily_generation": {
-                "name": "MPPT日发电量"
+                "name": "MPPT 日发电量"
             },
             "mppt_cumulative_generation": {
-                "name": "MPPT累计发电量"
+                "name": "MPPT 累计发电量"
             },
             "charge_power": {
-                "name": "MPPT充电功率"
+                "name": "MPPT 充电功率"
             },
             "mppt_out_current": {
-                "name": "MPPT输出电流"
+                "name": "MPPT 输出电流"
             },
             "system_fault": {
                 "name": "系统故障",
                 "state": {
-                    "min_input_voltage_protection": "最小输入电压保护",
-                    "max_input_voltage_protection": "最大输入电压保护",
+                    "min_input_voltage_protection": "最低输入电压保护",
+                    "max_input_voltage_protection": "最高输入电压保护",
                     "input_overfrequency_protection": "输入过频保护",
                     "input_underfrequency_protection": "输入欠频保护",
                     "grid_switchover": "电网切换",
                     "inverter_short_circuit": "逆变器短路",
                     "input_overcurrent": "输入过流",
                     "inverter_bus_overvoltage": "逆变器母线过压",
-                    "pv1_input_overvoltage": "光伏1输入过压",
-                    "pv2_input_overvoltage": "光伏2输入过压",
-                    "pv1_overcurrent_protection": "光伏1过流保护",
-                    "pv2_overcurrent_protection": "光伏2过流保护",
+                    "pv1_input_overvoltage": "PV1 输入过压",
+                    "pv2_input_overvoltage": "PV2 输入过压",
+                    "pv1_overcurrent_protection": "PV1 过流保护",
+                    "pv2_overcurrent_protection": "PV2 过流保护",
                     "charging_overcurrent_protection": "充电过流保护",
                     "charging_overvoltage_protection": "充电过压保护",
                     "battery_voltage_protection": "电池电压保护",
                     "inv_over_temperature_protection": "逆变器过温保护",
-                    "mpp1_over_temperature_protection": "MPPT1过温保护",
-                    "mpp2_over_temperature_protection": "MPPT2过温保护",
-                    "mpp3_over_temperature_protection": "MPPT3过温保护",
+                    "mpp1_over_temperature_protection": "MPPT1 过温保护",
+                    "mpp2_over_temperature_protection": "MPPT2 过温保护",
+                    "mpp3_over_temperature_protection": "MPPT3 过温保护",
                     "bms_fault": "电池管理系统故障",
                     "no_fault": "无故障"
                 }
             },
             "dc_dc_temperature": {
-                "name": "DC-DC温度"
+                "name": "DC-DC 温度"
             },
             "inverter_temperature": {
                 "name": "逆变器温度"
             },
             "mppt1_temperature": {
-                "name": "MPPT1温度"
+                "name": "MPPT1 温度"
             },
             "mppt2_temperature": {
-                "name": "MPPT2温度"
+                "name": "MPPT2 温度"
             },
             "mppt3_temperature": {
-                "name": "MPPT3温度"
+                "name": "MPPT3 温度"
             },
             "relay_status": {
                 "name": "继电器状态"
             },
             "pv_energy_flow_direction": {
-                "name": "光伏能量流向",
+                "name": "PV 能量流方向",
                 "state": {
-                    "no_pv": "无光伏",
-                    "pv_present": "光伏存在",
-                    "pv_generating": "光伏发电"
+                    "no_pv": "无 PV",
+                    "pv_present": "PV 存在",
+                    "pv_generating": "PV 发电"
                 }
             },
             "battery_energy_flow_direction": {
-                "name": "电池能量流向",
+                "name": "电池能量流方向",
                 "state": {
                     "no_battery": "无电池",
                     "battery_present": "电池存在",
-                    "charging": "电池充电",
-                    "discharging": "电池放电"
+                    "charging": "充电",
+                    "discharging": "放电"
                 }
             },
             "grid_energy_flow_direction": {
-                "name": "电网能量流向",
+                "name": "电网能量流方向",
                 "state": {
                     "no_grid": "无电网",
                     "grid_present": "电网存在",
-                    "grid_to_inverter_forward": "电网到逆变器（正向）",
-                    "inverter_to_grid_reverse": "逆变器到电网（反向）"
+                    "grid_to_inverter_forward": "电网到逆变器 (正向)",
+                    "inverter_to_grid_reverse": "逆变器到电网 (反向)"
                 }
             },
             "load_energy_flow_direction": {
-                "name": "负载能量流向",
+                "name": "负载能量流方向",
                 "state": {
                     "no_load": "无负载",
                     "load_present": "负载存在"
@@ -288,76 +315,76 @@
                 "name": "软件版本"
             },
             "mppt_fault_status": {
-                "name": "MPPT故障状态",
+                "name": "MPPT 故障状态",
                 "state": {
                     "battery_undervoltage": "电池欠压",
                     "battery_overvoltage": "电池过压",
                     "machine_over_temperature": "设备过温",
-                    "input_pv_overvoltage": "输入光伏过压",
+                    "input_pv_overvoltage": "输入 PV 过压",
                     "output_overcurrent_protection": "输出过流保护",
                     "output_short_circuit": "输出短路",
                     "normal_status": "正常状态"
                 }
             },
             "current_mppt_battery_voltage": {
-                "name": "当前MPPT电池电压"
+                "name": "当前 MPPT 电池电压"
             },
             "current_mppt_charge_current": {
-                "name": "当前MPPT充电电流"
+                "name": "当前 MPPT 充电电流"
             },
             "current_mppt_pv_voltage": {
-                "name": "当前MPPT光伏电压"
+                "name": "当前 MPPT PV 电压"
             },
             "pv_voltage": {
-                "name": "光伏电压"
+                "name": "PV 电压"
             },
             "mppt_temperature": {
-                "name": "MPPT温度"
+                "name": "MPPT 温度"
             },
             "mppt_cumulative": {
-                "name": "MPPT累计"
+                "name": "MPPT 累计"
             },
             "mppt_output_current": {
-                "name": "MPPT输出电流"
+                "name": "MPPT 输出电流"
             },
             "mppt_work_status": {
-                "name": "MPPT工作状态",
+                "name": "MPPT 工作状态",
                 "state": {
-                    "shutdown": "停机",
+                    "shutdown": "关闭",
                     "pre_charging": "预充电",
                     "constant_current_charging": "恒流充电",
                     "constant_voltage_charging": "恒压充电",
-                    "mppt_tracking": "MPPT跟踪",
+                    "mppt_tracking": "MPPT 跟踪",
                     "bus_constant_voltage": "母线恒压",
                     "float_charging": "浮充"
                 }
             },
             "vehicle_dcdc_program_version": {
-                "name": "车载DCDC程序版本"
+                "name": "车辆 DCDC 程序版本"
             },
             "12v_battery_current": {
-                "name": "12V电池电流"
+                "name": "12V 电池电流"
             },
             "vehicle_48v_generator_current": {
-                "name": "车载48V发电机电流"
+                "name": "车辆 48V 发电机电流"
             },
             "12v_battery_voltage": {
-                "name": "12V电池电压"
+                "name": "12V 电池电压"
             },
             "vehicle_48v_generator_voltage": {
-                "name": "车载48V发电机电压"
+                "name": "车辆 48V 发电机电压"
             },
             "system_temperature": {
                 "name": "系统温度"
             },
             "48v_battery_current": {
-                "name": "48V电池电流"
+                "name": "48V 电池电流"
             },
             "battery_current": {
                 "name": "电池电流"
             },
             "48v_battery_voltage": {
-                "name": "48V电池电压"
+                "name": "48V 电池电压"
             },
             "external_generator_temperature": {
                 "name": "外部发电机温度"
@@ -366,50 +393,50 @@
                 "name": "故障",
                 "state": {
                     "no_fault": "无故障",
-                    "12v_battery_side_input_overvoltage": "12V电池侧输入过压",
-                    "12v_battery_side_input_undervoltage": "12V电池侧输入欠压",
-                    "vehicle_48v_generator_side_input_overvoltage": "车载48V发电机侧输入过压",
-                    "vehicle_48v_generator_side_input_undervoltage": "车载48V发电机侧输入欠压",
-                    "48v_battery_side_input_overvoltage": "48V电池侧输入过压",
-                    "48v_battery_side_input_undervoltage": "48V电池侧输入欠压",
+                    "12v_battery_side_input_overvoltage": "12V 电池侧输入过压",
+                    "12v_battery_side_input_undervoltage": "12V 电池侧输入欠压",
+                    "vehicle_48v_generator_side_input_overvoltage": "车辆 48V 发电机侧输入过压",
+                    "vehicle_48v_generator_side_input_undervoltage": "车辆 48V 发电机侧输入欠压",
+                    "48v_battery_side_input_overvoltage": "48V 电池侧输入过压",
+                    "48v_battery_side_input_undervoltage": "48V 电池侧输入欠压",
                     "system_over_temperature": "系统过温",
-                    "vehicle_48v_generator_side_input_overcurrent": "车载48V发电机侧输入过流",
-                    "12v_battery_charge_current_overcurrent": "12V电池充电电流过流",
-                    "12v_battery_discharge_current_overcurrent": "12V电池放电电流过流",
+                    "vehicle_48v_generator_side_input_overcurrent": "车辆 48V 发电机侧输入过流",
+                    "12v_battery_charge_current_overcurrent": "12V 电池充电电流过流",
+                    "12v_battery_discharge_current_overcurrent": "12V 电池放电电流过流",
                     "external_generator_over_temperature": "外部发电机过温"
                 }
             },
             "machine_current_status": {
                 "name": "设备当前状态",
                 "state": {
-                    "not_working": "不工作",
+                    "not_working": "未工作",
                     "forward_constant_current": "正向恒流",
                     "reverse_constant_current": "反向恒流",
-                    "vehicle_48v_generator_constant_current_5": "车载48V发电机恒流5",
-                    "vehicle_48v_generator_constant_current_6": "车载48V发电机恒流6",
-                    "vehicle_48v_generator_constant_current_8": "车载48V发电机恒流8"
+                    "vehicle_48v_generator_constant_current_5": "车辆 48V 发电机恒流 5",
+                    "vehicle_48v_generator_constant_current_6": "车辆 48V 发电机恒流 6",
+                    "vehicle_48v_generator_constant_current_8": "车辆 48V 发电机恒流 8"
                 }
             },
             "protection_parameter_modify_switch": {
                 "name": "保护参数修改开关"
             },
             "12v_battery_charge_protection_current": {
-                "name": "12V电池充电保护电流"
+                "name": "12V 电池充电保护电流"
             },
             "12v_battery_discharge_protection_current": {
-                "name": "12V电池放电保护电流"
+                "name": "12V 电池放电保护电流"
             },
             "12v_battery_input_max_voltage": {
-                "name": "12V电池输入最大电压"
+                "name": "12V 电池输入最大电压"
             },
             "48v_charge_cutoff_protection_voltage": {
-                "name": "48V充电截止保护电压"
+                "name": "48V 充电截止保护电压"
             },
             "48v_discharge_cutoff_protection_voltage": {
-                "name": "48V放电截止保护电压"
+                "name": "48V 放电截止保护电压"
             },
             "vehicle_48v_generator_protection_current": {
-                "name": "车载48V发电机保护电流"
+                "name": "车辆 48V 发电机保护电流"
             },
             "charge_limit_voltage": {
                 "name": "充电限制电压"
@@ -430,7 +457,7 @@
                 "name": "电池总电流"
             },
             "max_temperature": {
-                "name": "最大温度"
+                "name": "最高温度"
             },
             "soc": {
                 "name": "电池荷电状态"
@@ -439,13 +466,13 @@
                 "name": "电池健康状态"
             },
             "remaining_capacity": {
-                "name": "剩余电量"
+                "name": "剩余容量"
             },
             "full_charge_capacity": {
-                "name": "满电量"
+                "name": "满充容量"
             },
             "design_capacity": {
-                "name": "设计电量"
+                "name": "设计容量"
             },
             "cycle_count": {
                 "name": "循环次数"
@@ -458,39 +485,456 @@
             },
             "fault_status": {
                 "name": "故障状态"
+            },
+            "grid_a_voltage": {
+                "name": "电网 A 相电压"
+            },
+            "grid_a_current": {
+                "name": "电网 A 相电流"
+            },
+            "grid_a_power": {
+                "name": "电网 A 相功率"
+            },
+            "grid_b_voltage": {
+                "name": "电网 B 相电压"
+            },
+            "grid_b_current": {
+                "name": "电网 B 相电流"
+            },
+            "grid_b_power": {
+                "name": "电网 B 相功率"
+            },
+            "grid_c_voltage": {
+                "name": "电网 C 相电压"
+            },
+            "grid_c_current": {
+                "name": "电网 C 相电流"
+            },
+            "grid_c_power": {
+                "name": "电网 C 相功率"
+            },
+            "inverter_inside_temperature": {
+                "name": "逆变器内部温度"
+            },
+            "load_a_voltage": {
+                "name": "负载 A 相电压"
+            },
+            "load_a_current": {
+                "name": "负载 A 相电流"
+            },
+            "load_a_power": {
+                "name": "负载 A 相功率"
+            },
+            "load_a_rate": {
+                "name": "负载 A 相率"
+            },
+            "load_b_voltage": {
+                "name": "负载 B 相电压"
+            },
+            "load_b_current": {
+                "name": "负载 B 相电流"
+            },
+            "load_b_power": {
+                "name": "负载 B 相功率"
+            },
+            "load_b_rate": {
+                "name": "负载 B 相率"
+            },
+            "load_c_voltage": {
+                "name": "负载 C 相电压"
+            },
+            "load_c_current": {
+                "name": "负载 C 相电流"
+            },
+            "load_c_power": {
+                "name": "负载 C 相功率"
+            },
+            "load_c_rate": {
+                "name": "负载 C 相率"
+            },
+            "generator_port_voltage_a": {
+                "name": "发电机端口 A 相电压"
+            },
+            "generator_port_voltage_b": {
+                "name": "发电机端口 B 相电压"
+            },
+            "generator_port_voltage_c": {
+                "name": "发电机端口 C 相电压"
+            },
+            "pv1_voltage": {
+                "name": "PV1 电压"
+            },
+            "pv1_current": {
+                "name": "PV1 电流"
+            },
+            "pv1_power": {
+                "name": "PV1 功率"
+            },
+            "pv2_voltage": {
+                "name": "PV2 电压"
+            },
+            "pv2_current": {
+                "name": "PV2 电流"
+            },
+            "pv2_power": {
+                "name": "PV2 功率"
+            },
+            "pv3_voltage": {
+                "name": "PV3 电压"
+            },
+            "pv3_current": {
+                "name": "PV3 电流"
+            },
+            "pv3_power": {
+                "name": "PV3 功率"
+            },
+            "pv4_voltage": {
+                "name": "PV4 电压"
+            },
+            "pv4_current": {
+                "name": "PV4 电流"
+            },
+            "pv4_power": {
+                "name": "PV4 功率"
+            },
+            "bms_battery_voltage": {
+                "name": "BMS 电池电压"
+            },
+            "bms_battery_current": {
+                "name": "BMS 电池电流"
+            },
+            "battery_current_1": {
+                "name": "电池电流 1"
+            },
+            "battery_current_2": {
+                "name": "电池电流 2"
+            },
+            "battery_current_3": {
+                "name": "电池电流 3"
+            },
+            "battery_soc": {
+                "name": "电池荷电状态 (SOC)"
+            },
+            "bms_battery_temperature": {
+                "name": "BMS 电池温度"
+            },
+            "bms_charge_voltage": {
+                "name": "BMS 充电电压"
+            },
+            "bms_charge_current_limit": {
+                "name": "BMS 充电电流限制"
+            },
+            "bms_discharge_current_limit": {
+                "name": "BMS 放电电流限制"
+            },
+            "battery_power": {
+                "name": "电池功率"
+            },
+            "bms_cell_max_voltage": {
+                "name": "BMS 电池单体最高电压"
+            },
+            "bms_cell_min_voltage": {
+                "name": "BMS 电池单体最低电压"
+            },
+            "bms_cell_max_temperature": {
+                "name": "BMS 电池单体最高温度"
+            },
+            "bms_cell_min_temperature": {
+                "name": "BMS 电池单体最低温度"
+            },
+            "positive_bus_voltage": {
+                "name": "正母线电压"
+            },
+            "negative_bus_voltage": {
+                "name": "负母线电压"
+            },
+            "dcdc_temperature": {
+                "name": "DCDC 温度"
+            },
+            "pv_day_energy": {
+                "name": "PV 日能耗"
+            },
+            "grid_day_energy": {
+                "name": "电网日能耗"
+            },
+            "load_day_energy": {
+                "name": "负载日能耗"
+            },
+            "pv_month_energy": {
+                "name": "PV 月能耗"
+            },
+            "grid_month_energy": {
+                "name": "电网月能耗"
+            },
+            "load_month_energy": {
+                "name": "负载月能耗"
+            },
+            "pv_year_energy": {
+                "name": "PV 年能耗"
+            },
+            "grid_year_energy": {
+                "name": "电网年能耗"
+            },
+            "load_year_energy": {
+                "name": "负载年能耗"
+            },
+            "pv_total_energy": {
+                "name": "PV 总能耗"
+            },
+            "grid_total_energy": {
+                "name": "电网总能耗"
+            },
+            "load_total_energy": {
+                "name": "负载总能耗"
+            },
+            "purchasing_day_energy": {
+                "name": "购买日能耗"
+            },
+            "battery_charge_day_energy": {
+                "name": "电池充电日能耗"
+            },
+            "battery_discharge_day_energy": {
+                "name": "电池放电日能耗"
+            },
+            "purchasing_month_energy": {
+                "name": "购买月能耗"
+            },
+            "battery_charge_month_energy": {
+                "name": "电池充电月能耗"
+            },
+            "battery_discharge_month_energy": {
+                "name": "电池放电月能耗"
+            },
+            "purchasing_year_energy": {
+                "name": "购买年能耗"
+            },
+            "battery_charge_year_energy": {
+                "name": "电池充电年能耗"
+            },
+            "battery_discharge_year_energy": {
+                "name": "电池放电年能耗"
+            },
+            "purchasing_total_energy": {
+                "name": "购买总能耗"
+            },
+            "battery_charge_total_energy": {
+                "name": "电池充电总能耗"
+            },
+            "battery_discharge_total_energy": {
+                "name": "电池放电总能耗"
+            },
+            "inverter_a_voltage": {
+                "name": "逆变器 A 相电压"
+            },
+            "inverter_a_current": {
+                "name": "逆变器 A 相电流"
+            },
+            "inverter_a_power": {
+                "name": "逆变器 A 相功率"
+            },
+            "inverter_b_voltage": {
+                "name": "逆变器 B 相电压"
+            },
+            "inverter_b_current": {
+                "name": "逆变器 B 相电流"
+            },
+            "inverter_b_power": {
+                "name": "逆变器 B 相功率"
+            },
+            "inverter_c_voltage": {
+                "name": "逆变器 C 相电压"
+            },
+            "inverter_c_current": {
+                "name": "逆变器 C 相电流"
+            },
+            "inverter_c_power": {
+                "name": "逆变器 C 相功率"
+            },
+            "inverter_a_frequency": {
+                "name": "逆变器 A 相频率"
+            },
+            "inverter_b_frequency": {
+                "name": "逆变器 B 相频率"
+            },
+            "inverter_c_frequency": {
+                "name": "逆变器 C 相频率"
+            },
+            "leak_current": {
+                "name": "漏电流"
+            },
+            "battery_grid_dod": {
+                "name": "电池电网深度放电"
+            },
+            "battery_discharge_power": {
+                "name": "电池放电功率"
+            },
+            "battery_type": {
+                "name": "电池类型"
+            },
+            "battery_capacity": {
+                "name": "电池容量"
+            },
+            "charge_voltage": {
+                "name": "充电电压"
+            },
+            "discharge_voltage": {
+                "name": "放电电压"
+            },
+            "charge_cut_off_voltage": {
+                "name": "充电截止电压"
+            },
+            "discharge_cut_off_voltage": {
+                "name": "放电截止电压"
+            },
+            "charge_current_limit": {
+                "name": "充电电流限制"
+            },
+            "discharge_current_limit": {
+                "name": "放电电流限制"
+            },
+            "grid_connect_time": {
+                "name": "电网连接时间"
+            },
+            "grid_disconnect_time": {
+                "name": "电网断开时间"
+            },
+            "pv_voltage_low": {
+                "name": "PV 电压低限"
+            },
+            "pv_voltage_high": {
+                "name": "PV 电压高限"
+            },
+            "pv_power_limit": {
+                "name": "PV 功率限制"
+            },
+            "battery_temperature_high": {
+                "name": "电池温度高限"
+            },
+            "battery_temperature_low": {
+                "name": "电池温度低限"
+            },
+            "bms_communication_type": {
+                "name": "BMS 通信类型"
+            },
+            "bms_protocol_number": {
+                "name": "BMS 协议编号"
+            },
+            "battery_number": {
+                "name": "电池数量"
+            },
+            "parallel_number": {
+                "name": "并联数量"
+            },
+            "parallel_address": {
+                "name": "并联地址"
+            },
+            "parallel_mode": {
+                "name": "并联模式"
+            },
+            "export_limit_enable": {
+                "name": "输出限制启用"
+            },
+            "export_limit_power": {
+                "name": "输出限制功率"
+            },
+            "force_charge_enable": {
+                "name": "强制充电启用"
+            },
+            "force_discharge_enable": {
+                "name": "强制放电启用"
+            },
+            "force_charge_power": {
+                "name": "强制充电功率"
+            },
+            "force_discharge_power": {
+                "name": "强制放电功率"
+            },
+            "time_of_use_enable": {
+                "name": "分时使用启用"
+            },
+            "time_of_use_charge_power_1": {
+                "name": "分时充电功率 1"
+            },
+            "time_of_use_discharge_power_1": {
+                "name": "分时放电功率 1"
+            },
+            "time_of_use_start_hour_1": {
+                "name": "分时开始小时 1"
+            },
+            "time_of_use_start_minute_1": {
+                "name": "分时开始分钟 1"
+            },
+            "time_of_use_end_hour_1": {
+                "name": "分时结束小时 1"
+            },
+            "language": {
+                "name": "语言"
+            },
+            "pv_input_type": {
+                "name": "PV 输入类型"
+            },
+            "bat_type": {
+                "name": "电池类型"
+            },
+            "lead_acid_float": {
+                "name": "铅酸浮充"
+            },
+            "score_statements": {
+                "name": "评分声明"
+            },
+            "bat_bootbay": {
+                "name": "电池启动舱"
+            },
+            "load_acid_bat_setting": {
+                "name": "加载酸性电池设置"
+            },
+            "end_of_voltage": {
+                "name": "电压结束"
+            },
+            "static": {
+                "name": "静态"
+            },
+            "off_grid_dod": {
+                "name": "离网 DOD"
+            },
+            "base_bat_charge_voltage": {
+                "name": "基础电池充电电压"
+            },
+            "cur_for_charge": {
+                "name": "充电电流"
             }
         },
         "select": {
             "work_mode": {
-                "name": "工作模式[d01]",
+                "name": "工作模式 [d01]",
                 "state": {
-                    "sub_solar_grid_storage": "SUB (光伏-电网-储能模式)",
+                    "sub_solar_grid_storage": "SUB (太阳能-电网-储能模式)",
                     "uti_grid_priority": "UTI (电网优先模式)",
-                    "sbu_solar_storage_grid": "SBU (光伏-储能-电网模式)",
-                    "nbu_no_battery_ac_coupling": "NBU (无电池交流耦合模式)",
+                    "sbu_solar_storage_grid": "SBU (太阳能-储能-电网模式)",
+                    "nbu_no_battery_ac_coupling": "NBU (无电池 AC 耦合模式)",
                     "oni_pure_inverter": "ONI (纯逆变器模式)"
                 }
             },
             "grid_voltage_range": {
-                "name": "电网电压范围[d02]"
+                "name": "电网电压范围 [d02]"
             },
             "inverter_ac_voltage": {
-                "name": "逆变器交流电压[d03]"
+                "name": "逆变器 AC 电压 [d03]"
             },
             "ac_frequency": {
-                "name": "交流频率[d04]"
+                "name": "AC 频率 [d04]"
             },
             "charge_priority": {
-                "name": "充电优先级[d06]",
+                "name": "充电优先级 [d06]",
                 "state": {
-                    "cso_solar_priority_charging": "CSO (光伏优先充电)",
+                    "cso_solar_priority_charging": "CSO (太阳能优先充电)",
                     "cut_grid_priority_charging": "CUT (电网优先充电)",
-                    "snu_solar_and_grid_charging": "SNU (光伏和电网一起充电)",
-                    "oso_solar_only_charging": "OSO (仅光伏充电)"
+                    "snu_solar_and_grid_charging": "SNU (太阳能和电网充电)",
+                    "oso_solar_only_charging": "OSO (仅太阳能充电)"
                 }
             },
             "battery_type": {
-                "name": "电池类型[d07]",
+                "name": "电池类型 [d07]",
                 "state": {
                     "pb_lead_acid_battery": "Pb (铅酸电池)",
                     "li_lithium_battery": "Li (锂电池)"
@@ -504,98 +948,195 @@
                 }
             },
             "force_charge_discharge_control": {
-                "name": "强制充放电控制[d21]",
+                "name": "强制充电/放电控制 [d21]",
                 "state": {
-                    "normal_charging": "常规充电",
+                    "normal_charging": "正常充电",
                     "force_charging": "强制充电",
                     "force_discharging": "强制放电"
                 }
             },
             "scheduled_force_charge_discharge_enable": {
-                "name": "定时强制充放电使能",
+                "name": "计划强制充电/放电启用",
                 "state": {
                     "disabled": "禁用",
-                    "enable_scheduled_force_charging_only": "启用定时强制充电",
-                    "enable_scheduled_force_discharging_only": "启用定时强制放电",
-                    "enable_both_scheduled_force_charging_and_discharging": "启用定时强制充放电"
+                    "enable_scheduled_force_charging_only": "仅启用计划强制充电",
+                    "enable_scheduled_force_discharging_only": "仅启用计划强制放电",
+                    "enable_both_scheduled_force_charging_and_discharging": "同时启用计划强制充电和放电"
                 }
+            },
+            "work_mode_megarevo": {
+                "name": "工作模式",
+                "state": {
+                    "0": "自发自用",
+                    "1": "削峰填谷",
+                    "2": "电池优先"
+                }
+            },
+            "bms_communication_type": {
+                "name": "BMS 通信类型",
+                "state": {
+                    "0": "CAN",
+                    "1": "RS485"
+                }
+            },
+            "parallel_mode": {
+                "name": "并联模式",
+                "state": {
+                    "0": "单机",
+                    "1": "并联"
+                }
+            },
+            "export_limit_enable": {
+                "name": "输出限制启用",
+                "state": {
+                    "0": "禁用",
+                    "1": "启用"
+                }
+            },
+            "force_charge_enable": {
+                "name": "强制充电启用",
+                "state": {
+                    "0": "禁用",
+                    "1": "启用"
+                }
+            },
+            "force_discharge_enable": {
+                "name": "强制放电启用",
+                "state": {
+                    "0": "禁用",
+                    "1": "启用"
+                }
+            },
+            "time_of_use_enable": {
+                "name": "分时使用启用",
+                "state": {
+                    "0": "禁用",
+                    "1": "启用"
+                }
+            },
+            "language": {
+                "name": "语言",
+                "state": {
+                    "0x1411": "中文",
+                    "0x1422": "英文"
+                }
+            },
+            "pv_input_type": {
+                "name": "PV 输入类型",
+                "state": {
+                    "0": "独立",
+                    "1": "并联",
+                    "2": "恒压"
+                }
+            },
+            "bat_type": {
+                "name": "电池类型",
+                "state": {
+                    "0": "直流电源",
+                    "1": "铅酸",
+                    "2": "锂电池"
+                }
+            },
+            "grid_set": {
+                "name": "电网设置"
             }
         },
         "number": {
+            "year": {
+                "name": "年"
+            },
+            "month": {
+                "name": "月"
+            },
+            "day": {
+                "name": "日"
+            },
+            "hour": {
+                "name": "时"
+            },
+            "minute": {
+                "name": "分"
+            },
+            "second": {
+                "name": "秒"
+            },
+            "week": {
+                "name": "星期"
+            },
             "force_charge_interval": {
-                "name": "定时强制充电间隔时间(天)"
+                "name": "计划强制充电间隔 (天)"
             },
             "force_discharge_interval": {
-                "name": "定时强制放电间隔时间(天)"
+                "name": "计划强制放电间隔 (天)"
             },
             "battery_discharge_max_current": {
-                "name": "电池放电最大电流"
+                "name": "电池最大放电电流"
             },
             "battery_charge_max_current": {
-                "name": "电池充电最大电流"
+                "name": "电池最大充电电流"
             },
             "battery_discharge_min_voltage": {
-                "name": "电池放电最低电压[d11]"
+                "name": "电池最低放电电压 [d11]"
             },
             "battery_start_discharge_voltage": {
-                "name": "电池开始放电电压[d12]"
+                "name": "电池开始放电电压 [d12]"
             },
             "grid_to_battery_max_charge_current": {
-                "name": "电网充电最大电流[d13]"
+                "name": "电网到电池最大充电电流 [d13]"
             },
             "pv_to_battery_max_charge_current": {
-                "name": "光伏充电最大电流[d14]"
+                "name": "PV 到电池最大充电电流 [d14]"
             },
             "inverter_max_grid_current": {
-                "name": "逆变器最大电网电流[d18]"
+                "name": "逆变器最大电网电流 [d18]"
             },
             "charge_soc": {
-                "name": "放电截止SOC[d19]"
+                "name": "放电截止 SOC [d19]"
             },
             "discharge_soc": {
-                "name": "放电开始SOC[d20]"
+                "name": "放电开始 SOC [d20]"
             },
             "communication_address": {
                 "name": "通信地址"
             },
             "anti_backflow_grid_power": {
-                "name": "防逆流电网功率[d23]"
+                "name": "防逆流电网功率 [d23]"
             },
             "battery_cutoff_voltage": {
-                "name": "电池截止电压[d15]"
+                "name": "电池截止电压 [d15]"
             },
             "mppt_charge_power": {
-                "name": "MPPT充电功率"
+                "name": "MPPT 充电功率"
             },
             "12v_battery_charge_current_setting": {
-                "name": "12V电池充电电流设置"
+                "name": "12V 电池充电电流设置"
             },
             "12v_battery_discharge_current_setting": {
-                "name": "12V电池放电电流设置"
+                "name": "12V 电池放电电流设置"
             },
             "12v_battery_charge_discharge_voltage_setting": {
-                "name": "12V电池充放电电压设置"
+                "name": "12V 电池充放电电压设置"
             },
             "48v_battery_charge_cutoff_voltage_setting": {
-                "name": "48V电池充电截止电压设置"
+                "name": "48V 电池充电截止电压设置"
             },
             "48v_battery_discharge_cutoff_voltage_setting": {
-                "name": "48V电池放电截止电压设置"
+                "name": "48V 电池放电截止电压设置"
             },
             "vehicle_48v_generator_current_setting": {
-                "name": "车载48V发电机电流设置"
+                "name": "车辆 48V 发电机电流设置"
             },
             "mppt_equalization_voltage": {
-                "name": "MPPT均充电压"
+                "name": "MPPT 均充电压"
             },
             "mppt_float_voltage": {
-                "name": "MPPT浮充电压"
+                "name": "MPPT 浮充电压"
             },
             "out_time_set": {
-                "name": "输出定时时间"
+                "name": "输出时间设置"
             },
             "mppt_charge_current": {
-                "name": "MPPT充电电流"
+                "name": "MPPT 充电电流"
             },
             "battery_low_voltage": {
                 "name": "欠压保护电压"
@@ -607,7 +1148,163 @@
                 "name": "电池数量"
             },
             "calibrate_battery_voltage": {
-                "name": "校准电压"
+                "name": "校准电池电压"
+            },
+            "battery_grid_dod": {
+                "name": "电池电网深度放电"
+            },
+            "battery_charge_current": {
+                "name": "电池充电电流"
+            },
+            "grid_power": {
+                "name": "电网功率"
+            },
+            "battery_discharge_power": {
+                "name": "电池放电功率"
+            },
+            "battery_capacity": {
+                "name": "电池容量"
+            },
+            "bms_protocol_number": {
+                "name": "BMS 协议编号"
+            },
+            "parallel_number": {
+                "name": "并联数量"
+            },
+            "parallel_address": {
+                "name": "并联地址"
+            },
+            "export_limit_power": {
+                "name": "输出限制功率"
+            },
+            "force_charge_power": {
+                "name": "强制充电功率"
+            },
+            "force_discharge_power": {
+                "name": "强制放电功率"
+            },
+            "time_of_use_charge_power_1": {
+                "name": "分时充电功率 1"
+            },
+            "time_of_use_discharge_power_1": {
+                "name": "分时放电功率 1"
+            },
+            "time_of_use_start_hour_1": {
+                "name": "分时开始小时 1"
+            },
+            "time_of_use_start_minute_1": {
+                "name": "分时开始分钟 1"
+            },
+            "time_of_use_end_hour_1": {
+                "name": "分时结束小时 1"
+            },
+            "charge_voltage": {
+                "name": "充电电压"
+            },
+            "discharge_voltage": {
+                "name": "放电电压"
+            },
+            "charge_cut_off_voltage": {
+                "name": "充电截止电压"
+            },
+            "discharge_cut_off_voltage": {
+                "name": "放电截止电压"
+            },
+            "charge_current_limit": {
+                "name": "充电电流限制"
+            },
+            "discharge_current_limit": {
+                "name": "放电电流限制"
+            },
+            "grid_connect_time": {
+                "name": "电网连接时间"
+            },
+            "grid_disconnect_time": {
+                "name": "电网断开时间"
+            },
+            "pv_voltage_low": {
+                "name": "PV 电压低"
+            },
+            "pv_voltage_high": {
+                "name": "PV 电压高"
+            },
+            "pv_power": {
+                "name": "PV 功率调度"
+            },
+            "battery_temperature_high": {
+                "name": "电池温度高"
+            },
+            "battery_temperature_low": {
+                "name": "电池温度低"
+            },
+            "bat_bootbay": {
+                "name": "电池启动舱"
+            },
+            "off_grid_dod": {
+                "name": "离网 DOD"
+            },
+            "lead_acid_bat_ah_setting": {
+                "name": "铅酸电池 AH 设置"
+            },
+            "lead_acid_bat_end_off_voltage": {
+                "name": "铅酸电池截止电压"
+            },
+            "rs485_bat_charge_voltage": {
+                "name": "RS485 电池充电电压"
+            },
+            "rs485_bat_limite_cur_for_charge_voltage": {
+                "name": "RS485 电池充电限流电压"
+            },
+            "rs485_max_charge_current": {
+                "name": "RS485 最大充电电流"
+            },
+            "rs485_max_discharge_current": {
+                "name": "RS485 最大放电电流"
+            },
+            "rs485_bms_version": {
+                "name": "RS485 BMS 版本"
+            },
+            "grid_charge_power": {
+                "name": "电网充电功率"
+            },
+            "us_standard" : {
+                "name": "美国标准"
+            },
+            "power_factor": {
+                "name": "功率因数"
+            },
+            "reactive_power": {
+                "name": "无功功率"
+            },
+            "grid_voltage_low": {
+                "name": "电网电压低限"
+            },
+            "grid_voltage_high": {
+                "name": "电网电压高限"
+            },
+            "grid_frequency_low": {
+                "name": "电网频率低限"
+            },
+            "grid_frequency_high": {
+                "name": "电网频率高限"
+            },
+            "lead_acid_bat_charge_voltage": {
+                "name": "铅酸电池充电电压"
+            },
+            "lead_acid_bat_charge_protect_voltage": {
+                "name": "铅酸电池充电保护电压"
+            },
+            "bat_eod_hyst": {
+                "name": "电池回差"
+            },
+            "reactive_type": {
+                "name": "无功类型"
+            },
+            "grid_standard": {
+                "name": "电网标准"
+            },
+            "grid_function": {
+                "name": "并网功能控制字"
             }
         },
         "datetime": {
@@ -617,16 +1314,52 @@
         },
         "time": {
             "scheduled_force_charge_start_time": {
-                "name": "定时强制充电开始时间"
+                "name": "计划强制充电开始时间"
             },
             "scheduled_force_charge_end_time": {
-                "name": "定时强制充电结束时间"
+                "name": "计划强制充电结束时间"
             },
             "scheduled_force_discharge_start_time": {
-                "name": "定时强制放电开始时间"
+                "name": "计划强制放电开始时间"
             },
             "scheduled_force_discharge_end_time": {
-                "name": "定时强制放电结束时间"
+                "name": "计划强制放电结束时间"
+            },
+            "charge_time1_start": {
+                "name": "充电时间 1 开始"
+            },
+            "charge_time1_end": {
+                "name": "充电时间 1 结束"
+            },
+            "discharge_time1_start": {
+                "name": "放电时间 1 开始"
+            },
+            "discharge_time1_end": {
+                "name": "放电时间 1 结束"
+            },
+            "charge_time2_start": {
+                "name": "充电时间 2 开始"
+            },
+            "charge_time2_end": {
+                "name": "充电时间 2 结束"
+            },
+            "discharge_time2_start": {
+                "name": "放电时间 2 开始"
+            },
+            "discharge_time2_end": {
+                "name": "放电时间 2 结束"
+            },
+            "charge_time3_start": {
+                "name": "充电时间 3 开始"
+            },
+            "charge_time3_end": {
+                "name": "充电时间 3 结束"
+            },
+            "discharge_time3_start": {
+                "name": "放电时间 3 开始"
+            },
+            "discharge_time3_end": {
+                "name": "放电时间 3 结束"
             }
         }
     }
