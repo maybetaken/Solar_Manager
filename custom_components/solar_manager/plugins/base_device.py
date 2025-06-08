@@ -199,8 +199,9 @@ class BaseDevice(ABC):
 
     async def perform_action(self, action_name: str) -> None:
         """Perform an action based on the action name."""
-        topic = f"{self.sn}/control/" + action_name
-        await self.mqtt_manager.publish(topic, action_name)
+        if action_name in {"restart", "reconfig"}:
+            topic = f"{self.sn}/control/" + action_name
+            await self.mqtt_manager.publish(topic, action_name)
 
     async def set_led(self, state: bool) -> None:
         """Set LED state via MQTT."""
