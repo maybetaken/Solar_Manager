@@ -19,8 +19,8 @@ It supports multiple device protocols, providing real-time data collection, devi
 
 - [x] **MakeSkyBlue (每天蓝)**
 - [x] **MakeSkyBlue MPPT (每天蓝 MPPT)**
-- [ ] **Megarevo （迈格瑞能）**: In progress
-- [ ] **CHINT 正泰电表** plan at Jun.25
+- [x] **Megarevo （迈格瑞能）**
+- [ ] **CHINT 正泰电表**: in progress
 - [ ] **JK BMS 极空BMS** plan at Aug.25
 
 ## Installationion
