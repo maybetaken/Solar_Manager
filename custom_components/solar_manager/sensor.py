@@ -42,6 +42,28 @@ unit_mapping = {
     None: None,
 }
 
+device_class_mapping = {
+    "voltage": SensorDeviceClass.VOLTAGE,
+    "current": SensorDeviceClass.CURRENT,
+    "power": SensorDeviceClass.POWER,
+    "energy": SensorDeviceClass.ENERGY,
+    "temperature": SensorDeviceClass.TEMPERATURE,
+    "frequency": SensorDeviceClass.FREQUENCY,
+    "power_factor": SensorDeviceClass.POWER_FACTOR,
+    "battery": SensorDeviceClass.BATTERY,
+    "timestamp": SensorDeviceClass.TIMESTAMP,
+    "enum": None,
+    "switch": None,
+    "None": None,
+}
+
+state_class_mapping = {
+    "measurement": SensorStateClass.MEASUREMENT,
+    "total": SensorStateClass.TOTAL,
+    "total_increasing": SensorStateClass.TOTAL_INCREASING,
+    "None": None,
+}
+
 
 class SolarManagerSensor(SensorEntity):
     """Representation of a Solar Manager sensor."""
@@ -58,6 +80,8 @@ class SolarManagerSensor(SensorEntity):
         display_precision: int | None = None,
         icon: str | None = None,
         offset: int = 0,
+        device_class: str | None = None,
+        state_class: str | None = None,
     ) -> None:
         """Initialize the sensor."""
         self._device = device
@@ -72,6 +96,8 @@ class SolarManagerSensor(SensorEntity):
         self._attr_suggested_display_precision = display_precision
         self._attr_icon = icon
         self._scale_factor = scale_factor
+        self._attr_device_class = device_class_mapping.get(device_class)
+        self._attr_state_class = state_class_mapping.get(state_class)
         self._device.register_entity(name, self)
 
     @property
@@ -246,6 +272,8 @@ async def async_setup_entry(
                 display_precision=device.get("display_precision", 0),
                 icon=device.get("icon"),
                 offset=device.get("offset", 0),
+                device_class=device.get("device_class", None),
+                state_class=device.get("state_class", None),
             )
         sensors.append(sensor)
     async_add_entities(sensors)
