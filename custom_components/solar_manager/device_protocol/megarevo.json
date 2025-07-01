@@ -3,7 +3,7 @@
     "control_type": "MODBUS",
     "segments": [
         {"slave_id": 1, "start_address": 12560, "length": 91, "read_command": 3},
-        {"slave_id": 1, "start_address": 12651, "length": 40, "read_command": 3},
+        {"slave_id": 1, "start_address": 12651, "length": 50, "read_command": 3},
         {"slave_id": 1, "start_address": 13312, "length": 42, "read_command": 3},
         {"slave_id": 1, "start_address": 13568, "length": 16, "read_command": 3}
     ],
