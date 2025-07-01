@@ -1,3 +1,10 @@
+"""Megarevo device class for Solar Manager integration.
+
+Solar Manager or solar_manager © 2025 by @maybetaken is
+licensed under Creative Commons
+Attribution-NonCommercial-NoDerivatives 4.0 International.
+"""
+
 import json
 import logging
 from typing import Any, Tuple
@@ -50,6 +57,16 @@ TIME_SCHEDULE_REGISTERS: dict[int, str] = {
     0x30350E: "discharge_time3_start",
     0x30350F: "discharge_time3_end",
 }
+
+# Special registers requiring high/low 16-bit swap
+SPECIAL_REGISTERS = range(0x303153, 0x303182)  # 0x3153 to 0x3181 inclusive
+
+
+def swap_16_bits(value: int) -> int:
+    """Swap high and low 16 bits of a 32-bit integer."""
+    high_16 = (value >> 16) & 0xFFFF
+    low_16 = value & 0xFFFF
+    return (low_16 << 16) | high_16
 
 
 class Megarevo(BaseDevice):
@@ -336,16 +353,34 @@ class Megarevo(BaseDevice):
             if register not in {**TIME_BASE_REGISTERS, **TIME_SCHEDULE_REGISTERS}:
                 name = self._register_to_name.get(register)
                 if name:
-                    if self._data_dict.get(name) != value:
-                        self._data_dict[name] = value
-                        _LOGGER.debug(
-                            "Updated register %s (%s): %s",
-                            register,
-                            name,
-                            value,
-                        )
-                        if name in self._entities:
-                            changed_entities.add(name)
+                    # Special handling for registers 0x3153 to 0x3181 (swap high/low 16 bits)
+                    if register in SPECIAL_REGISTERS:
+                        # Swap high and low 16 bits
+                        corrected_value = swap_16_bits(value)
+                        # Update only if value has changed
+                        if self._data_dict.get(name) != corrected_value:
+                            self._data_dict[name] = corrected_value
+                            _LOGGER.debug(
+                                "Updated register %s (%s): %s (swapped from %s)",
+                                hex(register),
+                                name,
+                                corrected_value,
+                                value,
+                            )
+                            if name in self._entities:
+                                changed_entities.add(name)
+                    else:
+                        # Normal handling for other registers
+                        if self._data_dict.get(name) != value:
+                            self._data_dict[name] = value
+                            _LOGGER.debug(
+                                "Updated register %s (%s): %s",
+                                hex(register),
+                                name,
+                                value,
+                            )
+                            if name in self._entities:
+                                changed_entities.add(name)
                 elif register not in self._unknown_registers:
                     _LOGGER.warning(
                         "No name found for register %s (hex format %s)",
