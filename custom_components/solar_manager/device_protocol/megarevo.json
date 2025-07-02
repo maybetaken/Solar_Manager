@@ -16,7 +16,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:lightning-bolt"
+            "icon": "mdi:lightning-bolt",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303111": {
             "name": "grid_a_current",
@@ -26,7 +28,9 @@
             "range": "-3276.8~3276.7A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-ac"
+            "icon": "mdi:current-ac",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303112": {
             "name": "grid_a_power",
@@ -36,7 +40,9 @@
             "range": "-32768~32767W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x303113": {
             "name": "grid_b_voltage",
@@ -46,7 +52,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:lightning-bolt"
+            "icon": "mdi:lightning-bolt",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303114": {
             "name": "grid_b_current",
@@ -56,7 +64,9 @@
             "range": "-3276.8~3276.7A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-ac"
+            "icon": "mdi:current-ac",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303115": {
             "name": "grid_b_power",
@@ -66,7 +76,9 @@
             "range": "-32768~32767W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x303116": {
             "name": "grid_c_voltage",
@@ -76,7 +88,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:lightning-bolt"
+            "icon": "mdi:lightning-bolt",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303117": {
             "name": "grid_c_current",
@@ -86,7 +100,9 @@
             "range": "-3276.8~3276.7A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-ac"
+            "icon": "mdi:current-ac",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303118": {
             "name": "grid_c_power",
@@ -96,7 +112,9 @@
             "range": "-32768~32767W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x303119": {
             "name": "grid_frequency",
@@ -106,7 +124,9 @@
             "range": "0~655.35Hz",
             "unit": "HERTZ",
             "display_precision": 2,
-            "icon": "mdi:sine-wave"
+            "icon": "mdi:sine-wave",
+            "device_class": "frequency",
+            "state_class": "measurement"
         },
         "0x30311A": {
             "name": "inverter_temperature",
@@ -116,7 +136,9 @@
             "range": "-32768~32767°C",
             "unit": "CELSIUS",
             "display_precision": 0,
-            "icon": "mdi:thermometer"
+            "icon": "mdi:thermometer",
+            "device_class": "temperature",
+            "state_class": "measurement"
         },
         "0x30311B": {
             "name": "inverter_inside_temperature",
@@ -126,7 +148,9 @@
             "range": "-32768~32767°C",
             "unit": "CELSIUS",
             "display_precision": 0,
-            "icon": "mdi:thermometer"
+            "icon": "mdi:thermometer",
+            "device_class": "temperature",
+            "state_class": "measurement"
         },
         "0x303120": {
             "name": "load_a_voltage",
@@ -136,7 +160,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:lightning-bolt"
+            "icon": "mdi:lightning-bolt",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303121": {
             "name": "load_a_current",
@@ -146,7 +172,9 @@
             "range": "0~6553.5A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-ac"
+            "icon": "mdi:current-ac",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303122": {
             "name": "load_a_power",
@@ -156,7 +184,9 @@
             "range": "0~65535W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x303123": {
             "name": "load_a_rate",
@@ -166,7 +196,9 @@
             "range": "0~6553.5%",
             "unit": "PERCENTAGE",
             "display_precision": 1,
-            "icon": "mdi:percent"
+            "icon": "mdi:percent",
+            "device_class": "power_factor",
+            "state_class": "measurement"
         },
         "0x303124": {
             "name": "load_b_voltage",
@@ -176,7 +208,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:lightning-bolt"
+            "icon": "mdi:lightning-bolt",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303125": {
             "name": "load_b_current",
@@ -186,7 +220,9 @@
             "range": "0~6553.5A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-ac"
+            "icon": "mdi:current-ac",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303126": {
             "name": "load_b_power",
@@ -196,7 +232,9 @@
             "range": "0~65535W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x303127": {
             "name": "load_b_rate",
@@ -206,7 +244,9 @@
             "range": "0~6553.5%",
             "unit": "PERCENTAGE",
             "display_precision": 1,
-            "icon": "mdi:percent"
+            "icon": "mdi:percent",
+            "device_class": "power_factor",
+            "state_class": "measurement"
         },
         "0x303128": {
             "name": "load_c_voltage",
@@ -216,7 +256,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:lightning-bolt"
+            "icon": "mdi:lightning-bolt",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303129": {
             "name": "load_c_current",
@@ -226,7 +268,9 @@
             "range": "0~6553.5A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-ac"
+            "icon": "mdi:current-ac",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x30312A": {
             "name": "load_c_power",
@@ -236,7 +280,9 @@
             "range": "0~65535W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x30312B": {
             "name": "load_c_rate",
@@ -246,7 +292,9 @@
             "range": "0~6553.5%",
             "unit": "PERCENTAGE",
             "display_precision": 1,
-            "icon": "mdi:percent"
+            "icon": "mdi:percent",
+            "device_class": "power_factor",
+            "state_class": "measurement"
         },
         "0x30312D": {
             "name": "generator_port_voltage_a",
@@ -256,7 +304,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:generator-stationary"
+            "icon": "mdi:generator-stationary",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x30312E": {
             "name": "generator_port_voltage_b",
@@ -266,7 +316,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:generator-stationary"
+            "icon": "mdi:generator-stationary",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x30312F": {
             "name": "generator_port_voltage_c",
@@ -276,7 +328,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:generator-stationary"
+            "icon": "mdi:generator-stationary",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303130": {
             "name": "pv1_voltage",
@@ -286,7 +340,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:solar-panel"
+            "icon": "mdi:solar-panel",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303131": {
             "name": "pv1_current",
@@ -296,7 +352,9 @@
             "range": "0~6553.5A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-dc",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303132": {
             "name": "pv1_power",
@@ -306,7 +364,9 @@
             "range": "0~65535W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x303133": {
             "name": "pv2_voltage",
@@ -316,7 +376,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:solar-panel"
+            "icon": "mdi:solar-panel",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303134": {
             "name": "pv2_current",
@@ -326,7 +388,9 @@
             "range": "0~6553.5A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-dc",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303135": {
             "name": "pv2_power",
@@ -336,7 +400,9 @@
             "range": "0~65535W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x303136": {
             "name": "pv3_voltage",
@@ -346,7 +412,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:solar-panel"
+            "icon": "mdi:solar-panel",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303137": {
             "name": "pv3_current",
@@ -356,7 +424,9 @@
             "range": "0~6553.5A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-dc",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303138": {
             "name": "pv3_power",
@@ -366,7 +436,9 @@
             "range": "0~65535W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x303139": {
             "name": "pv4_voltage",
@@ -376,7 +448,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:solar-panel"
+            "icon": "mdi:solar-panel",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x30313A": {
             "name": "pv4_current",
@@ -386,7 +460,9 @@
             "range": "0~6553.5A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-dc",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x30313B": {
             "name": "pv4_power",
@@ -396,7 +472,9 @@
             "range": "0~65535W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x30313E": {
             "name": "bms_battery_voltage",
@@ -406,7 +484,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:battery"
+            "icon": "mdi:battery",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x30313F": {
             "name": "bms_battery_current",
@@ -416,7 +496,9 @@
             "range": "-3276.8~3276.7A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-dc",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303140": {
             "name": "battery_voltage",
@@ -426,7 +508,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:battery"
+            "icon": "mdi:battery",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303141": {
             "name": "battery_current",
@@ -436,7 +520,9 @@
             "range": "-3276.8~3276.7A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-dc",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303142": {
             "name": "battery_current_1",
@@ -446,7 +532,9 @@
             "range": "-3276.8~3276.7A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-dc",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303143": {
             "name": "battery_current_2",
@@ -456,7 +544,9 @@
             "range": "-3276.8~3276.7A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-dc",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303144": {
             "name": "battery_current_3",
@@ -466,7 +556,9 @@
             "range": "-3276.8~3276.7A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-dc",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303145": {
             "name": "battery_soc",
@@ -476,7 +568,9 @@
             "range": "0~6553.5%",
             "unit": "PERCENTAGE",
             "display_precision": 1,
-            "icon": "mdi:battery-charging"
+            "icon": "mdi:battery-charging",
+            "device_class": "battery",
+            "state_class": "measurement"
         },
         "0x303146": {
             "name": "bms_battery_temperature",
@@ -486,7 +580,9 @@
             "range": "0~6553.5°C",
             "unit": "CELSIUS",
             "display_precision": 1,
-            "icon": "mdi:thermometer"
+            "icon": "mdi:thermometer",
+            "device_class": "temperature",
+            "state_class": "measurement"
         },
         "0x303147": {
             "name": "bms_charge_voltage",
@@ -496,7 +592,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:battery-charging"
+            "icon": "mdi:battery-charging",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303148": {
             "name": "bms_charge_current_limit",
@@ -506,7 +604,9 @@
             "range": "0~6553.5A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-dc",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303149": {
             "name": "bms_discharge_current_limit",
@@ -516,7 +616,9 @@
             "range": "0~6553.5A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-dc",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x30314A": {
             "name": "battery_power",
@@ -526,7 +628,9 @@
             "range": "-32768~32767W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x30314B": {
             "name": "bms_cell_max_voltage",
@@ -536,7 +640,9 @@
             "range": "0~65.535V",
             "unit": "VOLT",
             "display_precision": 3,
-            "icon": "mdi:battery"
+            "icon": "mdi:battery",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x30314C": {
             "name": "bms_cell_min_voltage",
@@ -546,7 +652,9 @@
             "range": "0~65.535V",
             "unit": "VOLT",
             "display_precision": 3,
-            "icon": "mdi:battery"
+            "icon": "mdi:battery",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x30314D": {
             "name": "bms_cell_max_temperature",
@@ -556,7 +664,9 @@
             "range": "-32768~32767°C",
             "unit": "CELSIUS",
             "display_precision": 0,
-            "icon": "mdi:thermometer"
+            "icon": "mdi:thermometer",
+            "device_class": "temperature",
+            "state_class": "measurement"
         },
         "0x30314E": {
             "name": "bms_cell_min_temperature",
@@ -566,7 +676,9 @@
             "range": "-32768~32767°C",
             "unit": "CELSIUS",
             "display_precision": 0,
-            "icon": "mdi:thermometer"
+            "icon": "mdi:thermometer",
+            "device_class": "temperature",
+            "state_class": "measurement"
         },
         "0x303150": {
             "name": "positive_bus_voltage",
@@ -576,7 +688,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:lightning-bolt"
+            "icon": "mdi:lightning-bolt",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303151": {
             "name": "negative_bus_voltage",
@@ -586,7 +700,9 @@
             "range": "-3276.8~3276.7V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:lightning-bolt"
+            "icon": "mdi:lightning-bolt",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303152": {
             "name": "dcdc_temperature",
@@ -596,7 +712,9 @@
             "range": "-32768~32767°C",
             "unit": "CELSIUS",
             "display_precision": 0,
-            "icon": "mdi:thermometer"
+            "icon": "mdi:thermometer",
+            "device_class": "temperature",
+            "state_class": "measurement"
         },
         "0x303153": {
             "name": "pv_day_energy",
@@ -606,7 +724,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:solar-power"
+            "icon": "mdi:solar-power",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x303155": {
             "name": "grid_day_energy",
@@ -616,7 +736,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:transmission-tower"
+            "icon": "mdi:transmission-tower",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x303157": {
             "name": "load_day_energy",
@@ -626,7 +748,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:power-plug"
+            "icon": "mdi:power-plug",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x303159": {
             "name": "pv_month_energy",
@@ -636,7 +760,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:solar-power"
+            "icon": "mdi:solar-power",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x30315B": {
             "name": "grid_month_energy",
@@ -646,7 +772,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:transmission-tower"
+            "icon": "mdi:transmission-tower",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x30315D": {
             "name": "load_month_energy",
@@ -656,7 +784,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:power-plug"
+            "icon": "mdi:power-plug",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x30315F": {
             "name": "pv_year_energy",
@@ -666,7 +796,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:solar-power"
+            "icon": "mdi:solar-power",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x303161": {
             "name": "grid_year_energy",
@@ -676,7 +808,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:transmission-tower"
+            "icon": "mdi:transmission-tower",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x303163": {
             "name": "load_year_energy",
@@ -686,7 +820,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:power-plug"
+            "icon": "mdi:power-plug",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x303165": {
             "name": "pv_total_energy",
@@ -696,7 +832,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:solar-power"
+            "icon": "mdi:solar-power",
+            "device_class": "energy",
+            "state_class": "total_increasing"
         },
         "0x303167": {
             "name": "grid_total_energy",
@@ -706,7 +844,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:transmission-tower"
+            "icon": "mdi:transmission-tower",
+            "device_class": "energy",
+            "state_class": "total_increasing"
         },
         "0x303169": {
             "name": "load_total_energy",
@@ -716,7 +856,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:power-plug"
+            "icon": "mdi:power-plug",
+            "device_class": "energy",
+            "state_class": "total_increasing"
         },
         "0x30316B": {
             "name": "purchasing_day_energy",
@@ -726,7 +868,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:transmission-tower"
+            "icon": "mdi:transmission-tower",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x30316D": {
             "name": "battery_charge_day_energy",
@@ -736,7 +880,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:battery-charging"
+            "icon": "mdi:battery-charging",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x30316F": {
             "name": "battery_discharge_day_energy",
@@ -746,7 +892,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:battery-minus"
+            "icon": "mdi:battery-minus",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x303171": {
             "name": "purchasing_month_energy",
@@ -756,7 +904,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:transmission-tower"
+            "icon": "mdi:transmission-tower",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x303173": {
             "name": "battery_charge_month_energy",
@@ -766,7 +916,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:battery-charging"
+            "icon": "mdi:battery-charging",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x303175": {
             "name": "battery_discharge_month_energy",
@@ -776,7 +928,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:battery-minus"
+            "icon": "mdi:battery-minus",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x303177": {
             "name": "purchasing_year_energy",
@@ -786,7 +940,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:transmission-tower"
+            "icon": "mdi:transmission-tower",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x303179": {
             "name": "battery_charge_year_energy",
@@ -796,7 +952,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:battery-charging"
+            "icon": "mdi:battery-charging",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x30317B": {
             "name": "battery_discharge_year_energy",
@@ -806,7 +964,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:battery-minus"
+            "icon": "mdi:battery-minus",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x30317D": {
             "name": "purchasing_total_energy",
@@ -816,7 +976,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:transmission-tower"
+            "icon": "mdi:transmission-tower",
+            "device_class": "energy",
+            "state_class": "total_increasing"
         },
         "0x30317F": {
             "name": "battery_charge_total_energy",
@@ -826,7 +988,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:battery-charging"
+            "icon": "mdi:battery-charging",
+            "device_class": "energy",
+            "state_class": "total_increasing"
         },
         "0x303181": {
             "name": "battery_discharge_total_energy",
@@ -836,7 +1000,9 @@
             "range": "0~4294967295Wh",
             "unit": "WATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:battery-minus"
+            "icon": "mdi:battery-minus",
+            "device_class": "energy",
+            "state_class": "total_increasing"
         },
         "0x303190": {
             "name": "inverter_a_voltage",
@@ -846,7 +1012,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:lightning-bolt"
+            "icon": "mdi:lightning-bolt",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303191": {
             "name": "inverter_a_current",
@@ -856,7 +1024,9 @@
             "range": "-3276.8~3276.7A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-ac"
+            "icon": "mdi:current-ac",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303192": {
             "name": "inverter_a_power",
@@ -866,7 +1036,9 @@
             "range": "-32768~32767W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x303193": {
             "name": "inverter_b_voltage",
@@ -876,7 +1048,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:lightning-bolt"
+            "icon": "mdi:lightning-bolt",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303194": {
             "name": "inverter_b_current",
@@ -886,7 +1060,9 @@
             "range": "-3276.8~3276.7A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-ac"
+            "icon": "mdi:current-ac",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303195": {
             "name": "inverter_b_power",
@@ -896,7 +1072,9 @@
             "range": "-32768~32767W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x303196": {
             "name": "inverter_c_voltage",
@@ -906,7 +1084,9 @@
             "range": "0~6553.5V",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:lightning-bolt"
+            "icon": "mdi:lightning-bolt",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x303197": {
             "name": "inverter_c_current",
@@ -916,7 +1096,9 @@
             "range": "-3276.8~3276.7A",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-ac"
+            "icon": "mdi:current-ac",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303198": {
             "name": "inverter_c_power",
@@ -926,7 +1108,9 @@
             "range": "-32768~32767W",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x303199": {
             "name": "inverter_a_frequency",
@@ -936,7 +1120,9 @@
             "range": "0~655.35Hz",
             "unit": "HERTZ",
             "display_precision": 2,
-            "icon": "mdi:sine-wave"
+            "icon": "mdi:sine-wave",
+            "device_class": "frequency",
+            "state_class": "measurement"
         },
         "0x30319A": {
             "name": "inverter_b_frequency",
@@ -946,7 +1132,9 @@
             "range": "0~655.35Hz",
             "unit": "HERTZ",
             "display_precision": 2,
-            "icon": "mdi:sine-wave"
+            "icon": "mdi:sine-wave",
+            "device_class": "frequency",
+            "state_class": "measurement"
         },
         "0x30319B": {
             "name": "inverter_c_frequency",
@@ -956,7 +1144,9 @@
             "range": "0~655.35Hz",
             "unit": "HERTZ",
             "display_precision": 2,
-            "icon": "mdi:sine-wave"
+            "icon": "mdi:sine-wave",
+            "device_class": "frequency",
+            "state_class": "measurement"
         },
         "0x30319C": {
             "name": "leak_current",
@@ -966,7 +1156,9 @@
             "range": "0~65535mA",
             "unit": "MILLIAMPERE",
             "display_precision": 0,
-            "icon": "mdi:current-ac"
+            "icon": "mdi:current-ac",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x303400": {
             "name": "work_mode_megarevo",
