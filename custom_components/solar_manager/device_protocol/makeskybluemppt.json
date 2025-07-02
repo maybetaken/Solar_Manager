@@ -31,7 +31,9 @@
             "sensor_type": "sensor",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:battery"
+            "icon": "mdi:battery",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x400006": {
             "name": "battery_current",
@@ -40,7 +42,9 @@
             "sensor_type": "sensor",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:current-dc"
+            "icon": "mdi:current-dc",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x400007": {
             "name": "pv_voltage",
@@ -49,7 +53,9 @@
             "sensor_type": "sensor",
             "unit": "VOLT",
             "display_precision": 1,
-            "icon": "mdi:solar-power"
+            "icon": "mdi:solar-power",
+            "device_class": "voltage",
+            "state_class": "measurement"
         },
         "0x400008": {
             "name": "charge_power",
@@ -58,7 +64,9 @@
             "sensor_type": "sensor",
             "unit": "WATT",
             "display_precision": 0,
-            "icon": "mdi:power"
+            "icon": "mdi:power",
+            "device_class": "power",
+            "state_class": "measurement"
         },
         "0x400009": {
             "name": "mppt_temperature",
@@ -67,7 +75,9 @@
             "sensor_type": "sensor",
             "unit": "CELSIUS",
             "display_precision": 1,
-            "icon": "mdi:thermometer"
+            "icon": "mdi:thermometer",
+            "device_class": "temperature",
+            "state_class": "measurement"
         },
         "0x40000A": {
             "name": "mppt_cumulative_generation",
@@ -76,7 +86,9 @@
             "sensor_type": "sensor",
             "unit": "KILOWATT_HOUR",
             "display_precision": 0,
-            "icon": "mdi:solar-power"
+            "icon": "mdi:solar-power",
+            "device_class": "energy",
+            "state_class": "total_increasing"
         },
         "0x40000B": {
             "name": "mppt_out_current",
@@ -85,7 +97,9 @@
             "sensor_type": "sensor",
             "unit": "AMPERE",
             "display_precision": 1,
-            "icon": "mdi:lightning-bolt"
+            "icon": "mdi:lightning-bolt",
+            "device_class": "current",
+            "state_class": "measurement"
         },
         "0x40000C": {
             "name": "mppt_work_status",
@@ -110,7 +124,9 @@
             "sensor_type": "sensor",
             "unit": "KILOWATT_HOUR",
             "display_precision": 1,
-            "icon": "mdi:solar-power"
+            "icon": "mdi:solar-power",
+            "device_class": "energy",
+            "state_class": "total"
         },
         "0x300001": {
             "name": "mppt_equalization_voltage",
@@ -220,10 +236,10 @@
             "type": "UINT16",
             "scale": 1,
             "sensor_type": "number",
-            "min_value":1,
-            "max_value":8,
+            "min_value": 1,
+            "max_value": 8,
             "write_command": 6,
-            "display_precision":0,
+            "display_precision": 0,
             "icon": "mdi:battery"
         },
         "0x30000A": {
@@ -234,8 +250,8 @@
             "sensor_type": "number",
             "unit": "VOLT",
             "step": 0.1,
-            "min_value":0,
-            "max_value":6553.5,
+            "min_value": 0,
+            "max_value": 6553.5,
             "display_precision": 1,
             "icon": "mdi:car-battery"
         }
