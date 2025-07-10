@@ -2,8 +2,7 @@
     "endianness": "BE",
     "control_type": "MODBUS",
     "segments": [
-        {"slave_id": 1, "start_address": 1, "length": 1, "read_command": 4},
-        {"slave_id": 1, "start_address": 5, "length": 8, "read_command": 4},
+        {"slave_id": 1, "start_address": 1, "length": 12, "read_command": 4},
         {"slave_id": 1, "start_address": 26, "length": 1, "read_command": 4},
         {"slave_id": 1, "start_address": 1, "length": 10, "read_command": 3}
     ],
@@ -14,13 +13,13 @@
             "scale": 1,
             "sensor_type": "sensor",
             "enum": {
-                "0x0000": "battery_undervoltage",
-                "0x0001": "battery_overvoltage",
-                "0x0002": "machine_over_temperature",
-                "0x0003": "input_pv_overvoltage",
-                "0x0004": "output_overcurrent_protection",
-                "0x0005": "output_short_circuit",
-                "0x0006": "normal_status"
+                "0x0000": "normal_status",
+                "0x0001": "battery_undervoltage",
+                "0x0002": "battery_overvoltage",
+                "0x0004": "machine_over_temperature",
+                "0x0008": "input_pv_overvoltage",
+                "0x0010": "output_overcurrent_protection",
+                "0x0020": "output_short_circuit"
             },
             "icon": "mdi:alert"
         },
@@ -104,7 +103,7 @@
         "0x40000C": {
             "name": "mppt_work_status",
             "type": "UINT16",
-            "scale": 0.1,
+            "scale": 1,
             "sensor_type": "sensor",
             "enum": {
                 "0x0000": "shutdown",
