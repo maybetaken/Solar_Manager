@@ -141,6 +141,16 @@ class MakeSkyBlueMppt(BaseDevice):
                             "register": register,
                         }
                     )
+            elif sensor_type == "switch":
+                device_info["switch"].append(
+                    {
+                        "name": name,
+                        "icon": details.get("icon", None),
+                        "device": self,
+                        "register": register,
+                        "write_command": details.get("write_command", 6),
+                    }
+                )
 
         return device_info
 
@@ -189,14 +199,12 @@ class MakeSkyBlueMppt(BaseDevice):
         if isinstance(value, str):
             data = value
         elif isinstance(value, (int, float)):
-            scale = (
-                self.parser.protocol_data.get("registers", {})
-                .get(cmd, {})
-                .get("scale", 1.0)
-            )
+            info = self.parser.protocol_data.get("registers", {}).get(cmd, {})
+            scale = info.get("scale", 1.0)
+            write_command = info.get("write_command", 6)
             if isinstance(value, float):
                 value = int(value / scale)
-            data = self.parser.pack_data(self.slave_id, cmd, value)
+            data = self.parser.pack_data(self.slave_id, cmd, value, write_command)
         else:
             _LOGGER.error("Unsupported value type: %s", type(value))
             return
