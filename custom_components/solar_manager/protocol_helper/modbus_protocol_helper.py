@@ -280,8 +280,8 @@ class ModbusProtocolHelper(ProtocolHelper):
             _LOGGER.error("Unsupported write command: %d", write_command)
             return b""
 
-        crc = self.crc16(packed_data)
-        packed_data += struct.pack(">H", crc)
+        # crc = self.crc16(packed_data)
+        # packed_data += struct.pack(">H", crc)
         return packed_data
 
     async def send_data(self, hass: HomeAssistant, url: str, data: bytes) -> bytes:
