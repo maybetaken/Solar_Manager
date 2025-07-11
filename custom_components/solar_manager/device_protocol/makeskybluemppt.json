@@ -2,24 +2,11 @@
     "endianness": "BE",
     "control_type": "MODBUS",
     "segments": [
-        {"slave_id": 1, "start_address": 0, "length": 7, "read_command": 1},
         {"slave_id": 1, "start_address": 1, "length": 12, "read_command": 4},
         {"slave_id": 1, "start_address": 26, "length": 1, "read_command": 4},
         {"slave_id": 1, "start_address": 1, "length": 10, "read_command": 3}
     ],
     "registers": {
-        "0x100002": {
-            "name": "on_off_button_en",
-            "type": "COIL",
-            "scale": 1,
-            "sensor_type": "switch",
-            "write_command": 5,
-            "enum": {
-                "0": "disable",
-                "1": "enable"
-            },
-            "icon": "mdi:toggle-switch"
-        },
         "0x400001": {
             "name": "mppt_fault_status",
             "type": "UINT16",
