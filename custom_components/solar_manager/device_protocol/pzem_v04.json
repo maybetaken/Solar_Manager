@@ -1,0 +1,121 @@
+{
+    "endianness": "BE",
+    "control_type": "MODBUS",
+    "segments": [
+        {"slave_id": 1, "start_address": 0, "length": 10, "read_command": 4},
+        {"slave_id": 1, "start_address": 1, "length": 2, "read_command": 3}
+    ],
+    "registers": {
+        "0x400000": {
+            "name": "voltage",
+            "type": "UINT16",
+            "scale": 0.1,
+            "sensor_type": "sensor",
+            "unit": "VOLT",
+            "display_precision": 1,
+            "icon": "mdi:flash",
+            "device_class": "voltage",
+            "state_class": "measurement"
+        },
+        "0x400001": {
+            "name": "current",
+            "type": "UINT32",
+            "scale": 0.001,
+            "sensor_type": "sensor",
+            "unit": "AMPERE",
+            "display_precision": 3,
+            "icon": "mdi:current-ac",
+            "device_class": "current",
+            "state_class": "measurement"
+        },
+        "0x400003": {
+            "name": "active_power",
+            "type": "UINT32",
+            "scale": 0.1,
+            "sensor_type": "sensor",
+            "unit": "WATT",
+            "display_precision": 1,
+            "icon": "mdi:power-plug",
+            "device_class": "power",
+            "state_class": "measurement"
+        },
+        "0x400005": {
+            "name": "active_energy",
+            "type": "UINT32",
+            "scale": 0.001,
+            "sensor_type": "sensor",
+            "unit": "KILOWATT_HOUR",
+            "display_precision": 3,
+            "icon": "mdi:counter",
+            "device_class": "energy",
+            "state_class": "total_increasing"
+        },
+        "0x400007": {
+            "name": "frequency",
+            "type": "UINT16",
+            "scale": 0.1,
+            "sensor_type": "sensor",
+            "unit": "HERTZ",
+            "display_precision": 1,
+            "icon": "mdi:sine-wave",
+            "device_class": "frequency",
+            "state_class": "measurement"
+        },
+        "0x400008": {
+            "name": "power_factor",
+            "type": "UINT16",
+            "scale": 0.01,
+            "sensor_type": "sensor",
+            "unit": null,
+            "display_precision": 2,
+            "icon": "mdi:angle-acute",
+            "device_class": "power_factor",
+            "state_class": "measurement"
+        },
+        "0x400009": {
+            "name": "alarm_status",
+            "type": "UINT16",
+            "scale": 1,
+            "sensor_type": "sensor",
+            "unit": null,
+            "enum": {
+                "0x0000": "normal_status",
+                "0xFFFF": "alarm_status"
+            },
+            "icon": "mdi:alarm-light-outline",
+            "device_class": "problem"
+        },
+        "0x300001": {
+            "name": "power_alarm_threshold",
+            "type": "UINT16",
+            "scale": 1,
+            "write_command": 6,
+            "sensor_type": "number",
+            "min_value": 0,
+            "max_value": 23000,
+            "unit": "WATT",
+            "step": 1,
+            "display_precision": 0,
+            "icon": "mdi:power-settings"
+        },
+        "0x300002": {
+            "name": "communication_address",
+            "type": "UINT16",
+            "scale": 1,
+            "write_command": 6,
+            "sensor_type": "number",
+            "min_value": 1,
+            "max_value": 247,
+            "unit": null,
+            "step": 1,
+            "display_precision": 0,
+            "icon": "mdi:network"
+        },
+        "0xFFFF42": {
+            "name": "reset_energy",
+            "sensor_type": "button",
+            "write_command": 66,
+            "icon": "mdi:restore"
+        }
+    }
+}

@@ -8,6 +8,7 @@ Attribution-NonCommercial-NoDerivatives 4.0 International.
 from custom_components.solar_manager.plugins.MakeSkyBlue import MakeSkyBlueDevice
 from custom_components.solar_manager.plugins.MakeSkyBlueMppt import MakeSkyBlueMppt
 from custom_components.solar_manager.plugins.Megarevo import Megarevo
+from custom_components.solar_manager.plugins.PZemV04 import PZemV04
 
 # Unified device configuration
 DEVICE_CONFIG = {
@@ -22,6 +23,10 @@ DEVICE_CONFIG = {
     "Megarevo": {
         "protocol": "megarevo",
         "device_class": Megarevo,
+    },
+    "PZEMV04": {
+        "protocol": "pzem_v04",
+        "device_class": PZemV04,
     },
     # "ChintMeter": {
     #     "protocol": "chintmeter",

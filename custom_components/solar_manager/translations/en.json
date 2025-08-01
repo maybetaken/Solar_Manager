@@ -881,6 +881,28 @@
             },
             "time_of_use_end_hour_1": {
                 "name": "Time of Use End Hour 1"
+            },
+            "voltage": {
+                "name": "Voltage"
+            },
+            "current": {
+                "name": "Current"
+            },
+            "active_power": {
+                "name": "Active Power"
+            },
+            "active_energy": {
+                "name": "Active Power"
+            },
+            "frequency": {
+                "name": "Frequency"
+            },
+            "alarm_status": {
+                "name": "Alarm Status",
+                "state": {
+                    "normal_status": "Normal",
+                    "alarm_status": "Alarm-on"
+                }
             }
         },
         "select": {
@@ -1278,6 +1300,9 @@
             },
             "grid_function": {
                 "name": "Grid Function"
+            },
+            "power_alarm_threshold": {
+                "name": "Power Alarm Threshold"
             }
         },
         "datetime": {

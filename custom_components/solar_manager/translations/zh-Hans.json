@@ -902,6 +902,28 @@
             },
             "cur_for_charge": {
                 "name": "充电电流"
+            },
+            "voltage": {
+                "name": "电压"
+            },
+            "current": {
+                "name": "电流"
+            },
+            "active_power": {
+                "name": "有功功率"
+            },
+            "active_energy": {
+                "name": "有功能量"
+            },
+            "frequency": {
+                "name": "频率"
+            },
+            "alarm_status": {
+                "name": "报警状态",
+                "state": {
+                    "normal_status": "正常状态",
+                    "alarm_status": "报警状态"
+                }
             }
         },
         "select": {
@@ -1305,6 +1327,9 @@
             },
             "grid_function": {
                 "name": "并网功能控制字"
+            },
+            "power_alarm_threshold": {
+                "name": "功率报警阈值"
             }
         },
         "datetime": {
