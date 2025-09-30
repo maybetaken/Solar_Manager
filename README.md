@@ -20,8 +20,9 @@ It supports multiple device protocols, providing real-time data collection, devi
 - [x] **MakeSkyBlue (每天蓝)**
 - [x] **MakeSkyBlue MPPT (每天蓝 MPPT)**
 - [x] **Megarevo （迈格瑞能）**
-- [ ] **CHINT 正泰电表**: in progress
-- [ ] **JK BMS 极空BMS** plan at Aug.25
+- [ ] **CHINT (正泰电表)** - ongoing
+- [ ] **JK BMS (极空BMS)** - ongoing
+- [ ] **Sungery (晟格锐)** - ongoing
 
 ## Installationion
 
@@ -52,6 +53,9 @@ It supports multiple device protocols, providing real-time data collection, devi
 This project is for educational purposes only. The data obtained from the devices may not be accurate. Any improper operation or inaccuracy that causes issues, including but not limited to device damage, explosions, fires, etc., is not the responsibility of the author. devices may not be accurate. Any improper operation or inaccuracy that causes issues, including but not limited to device damage, explosions, fires, etc., is not the responsibility of the author.
 Please do not use this project for commercial purposes. Any form of disassembly, tampering, or attempts to access the contents of the ESP32 module provided by the author will be considered illegal.Please do not use this project for commercial purposes. Any form of disassembly, tampering, or attempts to access the contents of the ESP32 module provided by the author will be considered illegal.
 By installing and using the device or integration, you agree to this disclaimer. and using the device or integration, you agree to this disclaimer.
+
+## Esp32 module
+Esp32 module firmware is closed-source project, if you want this module, please contact that email.
 
 ## Support and Feedback
 
