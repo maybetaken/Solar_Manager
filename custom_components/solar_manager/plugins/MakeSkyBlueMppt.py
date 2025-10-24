@@ -33,7 +33,6 @@ class MakeSkyBlueMppt(BaseDevice):
         self.slave_id = 1
         self._register_to_name = {}
         self._unknown_registers = set()
-        self.cmd_topic = f"{self.sn}/control/cmd"
 
     async def send_config(self) -> None:
         """Send device-specific configuration to the device."""
@@ -41,7 +40,7 @@ class MakeSkyBlueMppt(BaseDevice):
             config_data = {
                 "segments": self.parser.protocol_data.get("segments", []),
             }
-            topic = f"{self.sn}/config"
+            topic = self._build_topic("config")
             payload = json.dumps(config_data)
             await self.mqtt_manager.publish(topic, payload)
             _LOGGER.debug("Sent config to %s: %s", topic, payload)
@@ -51,10 +50,6 @@ class MakeSkyBlueMppt(BaseDevice):
     def setup_protocol(self) -> None:
         """Set up Modbus protocol parameters."""
         self.parser.register_callback(self.handle_cmd)
-
-    async def async_setup(self) -> None:
-        """Set up the device."""
-        await super().async_setup()
 
     async def unpack_device_info(self) -> dict[str, list[dict[str, Any]]]:
         """Unpack device information into different groups."""

@@ -6,6 +6,7 @@ Attribution-NonCommercial-NoDerivatives 4.0 International.
 """
 
 from custom_components.solar_manager.plugins.MakeSkyBlue import MakeSkyBlueDevice
+from custom_components.solar_manager.plugins.MakeSkyBlueIoTrix import MakeSkyBlueIoTrix
 from custom_components.solar_manager.plugins.MakeSkyBlueMppt import MakeSkyBlueMppt
 from custom_components.solar_manager.plugins.Megarevo import Megarevo
 from custom_components.solar_manager.plugins.PZemV04 import PZemV04
@@ -15,6 +16,10 @@ DEVICE_CONFIG = {
     "MakeSkyBlue": {
         "protocol": "makeskyblue",
         "device_class": MakeSkyBlueDevice,
+    },
+    "MakeSkyBlue IoTrix": {
+        "protocol": "makeskyblue",
+        "device_class": MakeSkyBlueIoTrix,
     },
     "MakeSkyBlue MPPT": {
         "protocol": "makeskybluemppt",
