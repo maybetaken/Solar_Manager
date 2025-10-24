@@ -85,7 +85,6 @@ class Megarevo(BaseDevice):
             **{r: n for r, n in TIME_SCHEDULE_REGISTERS.items()},
         }
         self._unknown_registers = set()
-        self.cmd_topic = f"{self.sn}/control/cmd"
 
     async def send_config(self) -> None:
         """Send device-specific configuration to the device."""
@@ -93,7 +92,7 @@ class Megarevo(BaseDevice):
             config_data = {
                 "segments": self.parser.protocol_data.get("segments", []),
             }
-            topic = f"{self.sn}/config"
+            topic = self._build_topic("config")
             payload = json.dumps(config_data)
             await self.mqtt_manager.publish(topic, payload)
             _LOGGER.debug("Sent config to %s: %s", topic, payload)
@@ -103,10 +102,6 @@ class Megarevo(BaseDevice):
     def setup_protocol(self) -> None:
         """Set up Modbus protocol parameters."""
         self.parser.register_callback(self.handle_cmd)
-
-    async def async_setup(self) -> None:
-        """Set up the device."""
-        await super().async_setup()
 
     async def perform_action(self, action_name: str) -> None:
         """Perform an action based on the action name."""

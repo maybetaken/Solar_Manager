@@ -68,7 +68,6 @@ class MakeSkyBlueDevice(BaseDevice):
         self._unknown_registers = set()
         self._rate_voltage_factory = None
         self._inverter_ac_voltage_initial = None
-        self.cmd_topic = f"{self.sn}/control/cmd"
 
     async def send_config(self) -> None:
         """Send MakeSkyBlue-specific configuration to the device."""
@@ -76,7 +75,7 @@ class MakeSkyBlueDevice(BaseDevice):
             config_data = {
                 "segments": self.parser.protocol_data.get("segments", []),
             }
-            topic = f"{self.sn}/config"
+            topic = self._build_topic("config")
             payload = json.dumps(config_data)
             await self.mqtt_manager.publish(topic, payload)
             _LOGGER.debug("Sent config to %s: %s", topic, payload)
@@ -87,11 +86,6 @@ class MakeSkyBlueDevice(BaseDevice):
     def setup_protocol(self) -> None:
         """Set up Modbus protocol parameters."""
         self.parser.register_callback(self.handle_cmd)
-
-    async def async_setup(self) -> None:
-        """Set up the device and send initial network_time."""
-        await super().async_setup()
-        await self._send_network_time()
 
     async def _send_network_time(self) -> None:
         """Send the current time to the device's network_time register (0x1E) in two parts."""
