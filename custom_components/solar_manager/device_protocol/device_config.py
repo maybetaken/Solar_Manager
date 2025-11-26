@@ -18,7 +18,7 @@ DEVICE_CONFIG = {
         "device_class": MakeSkyBlueDevice,
     },
     "MakeSkyBlue IoTrix": {
-        "protocol": "makeskyblue",
+        "protocol": "makeskybluemppt",
         "device_class": MakeSkyBlueIoTrix,
     },
     "MakeSkyBlue MPPT": {

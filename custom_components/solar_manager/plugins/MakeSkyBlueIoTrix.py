@@ -47,7 +47,7 @@ class MakeSkyBlueIoTrix(BaseDevice):
         self, hass: HomeAssistant, protocol_file: str, sn: str, model: str
     ) -> None:
         """Initialize the base device."""
-        super().__init__(hass, protocol_file, sn, model, "makeskyblue/iotrix", False)
+        super().__init__(hass, protocol_file, sn, model, "makeskyblue/iotrix")
         self.parser = ModbusProtocolHelper(hass, protocol_file)
         self.setup_protocol()
         self.slave_id = 1
@@ -57,8 +57,17 @@ class MakeSkyBlueIoTrix(BaseDevice):
         self._inverter_ac_voltage_initial = None
 
     async def send_config(self) -> None:
-        """Send configure."""
-        return
+        """Send device-specific configuration to the device."""
+        try:
+            config_data = {
+                "segments": self.parser.protocol_data.get("segments", []),
+            }
+            topic = self._build_topic("config")
+            payload = json.dumps(config_data)
+            await self.mqtt_manager.publish(topic, payload)
+            _LOGGER.debug("Sent config to %s: %s", topic, payload)
+        except Exception as e:
+            _LOGGER.error("Failed to send config for %s: %s", self.sn, e)
 
     def setup_protocol(self) -> None:
         """Set up Modbus protocol parameters."""
@@ -112,8 +121,6 @@ class MakeSkyBlueIoTrix(BaseDevice):
                             "display_precision": details.get("display_precision", 0),
                             "device": self,
                             "offset": details.get("offset", 0),
-                            "device_class": details.get("device_class", "None"),
-                            "state_class": details.get("state_class", "None"),
                         }
                     )
 
@@ -158,6 +165,7 @@ class MakeSkyBlueIoTrix(BaseDevice):
                         "icon": details.get("icon", None),
                         "device": self,
                         "register": register,
+                        "write_command": details.get("write_command", 6),
                     }
                 )
 
@@ -328,19 +336,13 @@ class MakeSkyBlueIoTrix(BaseDevice):
         else:
             if isinstance(value, str):
                 data = value
-            elif isinstance(value, int):
-                data = self.parser.pack_data(self.slave_id, cmd, value)
-            elif isinstance(value, float):
-                scale = (
-                    self.parser.protocol_data.get("registers", {})
-                    .get(cmd, {})
-                    .get("scale", 1.0)
-                )
-                data = self.parser.pack_data(
-                    self.slave_id,
-                    cmd,
-                    int(value / scale),
-                )
+            elif isinstance(value, (int, float)):
+                info = self.parser.protocol_data.get("registers", {}).get(cmd, {})
+                scale = info.get("scale", 1.0)
+                write_command = info.get("write_command", 6)
+                if isinstance(value, float):
+                    value = int(value / scale)
+                data = self.parser.pack_data(self.slave_id, cmd, value, write_command)
             else:
                 _LOGGER.error("Unsupported value type: %s", type(value))
                 return
@@ -348,10 +350,9 @@ class MakeSkyBlueIoTrix(BaseDevice):
         if data is not None:
             _LOGGER.debug("Publishing to topic %s: %s", self.cmd_topic, data)
             await self.mqtt_manager.publish(self.cmd_topic, data)
-            if not isinstance(value, str):
-                self._data_dict[cmd] = (
-                    value if isinstance(value, int) else int(value / scale)
-                )
-                entity_name = self._register_to_name.get(cmd)
-                if entity_name and entity_name in self._entities:
-                    self._entities[entity_name].schedule_update_ha_state()
+
+            # Update data dictionary and entity state
+            entity_name = self._register_to_name.get(cmd)
+            if entity_name and entity_name in self._entities:
+                self._data_dict[entity_name] = value
+                self._entities[entity_name].schedule_update_ha_state()
