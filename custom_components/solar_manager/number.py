@@ -17,6 +17,7 @@ from homeassistant.const import (
     UnitOfEnergy,
     UnitOfPower,
     UnitOfTemperature,
+    UnitOfTime,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -30,7 +31,10 @@ unit_mapping = {
     "WATT": UnitOfPower.WATT,
     "KILO_WATT": UnitOfPower.KILO_WATT,
     "KILOWATT_HOUR": UnitOfEnergy.KILO_WATT_HOUR,
+    "WATT_HOUR": UnitOfEnergy.WATT_HOUR,
     "CELSIUS": UnitOfTemperature.CELSIUS,
+    "SECONDS": UnitOfTime.SECONDS,
+    "HERTZ": "Hz",
     "AMPERE_HOUR": "Ah",
     None: None,
 }

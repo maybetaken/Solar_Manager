@@ -21,6 +21,7 @@ from homeassistant.const import (
     UnitOfEnergy,
     UnitOfPower,
     UnitOfTemperature,
+    UnitOfTime,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
@@ -37,6 +38,7 @@ unit_mapping = {
     "KILOWATT_HOUR": UnitOfEnergy.KILO_WATT_HOUR,
     "WATT_HOUR": UnitOfEnergy.WATT_HOUR,
     "CELSIUS": UnitOfTemperature.CELSIUS,
+    "SECONDS": UnitOfTime.SECONDS,
     "HERTZ": "Hz",
     "AMPERE_HOUR": "Ah",
     None: None,
@@ -92,7 +94,7 @@ class SolarManagerSensor(SensorEntity):
         self._device_id = device_id
         self._attr_translation_key = name
         self._attr_has_entity_name = True
-        self._attr_native_unit_of_measurement = unit_mapping.get(unit)
+        self._attr_native_unit_of_measurement = unit_mapping.get(unit, unit)
         self._attr_suggested_display_precision = display_precision
         self._attr_icon = icon
         self._scale_factor = scale_factor
@@ -109,7 +111,7 @@ class SolarManagerSensor(SensorEntity):
         if isinstance(value, str):
             return value
         try:
-            value = float(value - self._offset) * self._scale_factor
+            value = round(float(value - self._offset) * self._scale_factor, 3)
             if self._attr_suggested_display_precision == 0:
                 value = int(value)
         except (ValueError, TypeError):
@@ -170,7 +172,7 @@ class SolarManagerEnumSensor(SolarManagerSensor):
         if value is None:
             return None
         try:
-            value = float(value) * self._scale_factor
+            value = round(float(value) * self._scale_factor, 3)
             return self._enum_mapping.get(int(value), f"Unknown ({value})")
         except (ValueError, TypeError):
             return None
