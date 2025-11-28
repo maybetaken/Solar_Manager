@@ -1,0 +1,1208 @@
+{
+    "endianness": "BE",
+    "control_type": "MODBUS",
+    "addressing": "byte",
+    "segments": [
+        {"slave_id": 15, "start_address": "0x1400", "length": 20, "read_command": 3},
+        {"slave_id": 15, "start_address": "0x1000", "length": 100, "read_command": 3},
+        {"slave_id": 15, "start_address": "0x10C8", "length": 42, "read_command": 3},
+        {"slave_id": 15, "start_address": "0x1200", "length": 100, "read_command": 3},
+        {"slave_id": 15, "start_address": "0x12C8", "length": 35, "read_command": 3}
+    ],
+    "registers": {
+        "0x301000": {
+            "name": "setting_sleep_voltage",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "step": 0.01,
+            "icon": "mdi:sleep",
+            "sensor_type": "number",
+            "device_class": "voltage"
+        },
+        "0x301004": {
+            "name": "setting_cell_uv_protect",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "step": 0.01,
+            "icon": "mdi:shield-alert",
+            "sensor_type": "number",
+            "device_class": "voltage"
+        },
+        "0x301008": {
+            "name": "setting_cell_uv_recover",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "step": 0.01,
+            "icon": "mdi:shield-check",
+            "sensor_type": "number",
+            "device_class": "voltage"
+        },
+        "0x30100C": {
+            "name": "setting_cell_ov_protect",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "step": 0.01,
+            "icon": "mdi:shield-alert",
+            "sensor_type": "number",
+            "device_class": "voltage"
+        },
+        "0x301010": {
+            "name": "setting_cell_ov_recover",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "step": 0.01,
+            "icon": "mdi:shield-check",
+            "sensor_type": "number",
+            "device_class": "voltage"
+        },
+        "0x301014": {
+            "name": "setting_balance_trigger_voltage",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "step": 0.01,
+            "icon": "mdi:scale-balance",
+            "sensor_type": "number",
+            "device_class": "voltage"
+        },
+        "0x301018": {
+            "name": "setting_soc_100_voltage",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "step": 0.001,
+            "icon": "mdi:battery-high",
+            "sensor_type": "number",
+            "device_class": "voltage"
+        },
+        "0x30101C": {
+            "name": "setting_soc_0_voltage",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "step": 0.001,
+            "icon": "mdi:battery-low",
+            "sensor_type": "number",
+            "device_class": "voltage"
+        },
+        "0x301028": {
+            "name": "setting_sys_power_off_voltage",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "step": 0.01,
+            "icon": "mdi:power-off",
+            "sensor_type": "number",
+            "device_class": "voltage"
+        },
+        "0x30102C": {
+            "name": "setting_charge_current_cont",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "AMPERE",
+            "step": 0.01,
+            "icon": "mdi:current-dc",
+            "sensor_type": "number",
+            "device_class": "current"
+        },
+        "0x301030": {
+            "name": "setting_charge_oc_delay",
+            "type": "UINT32",
+            "unit": "SECONDS",
+            "icon": "mdi:timer",
+            "sensor_type": "number"
+        },
+        "0x301034": {
+            "name": "setting_charge_oc_release",
+            "type": "UINT32",
+            "unit": "SECONDS",
+            "icon": "mdi:timer-outline",
+            "sensor_type": "number"
+        },
+        "0x301038": {
+            "name": "setting_discharge_current_cont",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "AMPERE",
+            "step": 0.1,
+            "icon": "mdi:current-dc",
+            "sensor_type": "number",
+            "device_class": "current"
+        },
+        "0x30103C": {
+            "name": "setting_discharge_oc_delay",
+            "type": "UINT32",
+            "unit": "SECONDS",
+            "step": 0.1,
+            "icon": "mdi:timer",
+            "sensor_type": "number"
+        },
+        "0x301040": {
+            "name": "setting_discharge_oc_release",
+            "type": "UINT32",
+            "unit": "SECONDS",
+            "icon": "mdi:timer-outline",
+            "sensor_type": "number"
+        },
+        "0x301044": {
+            "name": "setting_sc_release_delay",
+            "type": "UINT32",
+            "unit": "SECONDS",
+            "icon": "mdi:timer-alert",
+            "sensor_type": "number"
+        },
+        "0x301048": {
+            "name": "setting_max_balance_current",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "AMPERE",
+            "icon": "mdi:current-dc",
+            "sensor_type": "number",
+            "device_class": "current"
+        },
+        "0x30104C": {
+            "name": "setting_charge_ot_protect",
+            "type": "INT32",
+            "scale": 0.1,
+            "unit": "CELSIUS",
+            "icon": "mdi:thermometer-alert",
+            "sensor_type": "number",
+            "device_class": "temperature"
+        },
+        "0x301050": {
+            "name": "setting_charge_ot_recover",
+            "type": "INT32",
+            "scale": 0.1,
+            "unit": "CELSIUS",
+            "icon": "mdi:thermometer-check",
+            "sensor_type": "number",
+            "device_class": "temperature"
+        },
+        "0x301054": {
+            "name": "setting_discharge_ot_protect",
+            "type": "INT32",
+            "scale": 0.1,
+            "unit": "CELSIUS",
+            "icon": "mdi:thermometer-alert",
+            "sensor_type": "number",
+            "device_class": "temperature"
+        },
+        "0x301058": {
+            "name": "setting_discharge_ot_recover",
+            "type": "INT32",
+            "scale": 0.1,
+            "unit": "CELSIUS",
+            "icon": "mdi:thermometer-check",
+            "sensor_type": "number",
+            "device_class": "temperature"
+        },
+        "0x30105C": {
+            "name": "setting_charge_ut_protect",
+            "type": "INT32",
+            "scale": 0.1,
+            "unit": "CELSIUS",
+            "icon": "mdi:snowflake-alert",
+            "sensor_type": "number",
+            "device_class": "temperature"
+        },
+        "0x301060": {
+            "name": "setting_charge_ut_recover",
+            "type": "INT32",
+            "scale": 0.1,
+            "unit": "CELSIUS",
+            "icon": "mdi:snowflake-check",
+            "sensor_type": "number",
+            "device_class": "temperature"
+        },
+        "0x301064": {
+            "name": "setting_mos_ot_protect",
+            "type": "INT32",
+            "scale": 0.1,
+            "unit": "CELSIUS",
+            "icon": "mdi:chip",
+            "sensor_type": "number",
+            "device_class": "temperature"
+        },
+        "0x301068": {
+            "name": "setting_mos_ot_recover",
+            "type": "INT32",
+            "scale": 0.1,
+            "unit": "CELSIUS",
+            "icon": "mdi:chip",
+            "sensor_type": "number",
+            "device_class": "temperature"
+        },
+        "0x30106C": {
+            "name": "setting_cell_count",
+            "type": "UINT32",
+            "unit": "cells",
+            "icon": "mdi:counter",
+            "sensor_type": "number",
+            "min_value": 3,
+            "max_value": 32
+        },
+        "0x301070": {
+            "name": "switch_charge",
+            "type": "UINT32",
+            "sensor_type": "switch",
+            "icon": "mdi:toggle-switch",
+            "enum": {"0": "Off", "1": "On"}
+        },
+        "0x301074": {
+            "name": "switch_discharge",
+            "type": "UINT32",
+            "sensor_type": "switch",
+            "icon": "mdi:toggle-switch",
+            "enum": {"0": "Off", "1": "On"}
+        },
+        "0x301078": {
+            "name": "switch_balance",
+            "type": "UINT32",
+            "sensor_type": "switch",
+            "icon": "mdi:toggle-switch",
+            "enum": {"0": "Off", "1": "On"}
+        },
+        "0x30107C": {
+            "name": "setting_design_capacity",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "AMPERE_HOUR",
+            "icon": "mdi:battery-settings",
+            "sensor_type": "number"
+        },
+        "0x301080": {
+            "name": "setting_scp_delay",
+            "type": "UINT32",
+            "unit": "us",
+            "icon": "mdi:timer-alert",
+            "sensor_type": "number"
+        },
+        "0x301084": {
+            "name": "setting_start_balance_voltage",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "icon": "mdi:scale-balance",
+            "sensor_type": "number",
+            "device_class": "voltage"
+        },
+        "0x301108": {
+            "name": "device_address",
+            "type": "UINT32",
+            "sensor_type": "number",
+            "icon": "mdi:identifier"
+        },
+        "0x30110C": {
+            "name": "setting_discharge_precharge_time",
+            "type": "UINT32",
+            "unit": "SECONDS",
+            "icon": "mdi:timer-outline",
+            "sensor_type": "number"
+        },
+        "0x301114": {
+            "name": "function_switch_bits",
+            "type": "UINT16",
+            "sensor_type": "sensor",
+            "icon": "mdi:cpu-32-bit"
+        },
+        "0x301116": {
+            "name": "setting_batt_alarm_temp",
+            "type": "INT8",
+            "unit": "CELSIUS",
+            "sensor_type": "number",
+            "device_class": "temperature"
+        },
+        "0x301117": {
+            "name": "setting_batt_alarm_recover_temp",
+            "type": "INT8",
+            "unit": "CELSIUS",
+            "sensor_type": "number",
+            "device_class": "temperature"
+        },
+        "0x301118": {
+            "name": "setting_smart_sleep_time",
+            "type": "UINT8",
+            "unit": "h",
+            "sensor_type": "number"
+        },
+        "0x301119": {
+            "name": "setting_data_domain_enable",
+            "type": "UINT8",
+            "sensor_type": "sensor"
+        },
+        "0x301200": {
+            "name": "cell_voltage_01",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301202": {
+            "name": "cell_voltage_02",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301204": {
+            "name": "cell_voltage_03",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301206": {
+            "name": "cell_voltage_04",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301208": {
+            "name": "cell_voltage_05",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x30120A": {
+            "name": "cell_voltage_06",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x30120C": {
+            "name": "cell_voltage_07",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x30120E": {
+            "name": "cell_voltage_08",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301210": {
+            "name": "cell_voltage_09",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301212": {
+            "name": "cell_voltage_10",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301214": {
+            "name": "cell_voltage_11",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301216": {
+            "name": "cell_voltage_12",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301218": {
+            "name": "cell_voltage_13",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x30121A": {
+            "name": "cell_voltage_14",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x30121C": {
+            "name": "cell_voltage_15",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x30121E": {
+            "name": "cell_voltage_16",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301220": {
+            "name": "cell_voltage_17",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301222": {
+            "name": "cell_voltage_18",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301224": {
+            "name": "cell_voltage_19",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301226": {
+            "name": "cell_voltage_20",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301228": {
+            "name": "cell_voltage_21",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x30122A": {
+            "name": "cell_voltage_22",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x30122C": {
+            "name": "cell_voltage_23",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x30122E": {
+            "name": "cell_voltage_24",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301230": {
+            "name": "cell_voltage_25",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301232": {
+            "name": "cell_voltage_26",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301234": {
+            "name": "cell_voltage_27",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301236": {
+            "name": "cell_voltage_28",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301238": {
+            "name": "cell_voltage_29",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x30123A": {
+            "name": "cell_voltage_30",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x30123C": {
+            "name": "cell_voltage_31",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x30123E": {
+            "name": "cell_voltage_32",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301240": {
+            "name": "cell_exist_mask",
+            "type": "UINT32",
+            "sensor_type": "sensor",
+            "icon": "mdi:check-network"
+        },
+        "0x301244": {
+            "name": "cell_avg_voltage",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301246": {
+            "name": "cell_diff_voltage",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x301248": {
+            "name": "max_voltage_cell_no",
+            "type": "UINT8",
+            "display_precision": 0,
+            "sensor_type": "sensor"
+        },
+        "0x301249": {
+            "name": "min_voltage_cell_no",
+            "type": "UINT8",
+            "display_precision": 0,
+            "sensor_type": "sensor"
+        },
+        "0x30124A": {
+            "name": "wire_res_1",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x30124C": {
+            "name": "wire_res_2",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x30124E": {
+            "name": "wire_res_3",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301250": {
+            "name": "wire_res_4",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301252": {
+            "name": "wire_res_5",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301254": {
+            "name": "wire_res_6",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301256": {
+            "name": "wire_res_7",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301258": {
+            "name": "wire_res_8",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x30125A": {
+            "name": "wire_res_9",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x30125C": {
+            "name": "wire_res_10",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x30125E": {
+            "name": "wire_res_11",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301260": {
+            "name": "wire_res_12",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301262": {
+            "name": "wire_res_13",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301264": {
+            "name": "wire_res_14",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301266": {
+            "name": "wire_res_15",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301268": {
+            "name": "wire_res_16",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x30126A": {
+            "name": "wire_res_17",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x30126C": {
+            "name": "wire_res_18",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x30126E": {
+            "name": "wire_res_19",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301270": {
+            "name": "wire_res_20",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301272": {
+            "name": "wire_res_21",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301274": {
+            "name": "wire_res_22",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301276": {
+            "name": "wire_res_23",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301278": {
+            "name": "wire_res_24",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x30127A": {
+            "name": "wire_res_25",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x30127C": {
+            "name": "wire_res_26",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x30127E": {
+            "name": "wire_res_27",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301280": {
+            "name": "wire_res_28",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301282": {
+            "name": "wire_res_29",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301284": {
+            "name": "wire_res_30",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301286": {
+            "name": "wire_res_31",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x301288": {
+            "name": "wire_res_32",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "mΩ",
+            "sensor_type": "sensor"
+        },
+        "0x30128A": {
+            "name": "power_board_temp",
+            "type": "INT16",
+            "scale": 0.1,
+            "unit": "CELSIUS",
+            "sensor_type": "sensor",
+            "device_class": "temperature"
+        },
+        "0x30128C": {
+            "name": "wire_res_alarm_status",
+            "type": "UINT32",
+            "sensor_type": "sensor"
+        },
+        "0x301290": {
+            "name": "total_voltage",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage",
+            "state_class": "measurement"
+        },
+        "0x301294": {
+            "name": "total_power",
+            "type": "UINT32",
+            "scale": 1,
+            "unit": "WATT",
+            "sensor_type": "sensor",
+            "device_class": "power",
+            "state_class": "measurement"
+        },
+        "0x301298": {
+            "name": "total_current",
+            "type": "INT32",
+            "scale": 0.001,
+            "unit": "AMPERE",
+            "sensor_type": "sensor",
+            "device_class": "current",
+            "state_class": "measurement"
+        },
+        "0x30129C": {
+            "name": "temp_sensor_1",
+            "type": "INT16",
+            "scale": 0.1,
+            "unit": "CELSIUS",
+            "sensor_type": "sensor",
+            "device_class": "temperature"
+        },
+        "0x30129E": {
+            "name": "temp_sensor_2",
+            "type": "INT16",
+            "scale": 0.1,
+            "unit": "CELSIUS",
+            "sensor_type": "sensor",
+            "device_class": "temperature"
+        },
+        "0x3012A0": {
+            "name": "system_alarm_status",
+            "type": "UINT32",
+            "sensor_type": "sensor",
+            "icon": "mdi:alert"
+        },
+        "0x3012A4": {
+            "name": "balance_current",
+            "type": "INT16",
+            "scale": 0.001,
+            "unit": "AMPERE",
+            "sensor_type": "sensor",
+            "device_class": "current"
+        },
+        "0x3012A6": {
+            "name": "balance_status",
+            "type": "UINT8",
+            "sensor_type": "sensor",
+            "enum": {"0": "Off", "1": "On"}
+        },
+        "0x3012A7": {
+            "name": "soc",
+            "type": "UINT8",
+            "unit": "PERCENTAGE",
+            "sensor_type": "sensor",
+            "device_class": "battery"
+        },
+        "0x3012A8": {
+            "name": "capacity_remaining",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "AMPERE_HOUR",
+            "sensor_type": "sensor",
+            "state_class": "total"
+        },
+        "0x3012AC": {
+            "name": "capacity_full",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "AMPERE_HOUR",
+            "sensor_type": "sensor"
+        },
+        "0x3012B0": {
+            "name": "cycles",
+            "type": "UINT32",
+            "unit": "cycles",
+            "sensor_type": "sensor"
+        },
+        "0x3012B4": {
+            "name": "capacity_cycle_total",
+            "type": "UINT32",
+            "scale": 0.001,
+            "unit": "AMPERE_HOUR",
+            "sensor_type": "sensor"
+        },
+        "0x3012B8": {
+            "name": "soh",
+            "type": "UINT8",
+            "unit": "PERCENTAGE",
+            "sensor_type": "sensor",
+            "icon": "mdi:battery-heart"
+        },
+        "0x3012B9": {
+            "name": "precharge_status",
+            "type": "UINT8",
+            "sensor_type": "sensor",
+            "enum": {"0": "Off", "1": "On"}
+        },
+        "0x3012BA": {"name": "user_alarm_1", "type": "UINT16", "sensor_type": "sensor"},
+        "0x3012BC": {
+            "name": "uptime",
+            "type": "UINT32",
+            "unit": "SECONDS",
+            "sensor_type": "sensor",
+            "icon": "mdi:clock-outline"
+        },
+        "0x3012C0": {
+            "name": "charge_fet_status",
+            "type": "UINT8",
+            "sensor_type": "sensor",
+            "enum": {"0": "Off", "1": "On"},
+            "icon": "mdi:toggle-switch"
+        },
+        "0x3012C1": {
+            "name": "discharge_fet_status",
+            "type": "UINT8",
+            "sensor_type": "sensor",
+            "enum": {"0": "Off", "1": "On"},
+            "icon": "mdi:toggle-switch"
+        },
+        "0x3012C2": {"name": "user_alarm_2", "type": "UINT16", "sensor_type": "sensor"},
+        "0x3012C4": {
+            "name": "time_discharge_oc_release",
+            "type": "UINT16",
+            "unit": "SECONDS",
+            "sensor_type": "sensor"
+        },
+        "0x3012C6": {
+            "name": "time_discharge_sc_release",
+            "type": "UINT16",
+            "unit": "SECONDS",
+            "sensor_type": "sensor"
+        },
+        "0x3012C8": {
+            "name": "time_charge_oc_release",
+            "type": "UINT16",
+            "unit": "SECONDS",
+            "sensor_type": "sensor"
+        },
+        "0x3012CA": {
+            "name": "time_charge_sc_release",
+            "type": "UINT16",
+            "unit": "SECONDS",
+            "sensor_type": "sensor"
+        },
+        "0x3012CC": {
+            "name": "time_uv_release",
+            "type": "UINT16",
+            "unit": "SECONDS",
+            "sensor_type": "sensor"
+        },
+        "0x3012CE": {
+            "name": "time_ov_release",
+            "type": "UINT16",
+            "unit": "SECONDS",
+            "sensor_type": "sensor"
+        },
+        "0x3012D0": {
+            "name": "temp_sensor_missing_status",
+            "type": "UINT8",
+            "sensor_type": "sensor"
+        },
+        "0x3012D1": {
+            "name": "heating_status",
+            "type": "UINT8",
+            "sensor_type": "sensor",
+            "enum": {"0": "Off", "1": "On"},
+            "icon": "mdi:fire"
+        },
+        "0x3012D4": {
+            "name": "time_emergency",
+            "type": "UINT16",
+            "unit": "SECONDS",
+            "sensor_type": "sensor"
+        },
+        "0x3012D6": {
+            "name": "current_correction_factor",
+            "type": "UINT16",
+            "sensor_type": "sensor"
+        },
+        "0x3012D8": {
+            "name": "charge_sense_voltage",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x3012DA": {
+            "name": "discharge_sense_voltage",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x3012DC": {
+            "name": "voltage_correction_factor",
+            "type": "FLOAT",
+            "display_precision": 2,
+            "sensor_type": "sensor"
+        },
+        "0x3012E0": {
+            "name": "charge_pwm",
+            "type": "UINT16",
+            "unit": "%",
+            "sensor_type": "sensor"
+        },
+        "0x3012E2": {
+            "name": "discharge_pwm",
+            "type": "UINT16",
+            "unit": "%",
+            "sensor_type": "sensor"
+        },
+        "0x3012E4": {
+            "name": "bat_vol_adc",
+            "type": "UINT16",
+            "scale": 0.01,
+            "unit": "VOLT",
+            "sensor_type": "sensor",
+            "device_class": "voltage"
+        },
+        "0x3012E6": {
+            "name": "heating_current",
+            "type": "UINT16",
+            "scale": 0.001,
+            "unit": "AMPERE",
+            "sensor_type": "sensor",
+            "device_class": "current"
+        },
+        "0x3012EE": {"name": "rvd_reserved", "type": "UINT8", "sensor_type": "sensor"},
+        "0x3012EF": {
+            "name": "charger_plugged_in",
+            "type": "UINT8",
+            "sensor_type": "sensor",
+            "enum": {"0": "No", "1": "Yes"},
+            "icon": "mdi:power-plug"
+        },
+        "0x3012F0": {
+            "name": "sys_ticks",
+            "type": "UINT32",
+            "scale": 0.1,
+            "unit": "SECONDS",
+            "sensor_type": "sensor"
+        },
+        "0x3012F4": {
+            "name": "pvd_timestamp",
+            "type": "UINT32",
+            "scale": 0.1,
+            "unit": "SECONDS",
+            "sensor_type": "sensor"
+        },
+        "0x3012F8": {
+            "name": "temp_sensor_3",
+            "type": "INT16",
+            "scale": 0.1,
+            "unit": "CELSIUS",
+            "sensor_type": "sensor",
+            "device_class": "temperature"
+        },
+        "0x3012FA": {
+            "name": "temp_sensor_4",
+            "type": "INT16",
+            "scale": 0.1,
+            "unit": "CELSIUS",
+            "sensor_type": "sensor",
+            "device_class": "temperature"
+        },
+        "0x3012FC": {
+            "name": "temp_sensor_5",
+            "type": "INT16",
+            "scale": 0.1,
+            "unit": "CELSIUS",
+            "sensor_type": "sensor",
+            "device_class": "temperature"
+        },
+        "0x301300": {
+            "name": "rtc_ticks",
+            "type": "UINT32",
+            "unit": "SECONDS",
+            "sensor_type": "sensor"
+        },
+        "0x301308": {
+            "name": "time_enter_sleep",
+            "type": "UINT32",
+            "unit": "SECONDS",
+            "sensor_type": "sensor"
+        },
+        "0x30130C": {
+            "name": "parallel_limit_status",
+            "type": "UINT8",
+            "sensor_type": "sensor",
+            "enum": {"0": "Off", "1": "On"},
+            "icon": "mdi:connection"
+        },
+        "0x301400": {
+            "name": "manufacturer",
+            "type": "STRING",
+            "length": 16,
+            "sensor_type": "sensor",
+            "icon": "mdi:factory"
+        },
+        "0x301410": {
+            "name": "hardware_version",
+            "type": "STRING",
+            "length": 8,
+            "sensor_type": "sensor",
+            "icon": "mdi:chip"
+        },
+        "0x301418": {
+            "name": "software_version",
+            "type": "STRING",
+            "length": 8,
+            "sensor_type": "sensor",
+            "icon": "mdi:information"
+        },
+        "0x301420": {
+            "name": "total_runtime",
+            "type": "UINT32",
+            "unit": "SECONDS",
+            "sensor_type": "sensor",
+            "icon": "mdi:clock-time-eight-outline"
+        },
+        "0x301424": {
+            "name": "power_on_count",
+            "type": "UINT32",
+            "unit": "times",
+            "sensor_type": "sensor"
+        }
+    }
+}
