@@ -17,6 +17,8 @@ from .protocol_helper import ProtocolHelper
 TYPE_FORMATS = {
     "COIL": (None, None),  # Coil, handled as bits
     "DISCRETE_INPUT": (None, None),  # Discrete Input, handled as bits
+    "UINT8": ("B", 1),  # Unsigned 8-bit integer, 1 byte (New)
+    "INT8": ("b", 1),  # Signed 8-bit integer, 1 byte (New)
     "UINT16": ("H", 2),  # Unsigned 16-bit integer, 2 bytes
     "INT16": ("h", 2),  # Signed 16-bit integer, 2 bytes
     "UINT32": ("I", 4),  # Unsigned 32-bit integer, 4 bytes
@@ -119,6 +121,8 @@ class ModbusProtocolHelper(ProtocolHelper):
                     )
 
                     if not register_info:
+                        # Skip 2 bytes (standard Modbus register size) if undefined
+                        # Assuming standard alignment for gaps
                         byte_offset += 2
                         i += 1
                         continue
@@ -141,6 +145,7 @@ class ModbusProtocolHelper(ProtocolHelper):
                                 "Invalid or missing length for STRING register 0x%08X",
                                 register_address,
                             )
+                            # Skip standard register size as fallback
                             byte_offset += 2
                             i += 1
                             continue
@@ -161,8 +166,12 @@ class ModbusProtocolHelper(ProtocolHelper):
                             .rstrip()
                         )
                         parsed_data[register_address] = value
+
+                        # Advance pointers
                         byte_offset += str_length
+                        # For strings, we assume register count based on 2 bytes per register
                         i += (str_length + 1) // 2
+
                         _LOGGER.debug(
                             "Parsed register 0x%08X: type=STRING, value=%s",
                             register_address,
@@ -184,8 +193,19 @@ class ModbusProtocolHelper(ProtocolHelper):
                             data_bytes[byte_offset : byte_offset + byte_size],
                         )[0]
                         parsed_data[register_address] = value
+
+                        # Update pointers
                         byte_offset += byte_size
-                        i += byte_size // 2
+
+                        # --- Logic Update for 1-byte types (JK-BMS support) ---
+                        if byte_size == 1:
+                            # If it's UINT8/INT8, we advance 1 register address unit
+                            # (because JK-BMS maps 1 byte to 1 address offset)
+                            i += 1
+                        else:
+                            # Standard Modbus: 2 bytes = 1 register address unit
+                            i += byte_size // 2
+
                         _LOGGER.debug(
                             "Parsed register 0x%08X: type=%s, value=%s",
                             register_address,
@@ -202,17 +222,7 @@ class ModbusProtocolHelper(ProtocolHelper):
     def pack_data(
         self, slave_id: int, address: int, value: Any, write_command: int = 6
     ) -> bytes:
-        """Pack data according to the protocol for Modbus commands.
-
-        Args:
-            slave_id: Modbus slave ID (1-247).
-            address: Register or coil address (0-65535).
-            value: Value(s) to write (bool/int for 0x05, int/float for 0x06, list for 0x10).
-            write_command: Modbus function code (5, 6, or 16).
-
-        Returns:
-            Packed bytes in TLD format: [slave_id:1][write_command:1][address:2][value(s) or num_regs:2][data][crc:2].
-        """
+        """Pack data according to the protocol for Modbus commands."""
         address = address & 0xFFFF
         packed_data = b""
 
@@ -243,6 +253,8 @@ class ModbusProtocolHelper(ProtocolHelper):
                 struct.pack(">B", slave_id)
                 + struct.pack(">B", write_command)
                 + struct.pack(">H", address)
+                # Note: Even for UINT8 writes, Modbus protocol usually sends 16 bits (2 bytes).
+                # The device will take the lower byte.
                 + struct.pack(">H", int(value) & 0xFFFF)
             )
         elif write_command == 16:  # Write Multiple Registers
@@ -280,8 +292,6 @@ class ModbusProtocolHelper(ProtocolHelper):
             _LOGGER.error("Unsupported write command: %d", write_command)
             return b""
 
-        # crc = self.crc16(packed_data)
-        # packed_data += struct.pack(">H", crc)
         return packed_data
 
     async def send_data(self, hass: HomeAssistant, url: str, data: bytes) -> bytes:
