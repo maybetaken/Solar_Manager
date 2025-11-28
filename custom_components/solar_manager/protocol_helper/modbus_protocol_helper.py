@@ -39,14 +39,12 @@ class ModbusProtocolHelper(ProtocolHelper):
         """Read data from the device for a specific register."""
         if self.protocol_data is None:
             self.protocol_data = await self.load_protocol()
-
         return None
 
     async def write_data(self, register_name: str, value: Any) -> None:
         """Write data to the device for a specific register."""
         if self.protocol_data is None:
             self.protocol_data = await self.load_protocol()
-
         await self.callback(register_name, value)
 
     def parse_data(self, data: bytes) -> dict[int, Any]:
@@ -56,162 +54,98 @@ class ModbusProtocolHelper(ProtocolHelper):
         """
         try:
             if len(data) < 6:
-                _LOGGER.error("Payload too short for TLD format: %d bytes", len(data))
+                _LOGGER.error("Payload too short: %d bytes", len(data))
                 return {}
 
-            # Determine endianness
             endianness = self.protocol_data.get("endianness", "BE")
-            endian_prefix = ">" if endianness == "BE" else "<"
-            if endianness not in ("BE", "LE"):
-                _LOGGER.warning(
-                    "Unsupported endianness: %s, defaulting to BE", endianness
-                )
-                endian_prefix = ">"
+            # 新增: 寻址模式 'register' (默认, 兼容旧设备) 或 'byte' (极空BMS)
+            addressing_mode = self.protocol_data.get("addressing", "register")
 
-            # Unpack slave_id, read_command, start_address, and length
+            endian_prefix = ">" if endianness == "BE" else "<"
+
             slave_id, read_command, start_address, length = struct.unpack(
                 f"{endian_prefix}BBHH", data[:6]
             )
             data_bytes = data[6:]
-            read_command = read_command << 20  # Retain original shift
+            read_command = read_command << 20
 
             parsed_data = {}
-            if read_command in (
-                1 << 20,
-                2 << 20,
-            ):  # Handle COIL (0x01) or DISCRETE_INPUT (0x02)
+
+            # 处理位操作 (Coil/Discrete)
+            if read_command in (1 << 20, 2 << 20):
                 expected_bytes = (length + 7) // 8
                 if len(data_bytes) < expected_bytes:
-                    _LOGGER.error(
-                        "Insufficient data for %s: need %d bytes, have %d",
-                        "COIL" if read_command == (0x01 << 20) else "DISCRETE_INPUT",
-                        expected_bytes,
-                        len(data_bytes),
-                    )
                     return {}
-
                 for i in range(length):
-                    register_address = read_command + start_address + i
-                    register_info = self.protocol_data["registers"].get(
-                        register_address
-                    )
-                    if not register_info or register_info.get("type") not in (
-                        "COIL",
-                        "DISCRETE_INPUT",
-                    ):
-                        continue
+                    reg_addr = read_command + start_address + i
+                    reg_info = self.protocol_data["registers"].get(reg_addr)
+                    if reg_info:
+                        byte_idx = i // 8
+                        bit_idx = i % 8
+                        val = (data_bytes[byte_idx] >> bit_idx) & 0x01
+                        parsed_data[reg_addr] = val
 
-                    byte_index = i // 8
-                    bit_index = i % 8
-                    value = (data_bytes[byte_index] >> bit_index) & 0x01
-                    parsed_data[register_address] = value
-                    _LOGGER.debug(
-                        "Parsed register 0x%08X: type=%s, value=%s",
-                        register_address,
-                        register_info.get("type"),
-                        value,
-                    )
-            else:  # Handle registers (0x03, 0x04, etc.)
+            # 处理寄存器数据
+            else:
+                total_bytes = len(data_bytes)
                 byte_offset = 0
-                i = 0
-                while i < length:
-                    register_address = read_command + start_address + i
-                    register_info = self.protocol_data["registers"].get(
-                        register_address
-                    )
 
+                # 使用字节偏移量循环，而不是寄存器索引
+                while byte_offset < total_bytes:
+                    # 计算当前的 Key
+                    if addressing_mode == "byte":
+                        # 字节寻址模式：Key = 起始地址 + 当前字节偏移量
+                        # 适合 JK-BMS 这种把地址当偏移量用的协议
+                        current_key = read_command + start_address + byte_offset
+                    else:
+                        # 寄存器寻址模式 (标准 Modbus)：Key = 起始地址 + (偏移量 / 2)
+                        # 适合 MakeSkyBlue 等标准设备
+                        current_key = read_command + start_address + (byte_offset // 2)
+
+                    register_info = self.protocol_data["registers"].get(current_key)
+
+                    # 如果当前地址没有定义，跳过 1 个字节继续尝试
+                    # (标准模式下通常跳过2字节，但为了鲁棒性，逐字节扫描也无妨，只要Key对不上)
                     if not register_info:
-                        # Skip 2 bytes (standard Modbus register size) if undefined
-                        # Assuming standard alignment for gaps
-                        byte_offset += 2
-                        i += 1
+                        byte_offset += 1
                         continue
 
                     data_type = register_info.get("type")
                     if data_type not in TYPE_FORMATS:
-                        _LOGGER.error(
-                            "Unsupported data type %s for register 0x%08X",
-                            data_type,
-                            register_address,
-                        )
-                        byte_offset += 2
-                        i += 1
+                        byte_offset += 1
                         continue
 
                     if data_type == "STRING":
-                        str_length = register_info.get("length")
-                        if not isinstance(str_length, int) or str_length <= 0:
-                            _LOGGER.error(
-                                "Invalid or missing length for STRING register 0x%08X",
-                                register_address,
-                            )
-                            # Skip standard register size as fallback
-                            byte_offset += 2
-                            i += 1
-                            continue
-
-                        if byte_offset + str_length > len(data_bytes):
-                            _LOGGER.error(
-                                "Insufficient data for STRING register 0x%08X: need %d bytes, have %d",
-                                register_address,
-                                str_length,
-                                len(data_bytes) - byte_offset,
-                            )
+                        str_len = register_info.get("length", 0)
+                        if byte_offset + str_len > total_bytes:
                             break
 
-                        str_bytes = data_bytes[byte_offset : byte_offset + str_length]
-                        value = (
-                            str_bytes.decode("ascii", errors="replace")
-                            .rstrip("\x00")
-                            .rstrip()
+                        val_bytes = data_bytes[byte_offset : byte_offset + str_len]
+                        val = (
+                            val_bytes.decode("ascii", errors="replace")
+                            .strip("\x00")
+                            .strip()
                         )
-                        parsed_data[register_address] = value
+                        parsed_data[current_key] = val
+                        byte_offset += str_len
 
-                        # Advance pointers
-                        byte_offset += str_length
-                        # For strings, we assume register count based on 2 bytes per register
-                        i += (str_length + 1) // 2
-
-                        _LOGGER.debug(
-                            "Parsed register 0x%08X: type=STRING, value=%s",
-                            register_address,
-                            value,
-                        )
                     else:
-                        fmt, byte_size = TYPE_FORMATS[data_type]
-                        if byte_offset + byte_size > len(data_bytes):
-                            _LOGGER.error(
-                                "Insufficient data for register 0x%08X: need %d bytes, have %d",
-                                register_address,
-                                byte_size,
-                                len(data_bytes) - byte_offset,
-                            )
+                        fmt, type_size = TYPE_FORMATS[data_type]
+
+                        # 检查剩余长度是否足够
+                        if byte_offset + type_size > total_bytes:
                             break
 
-                        value = struct.unpack(
+                        val = struct.unpack(
                             f"{endian_prefix}{fmt}",
-                            data_bytes[byte_offset : byte_offset + byte_size],
+                            data_bytes[byte_offset : byte_offset + type_size],
                         )[0]
-                        parsed_data[register_address] = value
 
-                        # Update pointers
-                        byte_offset += byte_size
+                        parsed_data[current_key] = val
 
-                        # --- Logic Update for 1-byte types (JK-BMS support) ---
-                        if byte_size == 1:
-                            # If it's UINT8/INT8, we advance 1 register address unit
-                            # (because JK-BMS maps 1 byte to 1 address offset)
-                            i += 1
-                        else:
-                            # Standard Modbus: 2 bytes = 1 register address unit
-                            i += byte_size // 2
-
-                        _LOGGER.debug(
-                            "Parsed register 0x%08X: type=%s, value=%s",
-                            register_address,
-                            data_type,
-                            value,
-                        )
+                        # ★ 核心逻辑：根据数据类型实际大小前进
+                        # UINT8 跳 1 字节, UINT16 跳 2 字节, UINT32 跳 4 字节
+                        byte_offset += type_size
 
         except struct.error as e:
             _LOGGER.error("Failed to parse TLD payload: %s", e)
@@ -222,64 +156,29 @@ class ModbusProtocolHelper(ProtocolHelper):
     def pack_data(
         self, slave_id: int, address: int, value: Any, write_command: int = 6
     ) -> bytes:
-        """Pack data according to the protocol for Modbus commands."""
+        """Pack data for write commands."""
         address = address & 0xFFFF
         packed_data = b""
 
-        if write_command == 5:  # Write Single Coil
-            if isinstance(value, bool):
-                coil_value = 0xFF00 if value else 0x0000
-            elif isinstance(value, int) and value in (0, 1):
-                coil_value = 0xFF00 if value == 1 else 0x0000
-            else:
-                _LOGGER.error(
-                    "Value for coil must be bool or int (0/1), got %s", type(value)
-                )
-                return b""
+        # 写入单个寄存器 (Modbus 协议底层写入最小单位通常是 2字节)
+        # 即使是 UINT8，通常也是写入一个寄存器，设备取低位
+        if write_command == 6:
             packed_data = (
                 struct.pack(">B", slave_id)
                 + struct.pack(">B", write_command)
                 + struct.pack(">H", address)
-                + struct.pack(">H", coil_value)
-            )
-        elif write_command == 6:  # Write Single Register
-            if not isinstance(value, (int, float)):
-                _LOGGER.error(
-                    "Value for single register must be int or float, got %s",
-                    type(value),
-                )
-                return b""
-            packed_data = (
-                struct.pack(">B", slave_id)
-                + struct.pack(">B", write_command)
-                + struct.pack(">H", address)
-                # Note: Even for UINT8 writes, Modbus protocol usually sends 16 bits (2 bytes).
-                # The device will take the lower byte.
                 + struct.pack(">H", int(value) & 0xFFFF)
             )
-        elif write_command == 16:  # Write Multiple Registers
+        # 写入多个寄存器 (功能码 16)
+        elif write_command == 16:
             if not isinstance(value, (list, tuple)):
-                _LOGGER.error(
-                    "Value for multiple registers must be a list or tuple, got %s",
-                    type(value),
-                )
                 return b""
             num_regs = len(value)
-            if num_regs == 0 or num_regs > 123:
-                _LOGGER.error(
-                    "Invalid number of registers: %d (must be 1-123)", num_regs
-                )
-                return b""
             byte_count = num_regs * 2
             data_bytes = b""
             for val in value:
-                if not isinstance(val, (int, float)):
-                    _LOGGER.error(
-                        "Each value for multiple registers must be int or float, got %s",
-                        type(val),
-                    )
-                    return b""
                 data_bytes += struct.pack(">H", int(val) & 0xFFFF)
+
             packed_data = (
                 struct.pack(">B", slave_id)
                 + struct.pack(">B", write_command)
@@ -288,17 +187,21 @@ class ModbusProtocolHelper(ProtocolHelper):
                 + struct.pack(">B", byte_count)
                 + data_bytes
             )
-        else:
-            _LOGGER.error("Unsupported write command: %d", write_command)
-            return b""
+
+        # 保持对 Coil (5) 的支持...
+        elif write_command == 5:
+            coil_val = 0xFF00 if value else 0x0000
+            packed_data = (
+                struct.pack(">B", slave_id)
+                + struct.pack(">B", write_command)
+                + struct.pack(">H", address)
+                + struct.pack(">H", coil_val)
+            )
 
         return packed_data
 
     async def send_data(self, hass: HomeAssistant, url: str, data: bytes) -> bytes:
-        """Send data to the device and return the response."""
-        # Placeholder for actual Modbus communication
         return data
 
     def register_callback(self, callback: callable) -> None:
-        """Register a callback function to handle specific events."""
         self.callback = callback
