@@ -3,17 +3,18 @@
     "control_type": "MODBUS",
     "addressing": "byte",
     "segments": [
-        {"slave_id": 15, "start_address": "0x1400", "length": 20, "read_command": 3},
-        {"slave_id": 15, "start_address": "0x1000", "length": 100, "read_command": 3},
-        {"slave_id": 15, "start_address": "0x10C8", "length": 42, "read_command": 3},
-        {"slave_id": 15, "start_address": "0x1200", "length": 100, "read_command": 3},
-        {"slave_id": 15, "start_address": "0x12C8", "length": 35, "read_command": 3}
+        {"slave_id": 15, "start_address": 5120, "length": 20, "read_command": 3},
+        {"slave_id": 15, "start_address": 4096, "length": 100, "read_command": 3},
+        {"slave_id": 15, "start_address": 4296, "length": 42, "read_command": 3},
+        {"slave_id": 15, "start_address": 4608, "length": 100, "read_command": 3},
+        {"slave_id": 15, "start_address": 4808, "length": 35, "read_command": 3}
     ],
     "registers": {
         "0x301000": {
             "name": "setting_sleep_voltage",
             "type": "UINT32",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "step": 0.01,
             "icon": "mdi:sleep",
@@ -24,6 +25,7 @@
             "name": "setting_cell_uv_protect",
             "type": "UINT32",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "step": 0.01,
             "icon": "mdi:shield-alert",
@@ -34,6 +36,7 @@
             "name": "setting_cell_uv_recover",
             "type": "UINT32",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "step": 0.01,
             "icon": "mdi:shield-check",
@@ -44,6 +47,7 @@
             "name": "setting_cell_ov_protect",
             "type": "UINT32",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "step": 0.01,
             "icon": "mdi:shield-alert",
@@ -54,6 +58,7 @@
             "name": "setting_cell_ov_recover",
             "type": "UINT32",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "step": 0.01,
             "icon": "mdi:shield-check",
@@ -64,6 +69,7 @@
             "name": "setting_balance_trigger_voltage",
             "type": "UINT32",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "step": 0.01,
             "icon": "mdi:scale-balance",
@@ -74,6 +80,7 @@
             "name": "setting_soc_100_voltage",
             "type": "UINT32",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "step": 0.001,
             "icon": "mdi:battery-high",
@@ -84,6 +91,7 @@
             "name": "setting_soc_0_voltage",
             "type": "UINT32",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "step": 0.001,
             "icon": "mdi:battery-low",
@@ -94,6 +102,7 @@
             "name": "setting_sys_power_off_voltage",
             "type": "UINT32",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "step": 0.01,
             "icon": "mdi:power-off",
@@ -243,6 +252,7 @@
             "unit": "cells",
             "icon": "mdi:counter",
             "sensor_type": "number",
+            "display_precision": 0,
             "min_value": 3,
             "max_value": 32
         },
@@ -272,7 +282,7 @@
             "type": "UINT32",
             "scale": 0.001,
             "unit": "AMPERE_HOUR",
-            "icon": "mdi:battery-settings",
+            "icon": "mdi:battery-check",
             "sensor_type": "number"
         },
         "0x301080": {
@@ -286,6 +296,7 @@
             "name": "setting_start_balance_voltage",
             "type": "UINT32",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "icon": "mdi:scale-balance",
             "sensor_type": "number",
@@ -307,6 +318,7 @@
         "0x301114": {
             "name": "function_switch_bits",
             "type": "UINT16",
+            "display_precision": 0,
             "sensor_type": "sensor",
             "icon": "mdi:cpu-32-bit"
         },
@@ -333,12 +345,14 @@
         "0x301119": {
             "name": "setting_data_domain_enable",
             "type": "UINT8",
+            "display_precision" : 0,
             "sensor_type": "sensor"
         },
         "0x301200": {
             "name": "cell_voltage_01",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -347,6 +361,7 @@
             "name": "cell_voltage_02",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -355,6 +370,7 @@
             "name": "cell_voltage_03",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -363,6 +379,7 @@
             "name": "cell_voltage_04",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -371,6 +388,7 @@
             "name": "cell_voltage_05",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -379,6 +397,7 @@
             "name": "cell_voltage_06",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -387,6 +406,7 @@
             "name": "cell_voltage_07",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -395,6 +415,7 @@
             "name": "cell_voltage_08",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -403,6 +424,7 @@
             "name": "cell_voltage_09",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -411,6 +433,7 @@
             "name": "cell_voltage_10",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -419,6 +442,7 @@
             "name": "cell_voltage_11",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -427,6 +451,7 @@
             "name": "cell_voltage_12",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -435,6 +460,7 @@
             "name": "cell_voltage_13",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -443,6 +469,7 @@
             "name": "cell_voltage_14",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -451,6 +478,7 @@
             "name": "cell_voltage_15",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -459,6 +487,7 @@
             "name": "cell_voltage_16",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -467,6 +496,7 @@
             "name": "cell_voltage_17",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -475,6 +505,7 @@
             "name": "cell_voltage_18",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -483,6 +514,7 @@
             "name": "cell_voltage_19",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -491,6 +523,7 @@
             "name": "cell_voltage_20",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -499,6 +532,7 @@
             "name": "cell_voltage_21",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -507,6 +541,7 @@
             "name": "cell_voltage_22",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -515,6 +550,7 @@
             "name": "cell_voltage_23",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -523,6 +559,7 @@
             "name": "cell_voltage_24",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -531,6 +568,7 @@
             "name": "cell_voltage_25",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -539,6 +577,7 @@
             "name": "cell_voltage_26",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -547,6 +586,7 @@
             "name": "cell_voltage_27",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -555,6 +595,7 @@
             "name": "cell_voltage_28",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -563,6 +604,7 @@
             "name": "cell_voltage_29",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -571,6 +613,7 @@
             "name": "cell_voltage_30",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -579,6 +622,7 @@
             "name": "cell_voltage_31",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -587,6 +631,7 @@
             "name": "cell_voltage_32",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -601,6 +646,7 @@
             "name": "cell_avg_voltage",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -609,6 +655,7 @@
             "name": "cell_diff_voltage",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -866,6 +913,7 @@
             "name": "total_voltage",
             "type": "UINT32",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage",
@@ -908,6 +956,7 @@
         "0x3012A0": {
             "name": "system_alarm_status",
             "type": "UINT32",
+            "display_precision" : 0,
             "sensor_type": "sensor",
             "icon": "mdi:alert"
         },
@@ -978,6 +1027,7 @@
             "name": "uptime",
             "type": "UINT32",
             "unit": "SECONDS",
+            "display_precision" : 0,
             "sensor_type": "sensor",
             "icon": "mdi:clock-outline"
         },
@@ -1000,6 +1050,7 @@
             "name": "time_discharge_oc_release",
             "type": "UINT16",
             "unit": "SECONDS",
+            "display_precision" : 0,
             "sensor_type": "sensor"
         },
         "0x3012C6": {
@@ -1034,6 +1085,7 @@
         },
         "0x3012D0": {
             "name": "temp_sensor_missing_status",
+            "display_precision" : 0,
             "type": "UINT8",
             "sensor_type": "sensor"
         },
@@ -1059,6 +1111,7 @@
             "name": "charge_sense_voltage",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -1067,6 +1120,7 @@
             "name": "discharge_sense_voltage",
             "type": "UINT16",
             "scale": 0.001,
+            "display_precision": 3,
             "unit": "VOLT",
             "sensor_type": "sensor",
             "device_class": "voltage"
@@ -1105,7 +1159,6 @@
             "sensor_type": "sensor",
             "device_class": "current"
         },
-        "0x3012EE": {"name": "rvd_reserved", "type": "UINT8", "sensor_type": "sensor"},
         "0x3012EF": {
             "name": "charger_plugged_in",
             "type": "UINT8",

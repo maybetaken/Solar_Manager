@@ -960,7 +960,6 @@
             "discharge_pwm": { "name": "Discharge PWM" },
             "bat_vol_adc": { "name": "Battery Voltage ADC" },
             "heating_current": { "name": "Heating Current" },
-            "rvd_reserved": { "name": "RVD Reserved" },
             "charger_plugged_in": { "name": "Charger Plugged In" },
             "sys_ticks": { "name": "System Ticks" },
             "pvd_timestamp": { "name": "PVD Timestamp" },
