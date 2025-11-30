@@ -56,6 +56,8 @@ class BaseDevice(ABC):
         self._topic_segment = topic_segment or ""
         self._enable_diagnostics = enable_diagnostics
         self.cmd_topic = self._build_topic("control", "cmd")
+        self._heartbeat_task = None
+        self._heartbeat_interval = timedelta(seconds=5)
 
         self._diagnostics = (
             {"ssid": None, "rssi": None, "led": None} if enable_diagnostics else {}
@@ -96,6 +98,8 @@ class BaseDevice(ABC):
         if self._enable_diagnostics:
             self._reset_diagnostics_clear_timer()
         self._reset_notify_clear_timer()
+
+        self._start_heartbeat()
 
     async def handle_online(self, topic: str, payload: bytes) -> None:
         """Handle device online message."""
@@ -303,6 +307,29 @@ class BaseDevice(ABC):
     def setup_protocol(self) -> None:
         """Set up device-specific protocol parameters."""
 
+    def _start_heartbeat(self) -> None:
+        """Start periodic heartbeat publishing."""
+        if self._heartbeat_task:
+            self._heartbeat_task()
+        # Use async_track_time_interval to schedule recurring heartbeat
+        self._heartbeat_task = async_track_time_interval(
+            self.hass, self._send_heartbeat, self._heartbeat_interval
+        )
+        _LOGGER.debug(
+            "Started heartbeat every %s for %s", self._heartbeat_interval, self.sn
+        )
+
+    async def _send_heartbeat(self, now=None) -> None:
+        """Publish a heartbeat message to the host."""
+        try:
+            topic = self._build_topic("host", "heartbeat")
+            # Payload can be empty or simple string — your C code only checks data_len > 0
+            payload = "alive"
+            await self.mqtt_manager.publish(topic, payload)
+            _LOGGER.debug("Sent heartbeat to %s", topic)
+        except Exception as e:
+            _LOGGER.warning("Failed to send heartbeat for %s: %s", self.sn, e)
+
     def cleanup(self) -> None:
         """Cleanup device resources."""
         if self._enable_diagnostics:
@@ -315,6 +342,9 @@ class BaseDevice(ABC):
         if self._diagnostics_clear_task:
             self._diagnostics_clear_task()
             self._diagnostics_clear_task = None
+        if self._heartbeat_task:
+            self._heartbeat_task()
+            self._heartbeat_task = None
         if self._notify_clear_task:
             self._notify_clear_task()
             self._notify_clear_task = None
