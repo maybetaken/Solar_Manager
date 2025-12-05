@@ -34,7 +34,7 @@ DEVICE_CONFIG = {
         "protocol": "pzem_v04",
         "device_class": PZemV04,
     },
-    "Jk BMS": {
+    "JK BMS": {
         "protocol": "jkbms",
         "device_class": JkBms,
     },

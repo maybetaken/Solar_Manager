@@ -15,8 +15,13 @@ from homeassistant.components.mqtt import DOMAIN as MQTT_DOMAIN, MqttData
 from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import HomeAssistantError
+from homeassistant.helpers.selector import (
+    NumberSelector,
+    NumberSelectorConfig,
+    NumberSelectorMode,
+)
 
-from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
+from .const import CONF_MODEL, CONF_SERIAL, CONF_SLAVE, DOMAIN
 from .device_protocol.device_config import PROTOCOL_MAP, SUPPORTED_MODELS
 
 STEP_USER_DATA_SCHEMA = vol.Schema(
@@ -28,6 +33,19 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
 STEP_MODEL_DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_MODEL, default="MakeSkyBlue"): vol.In(SUPPORTED_MODELS),
+    }
+)
+
+STEP_SETTINGS_DATA_SCHEMA = vol.Schema(
+    {
+        vol.Required(CONF_SLAVE, default=15): NumberSelector(
+            NumberSelectorConfig(
+                min=0,
+                max=255,
+                step=1,
+                mode=NumberSelectorMode.BOX,
+            )
+        ),
     }
 )
 
@@ -72,11 +90,12 @@ class SolarManagerConfigFlow(ConfigFlow, domain=DOMAIN):
     def __init__(self) -> None:
         """Initialize the config flow."""
         self._serial = None
+        self._model = None
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Handle the initial step."""
+        """Step 1: Handle the serial number input."""
         errors: dict[str, str] = {}
 
         if not await check_mqtt_connection(self.hass):
@@ -88,7 +107,6 @@ class SolarManagerConfigFlow(ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             self._serial = user_input[CONF_SERIAL]
 
-            # Check if serial already exists
             if any(
                 entry.data[CONF_SERIAL] == self._serial
                 for entry in self._async_current_entries()
@@ -104,36 +122,82 @@ class SolarManagerConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_model(
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
-        """Handle the model selection step."""
+        """Step 2: Handle the model selection."""
         errors: dict[str, str] = {}
 
         if user_input is not None:
-            try:
-                model = user_input[CONF_MODEL]
-                await validate_input(
-                    self.hass,
-                    {CONF_SERIAL: self._serial, CONF_MODEL: model},
-                )
-                protocol = PROTOCOL_MAP.get(model)
-                if protocol is None:
-                    errors["base"] = "invalid_model"
-                else:
-                    return self.async_create_entry(
-                        title=f"{model} ({self._serial})",
-                        data={
-                            CONF_SERIAL: self._serial,
-                            CONF_MODEL: model,
-                        },
-                    )
-            except CannotConnect:
-                errors["base"] = "cannot_connect"
-            except InvalidAuth:
-                errors["base"] = "invalid_auth"
-            except Exception:  # noqa: BLE001
-                errors["base"] = "unknown"
+            self._model = user_input[CONF_MODEL]
+
+            if self._model == "JK BMS":
+                return await self.async_step_settings()
+
+            return await self._async_create_entry_helper(
+                slave_id=None, error_step="model"
+            )
 
         return self.async_show_form(
             step_id="model", data_schema=STEP_MODEL_DATA_SCHEMA, errors=errors
+        )
+
+    async def async_step_settings(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Step 3: Handle the Slave ID setting (Only for JK BMS)."""
+        errors: dict[str, str] = {}
+
+        if user_input is not None:
+            slave_id = user_input[CONF_SLAVE]
+            return await self._async_create_entry_helper(
+                slave_id=slave_id, error_step="settings"
+            )
+
+        return self.async_show_form(
+            step_id="settings",
+            data_schema=STEP_SETTINGS_DATA_SCHEMA,
+            errors=errors,
+            description_placeholders={"model": self._model},
+        )
+
+    async def _async_create_entry_helper(
+        self, slave_id: int | None, error_step: str
+    ) -> ConfigFlowResult:
+        """Common helper to validate and create the entry."""
+        errors: dict[str, str] = {}
+        try:
+            await validate_input(
+                self.hass,
+                {CONF_SERIAL: self._serial, CONF_MODEL: self._model},
+            )
+
+            protocol = PROTOCOL_MAP.get(self._model)
+            if protocol is None:
+                errors["base"] = "invalid_model"
+            else:
+                data = {
+                    CONF_SERIAL: self._serial,
+                    CONF_MODEL: self._model,
+                }
+                if slave_id is not None:
+                    data[CONF_SLAVE] = slave_id
+
+                return self.async_create_entry(
+                    title=f"{self._model} ({self._serial})",
+                    data=data,
+                )
+        except CannotConnect:
+            errors["base"] = "cannot_connect"
+        except InvalidAuth:
+            errors["base"] = "invalid_auth"
+        except Exception:  # noqa: BLE001
+            errors["base"] = "unknown"
+
+        schema = (
+            STEP_SETTINGS_DATA_SCHEMA
+            if error_step == "settings"
+            else STEP_MODEL_DATA_SCHEMA
+        )
+        return self.async_show_form(
+            step_id=error_step, data_schema=schema, errors=errors
         )
 
 

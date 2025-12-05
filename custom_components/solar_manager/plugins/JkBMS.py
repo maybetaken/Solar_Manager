@@ -24,12 +24,12 @@ class JkBms(BaseDevice):
     """JkBms device class for Solar Manager integration."""
 
     def __init__(
-        self, hass: HomeAssistant, protocol_file: str, sn: str, model: str
+        self, hass: HomeAssistant, protocol_file: str, sn: str, model: str, id: int = 15
     ) -> None:
         """Init."""
         super().__init__(hass, protocol_file, sn, model)
         self.parser = ModbusProtocolHelper(hass, protocol_file)
-        self.slave_id = 15
+        self.slave_id = int(id)
         self.setup_protocol()
         self._register_to_name = {}
         self._unknown_registers = set()
@@ -37,7 +37,14 @@ class JkBms(BaseDevice):
     async def send_config(self) -> None:
         """Send config via MQTT."""
         try:
-            config = {"segments": self.parser.protocol_data.get("segments", [])}
+            raw_segments = self.parser.protocol_data.get("segments", [])
+
+            final_segments = [
+                {**seg, "slave_id": self.slave_id} for seg in raw_segments
+            ]
+
+            config = {"segments": final_segments}
+
             await self.mqtt_manager.publish(
                 self._build_topic("config"), json.dumps(config)
             )
@@ -61,8 +68,6 @@ class JkBms(BaseDevice):
             self._register_to_name[register] = name
             sensor_type = details.get("sensor_type", "sensor")
 
-            # ★★★ 修复点：display_precision 默认值改为 None，不要用 0 ★★★
-            # 只有当它是 None 时，HA 才允许字符串类型的状态
             entity_def = {
                 "addressing": "byte",
                 "name": name,

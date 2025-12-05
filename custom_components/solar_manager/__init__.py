@@ -13,7 +13,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 
-from .const import _LOGGER, CONF_MODEL, CONF_SERIAL, DOMAIN
+from .const import _LOGGER, CONF_MODEL, CONF_SERIAL, CONF_SLAVE, DOMAIN
 from .device_protocol.device_config import DEVICE_CLASS_MAP, PROTOCOL_MAP
 from .mqtt_helper.mqtt_global import get_mqtt_manager
 from .ssdp import SSDPBroadcaster
@@ -70,7 +70,11 @@ async def async_setup_entry(
         return False
 
     protocol_file_path = Path(__file__).parent / "device_protocol" / f"{protocol}.json"
-    device = device_class(hass, protocol_file_path, serial, model)
+    if model == "JK BMS":
+        slave_id = entry.data.get(CONF_SLAVE, 15)
+        device = device_class(hass, protocol_file_path, serial, model, id=slave_id)
+    else:
+        device = device_class(hass, protocol_file_path, serial, model)
 
     await device.load_protocol()
 

@@ -13,5 +13,6 @@ DOMAIN = "solar_manager"
 CONF_SERIAL: str = "serial"
 CONF_MODEL: str = "model"
 CONF_PROTOCOL: str = "protocol"
+CONF_SLAVE: str = "slave_id"
 
 _LOGGER = logging.getLogger(__name__)
