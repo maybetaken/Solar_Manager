@@ -5,6 +5,7 @@ licensed under Creative Commons
 Attribution-NonCommercial-NoDerivatives 4.0 International.
 """
 
+from custom_components.solar_manager.plugins.DDSU666 import ChintDDSU666
 from custom_components.solar_manager.plugins.JkBMS import JkBms
 from custom_components.solar_manager.plugins.MakeSkyBlue import MakeSkyBlueDevice
 from custom_components.solar_manager.plugins.MakeSkyBlueIoTrix import MakeSkyBlueIoTrix
@@ -38,10 +39,10 @@ DEVICE_CONFIG = {
         "protocol": "jkbms",
         "device_class": JkBms,
     },
-    # "ChintMeter": {
-    #     "protocol": "chintmeter",
-    #     "device_class": None,
-    # },
+    "DDSU666": {
+        "protocol": "ddsu666",
+        "device_class": ChintDDSU666,
+    },
 }
 
 # Derived lists and mappings

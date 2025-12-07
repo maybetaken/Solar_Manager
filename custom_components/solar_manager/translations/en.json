@@ -38,7 +38,8 @@
             },
             "clear_arc_alarm": {
                 "name": "Clear arc alarm"
-            }
+            },
+            "clear_energy": { "name": "Clear Total Energy" }
         },
         "switch": {
             "led": {
@@ -1033,7 +1034,11 @@
             "wire_res_29": { "name": "Cell Wire Resistance 29" },
             "wire_res_30": { "name": "Cell Wire Resistance 30" },
             "wire_res_31": { "name": "Cell Wire Resistance 31" },
-            "wire_res_32": { "name": "Cell Wire Resistance 32" }
+            "wire_res_32": { "name": "Cell Wire Resistance 32" },
+            "phase_a_voltage": { "name": "Phase A Voltage" },
+            "phase_a_current": { "name": "Phase A Current" },
+            "reactive_power": { "name": "Reactive Power" },
+            "apparent_power": { "name": "Apparent Power" }
         },
         "select": {
             "work_mode": {

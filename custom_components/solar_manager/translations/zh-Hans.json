@@ -38,7 +38,8 @@
             },
             "clear_arc_alarm": {
                 "name": "清除拉弧告警"
-            }
+            },
+            "clear_energy": { "name": "电能清零" }
         },
         "switch": {
             "led": {
@@ -922,7 +923,7 @@
                 "name": "有功功率"
             },
             "active_energy": {
-                "name": "有功能量"
+                "name": "有功电能"
             },
             "frequency": {
                 "name": "频率"
@@ -1054,7 +1055,11 @@
             "wire_res_29": { "name": "均衡线电阻 29" },
             "wire_res_30": { "name": "均衡线电阻 30" },
             "wire_res_31": { "name": "均衡线电阻 31" },
-            "wire_res_32": { "name": "均衡线电阻 32" }
+            "wire_res_32": { "name": "均衡线电阻 32" },
+            "phase_a_voltage": { "name": "A相电压" },
+            "phase_a_current": { "name": "A相电流" },
+            "reactive_power": { "name": "无功功率" },
+            "apparent_power": { "name": "视在功率" }
         },
         "select": {
             "work_mode": {

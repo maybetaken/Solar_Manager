@@ -1,0 +1,106 @@
+{
+    "endianness": "BE",
+    "control_type": "MODBUS",
+    "segments": [
+        {"slave_id": 1, "start_address": 8192,"length": 16, "read_command": 3},
+        {"slave_id": 1, "start_address": 16384, "length": 2, "read_command": 3}
+    ],
+    "registers": {
+        "0x0002": {
+            "name": "clear_energy",
+            "sensor_type": "button",
+            "icon": "mdi:delete-restore",
+            "write_command": 6,
+            "write_value": 1,
+            "device_class": "restart"
+        },
+        "0x302000": {
+            "name": "phase_a_voltage",
+            "type": "FLOAT",
+            "scale": 1,
+            "sensor_type": "sensor",
+            "unit": "VOLT",
+            "display_precision": 1,
+            "icon": "mdi:flash",
+            "device_class": "voltage",
+            "state_class": "measurement"
+        },
+        "0x302002": {
+            "name": "phase_a_current",
+            "type": "FLOAT",
+            "scale": 1,
+            "sensor_type": "sensor",
+            "unit": "AMPERE",
+            "display_precision": 2,
+            "icon": "mdi:current-ac",
+            "device_class": "current",
+            "state_class": "measurement"
+        },
+        "0x302004": {
+            "name": "active_power",
+            "type": "FLOAT",
+            "scale": 1,
+            "sensor_type": "sensor",
+            "unit": "WATT",
+            "display_precision": 1,
+            "icon": "mdi:home-lightning-bolt",
+            "device_class": "power",
+            "state_class": "measurement"
+        },
+        "0x302006": {
+            "name": "reactive_power",
+            "type": "FLOAT",
+            "scale": 1,
+            "sensor_type": "sensor",
+            "unit": "WATT",
+            "display_precision": 1,
+            "icon": "mdi:flash-outline",
+            "device_class": "reactive_power",
+            "state_class": "measurement"
+        },
+        "0x302008": {
+            "name": "apparent_power",
+            "type": "FLOAT",
+            "scale": 1,
+            "sensor_type": "sensor",
+            "unit": "WATT",
+            "display_precision": 1,
+            "icon": "mdi:flash-auto",
+            "device_class": "apparent_power",
+            "state_class": "measurement"
+        },
+        "0x30200A": {
+            "name": "power_factor",
+            "type": "FLOAT",
+            "scale": 1,
+            "sensor_type": "sensor",
+            "unit": "",
+            "display_precision": 2,
+            "icon": "mdi:angle-acute",
+            "device_class": "power_factor",
+            "state_class": "measurement"
+        },
+        "0x30200E": {
+            "name": "grid_frequency",
+            "type": "FLOAT",
+            "scale": 1,
+            "sensor_type": "sensor",
+            "unit": "HERTZ",
+            "display_precision": 2,
+            "icon": "mdi:sine-wave",
+            "device_class": "frequency",
+            "state_class": "measurement"
+        },
+        "0x304000": {
+            "name": "active_energy",
+            "type": "FLOAT",
+            "scale": 1,
+            "sensor_type": "sensor",
+            "unit": "KILO_WATT_HOUR",
+            "display_precision": 2,
+            "icon": "mdi:meter-electric-outline",
+            "device_class": "energy",
+            "state_class": "total_increasing"
+        }
+    }
+}
