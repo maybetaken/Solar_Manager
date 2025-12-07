@@ -56,6 +56,27 @@ class SolarManagerActionButton(ButtonEntity):
         }
 
 
+class SolarManagerCommandButton(SolarManagerActionButton):
+    """Representation of a Solar Manager Modbus Command button."""
+
+    def __init__(
+        self,
+        register: int,
+        payload: int,
+        *args,
+        **kwargs,
+    ) -> None:
+        """Initialize the command button."""
+        super().__init__(*args, **kwargs)
+        self._register = register
+        self._payload = payload
+
+    async def async_press(self) -> None:
+        """Handle the button press by sending a specific command."""
+        if hasattr(self._device, "handle_cmd"):
+            await self._device.handle_cmd(self._register, self._payload)
+
+
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
@@ -63,17 +84,32 @@ async def async_setup_entry(
     entities = []
     serial = entry.data[CONF_SERIAL]
     model = entry.data[CONF_MODEL]
+    buttons_data = hass.data[DOMAIN][serial].get(Platform.BUTTON, [])
 
-    for device in hass.data[DOMAIN][serial].get(Platform.BUTTON, []):
-        unique_id = f"{device['name']}_action_{model}_{serial}"
-        button = SolarManagerActionButton(
-            name=device["name"],
-            model=model,
-            device=device["device"],
-            unique_id=unique_id,
-            device_id=serial,
-            icon=device.get("icon"),
-        )
+    for device_data in buttons_data:
+        unique_id = f"{device_data['name']}_action_{model}_{serial}"
+
+        if "register" in device_data:
+            button = SolarManagerCommandButton(
+                name=device_data["name"],
+                model=model,
+                device=device_data["device"],
+                unique_id=unique_id,
+                device_id=serial,
+                icon=device_data.get("icon"),
+                register=device_data["register"],
+                payload=device_data.get("payload_press", 1),
+            )
+        else:
+            button = SolarManagerActionButton(
+                name=device_data["name"],
+                model=model,
+                device=device_data["device"],
+                unique_id=unique_id,
+                device_id=serial,
+                icon=device_data.get("icon"),
+            )
+
         entities.append(button)
 
     async_add_entities(entities)
