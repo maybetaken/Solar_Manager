@@ -19,21 +19,9 @@ DEVICE_CONFIG = {
         "protocol": "makeskyblue",
         "device_class": MakeSkyBlueDevice,
     },
-    "MakeSkyBlue IoTrix": {
-        "protocol": "makeskyblue",
-        "device_class": MakeSkyBlueIoTrix,
-    },
     "MakeSkyBlue MPPT": {
         "protocol": "makeskybluemppt",
         "device_class": MakeSkyBlueMppt,
-    },
-    "Megarevo": {
-        "protocol": "megarevo",
-        "device_class": Megarevo,
-    },
-    "PZEMV04": {
-        "protocol": "pzem_v04",
-        "device_class": PZemV04,
     },
     "JK BMS": {
         "protocol": "jkbms",
@@ -42,6 +30,18 @@ DEVICE_CONFIG = {
     "DDSU666": {
         "protocol": "ddsu666",
         "device_class": ChintDDSU666,
+    },
+    "MakeSkyBlue IoTrix": {
+        "protocol": "makeskyblue",
+        "device_class": MakeSkyBlueIoTrix,
+    },
+    "Megarevo": {
+        "protocol": "megarevo",
+        "device_class": Megarevo,
+    },
+    "PZEMV04": {
+        "protocol": "pzem_v04",
+        "device_class": PZemV04,
     },
 }
 
