@@ -74,7 +74,7 @@ class JkBms(BaseDevice):
                 "scale": details.get("scale", 1),
                 "unit": details.get("unit"),
                 "icon": details.get("icon"),
-                "display_precision": details.get("display_precision", 0),
+                "display_precision": details.get("display_precision"),
                 "device": self,
                 "offset": details.get("offset", 0),
                 "device_class": details.get("device_class", "None"),
