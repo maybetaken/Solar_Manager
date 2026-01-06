@@ -58,7 +58,6 @@ class ModbusProtocolHelper(ProtocolHelper):
                 return {}
 
             endianness = self.protocol_data.get("endianness", "BE")
-            # 新增: 寻址模式 'register' (默认, 兼容旧设备) 或 'byte' (极空BMS)
             addressing_mode = self.protocol_data.get("addressing", "register")
 
             endian_prefix = ">" if endianness == "BE" else "<"
@@ -71,7 +70,6 @@ class ModbusProtocolHelper(ProtocolHelper):
 
             parsed_data = {}
 
-            # 处理位操作 (Coil/Discrete)
             if read_command in (1 << 20, 2 << 20):
                 expected_bytes = (length + 7) // 8
                 if len(data_bytes) < expected_bytes:
@@ -85,27 +83,18 @@ class ModbusProtocolHelper(ProtocolHelper):
                         val = (data_bytes[byte_idx] >> bit_idx) & 0x01
                         parsed_data[reg_addr] = val
 
-            # 处理寄存器数据
             else:
                 total_bytes = len(data_bytes)
                 byte_offset = 0
 
-                # 使用字节偏移量循环，而不是寄存器索引
                 while byte_offset < total_bytes:
-                    # 计算当前的 Key
                     if addressing_mode == "byte":
-                        # 字节寻址模式：Key = 起始地址 + 当前字节偏移量
-                        # 适合 JK-BMS 这种把地址当偏移量用的协议
                         current_key = read_command + start_address + byte_offset
                     else:
-                        # 寄存器寻址模式 (标准 Modbus)：Key = 起始地址 + (偏移量 / 2)
-                        # 适合 MakeSkyBlue 等标准设备
                         current_key = read_command + start_address + (byte_offset // 2)
 
                     register_info = self.protocol_data["registers"].get(current_key)
 
-                    # 如果当前地址没有定义，跳过 1 个字节继续尝试
-                    # (标准模式下通常跳过2字节，但为了鲁棒性，逐字节扫描也无妨，只要Key对不上)
                     if not register_info:
                         byte_offset += 1
                         continue
@@ -132,7 +121,6 @@ class ModbusProtocolHelper(ProtocolHelper):
                     else:
                         fmt, type_size = TYPE_FORMATS[data_type]
 
-                        # 检查剩余长度是否足够
                         if byte_offset + type_size > total_bytes:
                             break
 
@@ -143,8 +131,6 @@ class ModbusProtocolHelper(ProtocolHelper):
 
                         parsed_data[current_key] = val
 
-                        # ★ 核心逻辑：根据数据类型实际大小前进
-                        # UINT8 跳 1 字节, UINT16 跳 2 字节, UINT32 跳 4 字节
                         byte_offset += type_size
 
         except struct.error as e:
@@ -160,8 +146,6 @@ class ModbusProtocolHelper(ProtocolHelper):
         address = address & 0xFFFF
         packed_data = b""
 
-        # 写入单个寄存器 (Modbus 协议底层写入最小单位通常是 2字节)
-        # 即使是 UINT8，通常也是写入一个寄存器，设备取低位
         if write_command == 6:
             packed_data = (
                 struct.pack(">B", slave_id)
@@ -169,7 +153,6 @@ class ModbusProtocolHelper(ProtocolHelper):
                 + struct.pack(">H", address)
                 + struct.pack(">H", int(value) & 0xFFFF)
             )
-        # 写入多个寄存器 (功能码 16)
         elif write_command == 16:
             if not isinstance(value, (list, tuple)):
                 return b""
@@ -188,7 +171,6 @@ class ModbusProtocolHelper(ProtocolHelper):
                 + data_bytes
             )
 
-        # 保持对 Coil (5) 的支持...
         elif write_command == 5:
             coil_val = 0xFF00 if value else 0x0000
             packed_data = (
