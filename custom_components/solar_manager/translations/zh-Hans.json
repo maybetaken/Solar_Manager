@@ -954,7 +954,12 @@
             "temp_sensor_5": { "name": "温度传感器 5" },
             "system_alarm_status": { "name": "系统报警状态" },
             "balance_current": { "name": "均衡电流" },
-            "balance_status": { "name": "均衡状态" },
+            "balance_status": { "name": "均衡状态",                 
+                                "state":{
+                                            "Off": "关闭",
+                                            "Charge": "充电",
+                                            "Discharge": "放电"
+                                        }},
             "capacity_remaining": { "name": "剩余容量" },
             "capacity_full": { "name": "实际容量" },
             "cycles": { "name": "循环次数" },

@@ -71,10 +71,10 @@ class JkBms(BaseDevice):
             entity_def = {
                 "addressing": "byte",
                 "name": name,
-                "scale": details.get("scale", 1.0),
+                "scale": details.get("scale", 1),
                 "unit": details.get("unit"),
                 "icon": details.get("icon"),
-                "display_precision": details.get("display_precision"),
+                "display_precision": details.get("display_precision", 0),
                 "device": self,
                 "offset": details.get("offset", 0),
                 "device_class": details.get("device_class", "None"),
@@ -94,7 +94,7 @@ class JkBms(BaseDevice):
                     {
                         "min_value": details.get("min_value", -500000000),
                         "max_value": details.get("max_value", 500000000),
-                        "step": details.get("step", 1.0),
+                        "step": details.get("step", 1),
                         "register": register,
                     }
                 )
