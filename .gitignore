@@ -24,3 +24,4 @@ home-assistant_v2.db-wal
 scenes.yaml
 scripts.yaml
 secrets.yaml
+.DS_Store
