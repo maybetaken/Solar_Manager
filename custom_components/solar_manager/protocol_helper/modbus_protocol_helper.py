@@ -112,7 +112,7 @@ class ModbusProtocolHelper(ProtocolHelper):
                         val_bytes = data_bytes[byte_offset : byte_offset + str_len]
                         val = (
                             val_bytes.decode("ascii", errors="replace")
-                            .strip("\x00")
+                            .strip("\x00").strip("\x08")
                             .strip()
                         )
                         parsed_data[current_key] = val
