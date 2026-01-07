@@ -157,7 +157,6 @@ class ModbusProtocolHelper(ProtocolHelper):
             if not isinstance(value, (list, tuple)):
                 return b""
             num_regs = len(value)
-            byte_count = num_regs * 2
             data_bytes = b""
             for val in value:
                 data_bytes += struct.pack(">H", int(val) & 0xFFFF)
@@ -167,7 +166,6 @@ class ModbusProtocolHelper(ProtocolHelper):
                 + struct.pack(">B", write_command)
                 + struct.pack(">H", address)
                 + struct.pack(">H", num_regs)
-                + struct.pack(">B", byte_count)
                 + data_bytes
             )
 
