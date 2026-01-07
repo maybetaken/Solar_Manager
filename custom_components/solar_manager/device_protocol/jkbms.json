@@ -16,7 +16,7 @@
             "scale": 0.001,
             "display_precision": 3,
             "unit": "VOLT",
-            "step": 0.01,
+            "step": 0.001,
             "icon": "mdi:sleep",
             "sensor_type": "number",
             "device_class": "voltage"
@@ -27,7 +27,7 @@
             "scale": 0.001,
             "display_precision": 3,
             "unit": "VOLT",
-            "step": 0.01,
+            "step": 0.001,
             "icon": "mdi:shield-alert",
             "sensor_type": "number",
             "device_class": "voltage"
@@ -38,7 +38,7 @@
             "scale": 0.001,
             "display_precision": 3,
             "unit": "VOLT",
-            "step": 0.01,
+            "step": 0.001,
             "icon": "mdi:shield-check",
             "sensor_type": "number",
             "device_class": "voltage"
@@ -49,7 +49,7 @@
             "scale": 0.001,
             "display_precision": 3,
             "unit": "VOLT",
-            "step": 0.01,
+            "step": 0.001,
             "icon": "mdi:shield-alert",
             "sensor_type": "number",
             "device_class": "voltage"
@@ -60,7 +60,7 @@
             "scale": 0.001,
             "display_precision": 3,
             "unit": "VOLT",
-            "step": 0.01,
+            "step": 0.001,
             "icon": "mdi:shield-check",
             "sensor_type": "number",
             "device_class": "voltage"
@@ -71,7 +71,7 @@
             "scale": 0.001,
             "display_precision": 3,
             "unit": "VOLT",
-            "step": 0.01,
+            "step": 0.001,
             "icon": "mdi:scale-balance",
             "sensor_type": "number",
             "device_class": "voltage"
@@ -104,7 +104,7 @@
             "scale": 0.001,
             "display_precision": 3,
             "unit": "VOLT",
-            "step": 0.01,
+            "step": 0.001,
             "icon": "mdi:power-off",
             "sensor_type": "number",
             "device_class": "voltage"
@@ -114,7 +114,7 @@
             "type": "UINT32",
             "scale": 0.001,
             "unit": "AMPERE",
-            "step": 0.01,
+            "step": 0.001,
             "icon": "mdi:current-dc",
             "sensor_type": "number",
             "device_class": "current"
@@ -122,6 +122,8 @@
         "0x301030": {
             "name": "setting_charge_oc_delay",
             "type": "UINT32",
+            "scale": 1,
+            "display_precision": 0,
             "unit": "SECONDS",
             "icon": "mdi:timer",
             "sensor_type": "number"
@@ -129,6 +131,8 @@
         "0x301034": {
             "name": "setting_charge_oc_release",
             "type": "UINT32",
+            "scale": 1,
+            "display_precision": 0,
             "unit": "SECONDS",
             "icon": "mdi:timer-outline",
             "sensor_type": "number"
@@ -137,8 +141,8 @@
             "name": "setting_discharge_current_cont",
             "type": "UINT32",
             "scale": 0.001,
+            "step": 0.001,
             "unit": "AMPERE",
-            "step": 0.1,
             "icon": "mdi:current-dc",
             "sensor_type": "number",
             "device_class": "current"
@@ -146,14 +150,17 @@
         "0x30103C": {
             "name": "setting_discharge_oc_delay",
             "type": "UINT32",
+            "scale": 1,
+            "display_precision": 0,
             "unit": "SECONDS",
-            "step": 0.1,
             "icon": "mdi:timer",
             "sensor_type": "number"
         },
         "0x301040": {
             "name": "setting_discharge_oc_release",
             "type": "UINT32",
+            "scale": 1,
+            "display_precision": 0,
             "unit": "SECONDS",
             "icon": "mdi:timer-outline",
             "sensor_type": "number"
@@ -162,6 +169,7 @@
             "name": "setting_sc_release_delay",
             "type": "UINT32",
             "unit": "SECONDS",
+            "display_precision": 0,
             "icon": "mdi:timer-alert",
             "sensor_type": "number"
         },
@@ -170,6 +178,7 @@
             "type": "UINT32",
             "scale": 0.001,
             "unit": "AMPERE",
+            "step": 0.001,
             "icon": "mdi:current-dc",
             "sensor_type": "number",
             "device_class": "current"
@@ -178,6 +187,7 @@
             "name": "setting_charge_ot_protect",
             "type": "INT32",
             "scale": 0.1,
+            "step": 0.1,
             "unit": "CELSIUS",
             "icon": "mdi:thermometer-alert",
             "sensor_type": "number",
@@ -187,6 +197,7 @@
             "name": "setting_charge_ot_recover",
             "type": "INT32",
             "scale": 0.1,
+            "step": 0.1,
             "unit": "CELSIUS",
             "icon": "mdi:thermometer-check",
             "sensor_type": "number",
@@ -196,6 +207,7 @@
             "name": "setting_discharge_ot_protect",
             "type": "INT32",
             "scale": 0.1,
+            "step": 0.1,
             "unit": "CELSIUS",
             "icon": "mdi:thermometer-alert",
             "sensor_type": "number",
@@ -205,6 +217,7 @@
             "name": "setting_discharge_ot_recover",
             "type": "INT32",
             "scale": 0.1,
+            "step": 0.1,
             "unit": "CELSIUS",
             "icon": "mdi:thermometer-check",
             "sensor_type": "number",
@@ -214,6 +227,7 @@
             "name": "setting_charge_ut_protect",
             "type": "INT32",
             "scale": 0.1,
+            "step": 0.1,
             "unit": "CELSIUS",
             "icon": "mdi:snowflake-alert",
             "sensor_type": "number",
@@ -223,6 +237,7 @@
             "name": "setting_charge_ut_recover",
             "type": "INT32",
             "scale": 0.1,
+            "step": 0.1,
             "unit": "CELSIUS",
             "icon": "mdi:snowflake-check",
             "sensor_type": "number",
@@ -232,6 +247,7 @@
             "name": "setting_mos_ot_protect",
             "type": "INT32",
             "scale": 0.1,
+            "step": 0.1,
             "unit": "CELSIUS",
             "icon": "mdi:chip",
             "sensor_type": "number",
@@ -241,6 +257,7 @@
             "name": "setting_mos_ot_recover",
             "type": "INT32",
             "scale": 0.1,
+            "step": 0.1,
             "unit": "CELSIUS",
             "icon": "mdi:chip",
             "sensor_type": "number",
@@ -253,7 +270,7 @@
             "icon": "mdi:counter",
             "sensor_type": "number",
             "display_precision": 0,
-            "min_value": 3,
+            "min_value": 1,
             "max_value": 32
         },
         "0x301070": {
@@ -281,6 +298,7 @@
             "name": "setting_design_capacity",
             "type": "UINT32",
             "scale": 0.001,
+            "step": 0.001,
             "unit": "AMPERE_HOUR",
             "icon": "mdi:battery-check",
             "sensor_type": "number"
@@ -288,6 +306,7 @@
         "0x301080": {
             "name": "setting_scp_delay",
             "type": "UINT32",
+            "display_precision": 0,
             "unit": "us",
             "icon": "mdi:timer-alert",
             "sensor_type": "number"
@@ -298,6 +317,7 @@
             "scale": 0.001,
             "display_precision": 3,
             "unit": "VOLT",
+            "step": 0.001,
             "icon": "mdi:scale-balance",
             "sensor_type": "number",
             "device_class": "voltage"
@@ -314,7 +334,8 @@
             "type": "UINT32",
             "unit": "SECONDS",
             "icon": "mdi:timer-outline",
-            "sensor_type": "number"
+            "sensor_type": "number",
+            "display_precision": 0
         },
         "0x301114": {
             "name": "function_switch_bits",
@@ -1260,6 +1281,7 @@
             "name": "power_on_count",
             "type": "UINT32",
             "unit": "times",
+            "display_precision": 0,
             "sensor_type": "sensor"
         }
     }

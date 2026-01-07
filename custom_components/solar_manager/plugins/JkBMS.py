@@ -104,7 +104,7 @@ class JkBms(BaseDevice):
                 entity_def.update(
                     {
                         "register": register,
-                        "write_command": details.get("write_command", 10),
+                        "write_command": details.get("write_command", 16),
                     }
                 )
                 device_info["switch"].append(entity_def)
@@ -136,8 +136,8 @@ class JkBms(BaseDevice):
         if isinstance(value, (int, float)):
             info = self.parser.protocol_data.get("registers", {}).get(cmd, {})
             scale = info.get("scale", 1.0)
-            write_command = info.get("write_command", 10)
+            write_command = info.get("write_command", 16)
             if isinstance(value, float):
                 value = int(value / scale)
-            data = self.parser.pack_data(self.slave_id, cmd, value, write_command)
+            data = self.parser.pack_data(self.slave_id, cmd, [0, value], write_command)
             await self.mqtt_manager.publish(self.cmd_topic, data)
