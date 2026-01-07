@@ -944,7 +944,7 @@
         "0x301294": {
             "name": "total_power",
             "type": "UINT32",
-            "scale": 1,
+            "scale": 0.001,
             "unit": "WATT",
             "sensor_type": "sensor",
             "device_class": "power",
