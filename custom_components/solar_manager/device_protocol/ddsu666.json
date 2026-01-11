@@ -96,7 +96,7 @@
             "type": "FLOAT",
             "scale": 1,
             "sensor_type": "sensor",
-            "unit": "KILO_WATT_HOUR",
+            "unit": "KILOWATT_HOUR",
             "display_precision": 2,
             "icon": "mdi:meter-electric-outline",
             "device_class": "energy",
