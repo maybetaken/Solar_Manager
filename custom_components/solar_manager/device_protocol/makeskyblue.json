@@ -1057,7 +1057,7 @@
         },
         "0x3000CE": {
             "name": "battery_total_current",
-            "type": "UINT16",
+            "type": "INT16",
             "scale": 0.01,
             "sensor_type": "sensor",
             "range": "0~200A",
