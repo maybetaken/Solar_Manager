@@ -124,6 +124,10 @@ class JkBms(BaseDevice):
                     if name in self._entities:
                         changed_entities.add(name)
 
+        # Make power negative when current is negative (discharging)
+        if self._data_dict.get("total_current", 0) < 0:
+            self._data_dict["total_power"] = -abs(self._data_dict.get("total_power", 0))
+
         for name in changed_entities:
             entity = self._entities.get(name)
             if entity is not None:
