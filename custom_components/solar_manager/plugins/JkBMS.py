@@ -147,7 +147,12 @@ class JkBms(BaseDevice):
             info = self.parser.protocol_data.get("registers", {}).get(cmd, {})
             scale = info.get("scale", 1.0)
             write_command = info.get("write_command", 16)
-            if isinstance(value, float):
-                value = int(value / scale)
-            data = self.parser.pack_data(self.slave_id, cmd, [0, value], write_command)
+            if info.get("type") in ("UINT32", "INT32"):
+                value = int(value)
+                value_high = (value >> 16) & 0xFFFF
+                value_low = value & 0xFFFF
+                value_list = [value_high, value_low]
+            else:
+                value_list = [int(value)]
+            data = self.parser.pack_data(self.slave_id, cmd, value_list, write_command)
             await self.mqtt_manager.publish(self.cmd_topic, data)
