@@ -32,7 +32,7 @@ It supports multiple device protocols, providing real-time data collection, devi
 
 ## Usage
 
-- Connect ESP32 device to the internet through the `ESP Config` WeChat mini-program or `EspBlufi` application. If you don't have this device, please contact me through 296496296@qq.com.
+- Connect ESP32 device to the internet through the `ESP Config` WeChat mini-program or `EspBlufi` application. If you don't have this device, please join Discord https://discord.gg/TVwrS6CZ4.
 - Currently, the MQTT broker only supports HA local versions. Recommended local MQTT broker: Mosquitto.
 - Set up your Home Assistant network as `host`; otherwise, your ESP32 device will not be able to connect to HA. your Home Assistant network as `host`; otherwise, your ESP32 device will not be able to connect to HA.
 - Once the preparation is done, you can connect through the Serial Number.- Once the preparation is done, you can connect through the Serial Number.
