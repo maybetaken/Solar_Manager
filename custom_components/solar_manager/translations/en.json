@@ -933,6 +933,12 @@
             "daily_energy": {
                 "name": "Daily Energy"
             },
+            "daily_charge_energy": {
+                "name": "Daily Charge Energy"
+            },
+            "daily_discharge_energy": {
+                "name": "Daily Discharge Energy"
+            },
             "frequency": {
                 "name": "Frequency"
             },

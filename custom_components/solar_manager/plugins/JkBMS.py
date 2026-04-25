@@ -7,13 +7,16 @@ Attribution-NonCommercial-NoDerivatives 4.0 International.
 
 import json
 import logging
+from datetime import datetime, date, time
 from typing import Any
+import asyncio
 
 from custom_components.solar_manager.protocol_helper.modbus_protocol_helper import (
     ModbusProtocolHelper,
 )
 
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.event import async_track_time_change
 
 from .base_device import BaseDevice
 
@@ -33,6 +36,14 @@ class JkBms(BaseDevice):
         self.setup_protocol()
         self._register_to_name = {}
         self._unknown_registers = set()
+        
+        # Daily energy tracking variables
+        self._daily_charge_energy = 0.0  # Daily charge energy in kWh
+        self._daily_discharge_energy = 0.0  # Daily discharge energy in kWh
+        self._last_update_time = None  # Last update timestamp
+        self._last_power = 0.0  # Last power reading
+        self._hass = hass
+        self._midnight_timer = None  # Midnight timer
 
     async def send_config(self) -> None:
         """Send config via MQTT."""
@@ -109,7 +120,53 @@ class JkBms(BaseDevice):
                 )
                 device_info["switch"].append(entity_def)
 
+        # Add daily charge and discharge energy sensors
+        daily_charge_entity = {
+            "addressing": "byte",
+            "name": "daily_charge_energy",
+            "scale": 1.0,
+            "unit": "KILOWATT_HOUR",
+            "icon": "mdi:battery-charging",
+            "display_precision": 3,
+            "device": self,
+            "offset": 0,
+            "device_class": "energy",
+            "state_class": "total",
+        }
+        device_info["sensor"].append(daily_charge_entity)
+
+        daily_discharge_entity = {
+            "addressing": "byte",
+            "name": "daily_discharge_energy",
+            "scale": 1.0,
+            "unit": "KILOWATT_HOUR",
+            "icon": "mdi:battery-minus",
+            "display_precision": 3,
+            "device": self,
+            "offset": 0,
+            "device_class": "energy",
+            "state_class": "total",
+        }
+        device_info["sensor"].append(daily_discharge_entity)
+
+        # Initialize daily energy tracking and setup timer
+        self._setup_daily_energy()
+
         return device_info
+
+    def _setup_daily_energy(self) -> None:
+        """Setup daily energy tracking and midnight timer."""
+        # Initialize daily energy values
+        self._daily_charge_energy = 0.0
+        self._daily_discharge_energy = 0.0
+        self._data_dict["daily_charge_energy"] = self._daily_charge_energy
+        self._data_dict["daily_discharge_energy"] = self._daily_discharge_energy
+        
+        # Setup midnight timer to reset daily energy
+        if self._midnight_timer is None:
+            self._midnight_timer = async_track_time_change(
+                self._hass, self._midnight_callback, hour=0, minute=0, second=0
+            )
 
     async def handle_notify(self, topic: str, payload: bytes) -> None:
         """Handle incoming data."""
@@ -134,12 +191,63 @@ class JkBms(BaseDevice):
                 if "total_power" in self._entities:
                     changed_entities.add("total_power")
 
+        # Update daily energy calculations
+        self._update_daily_energy()
+
         for name in changed_entities:
             entity = self._entities.get(name)
             if entity is not None:
                 entity.schedule_update_ha_state()
 
+        # Update daily energy entities if they exist
+        if "daily_charge_energy" in self._entities:
+            self._entities["daily_charge_energy"].schedule_update_ha_state()
+        if "daily_discharge_energy" in self._entities:
+            self._entities["daily_discharge_energy"].schedule_update_ha_state()
+
         self._reset_notify_clear_timer()
+
+    def _update_daily_energy(self) -> None:
+        """Update daily charge and discharge energy based on power consumption."""
+        current_time = datetime.now()
+        current_power = self._data_dict.get("total_power", 0.0) / 1000.0 # Power in watts
+        
+        if self._last_update_time is not None and self._last_power is not None:
+            # Calculate time difference in hours
+            time_diff = (current_time - self._last_update_time).total_seconds() / 3600.0
+            
+            # Use average power for energy calculation (trapezoidal integration)
+            avg_power = (current_power + self._last_power) / 2.0
+            
+            # Calculate energy in kWh
+            energy_kwh = abs(avg_power) * time_diff / 1000.0
+            
+            # Add to appropriate daily total based on power direction
+            if avg_power > 0:  # Charging (positive power)
+                self._daily_charge_energy += energy_kwh
+            elif avg_power < 0:  # Discharging (negative power)
+                self._daily_discharge_energy += energy_kwh
+        
+        # Update data dictionary
+        self._data_dict["daily_charge_energy"] = self._daily_charge_energy
+        self._data_dict["daily_discharge_energy"] = self._daily_discharge_energy
+        
+        # Store current values for next calculation
+        self._last_update_time = current_time
+        self._last_power = current_power
+
+    async def _midnight_callback(self, now) -> None:
+        """Midnight callback to reset daily energy counters."""
+        self._daily_charge_energy = 0.0
+        self._daily_discharge_energy = 0.0
+        self._data_dict["daily_charge_energy"] = self._daily_charge_energy
+        self._data_dict["daily_discharge_energy"] = self._daily_discharge_energy
+        
+        # Update entity states
+        if "daily_charge_energy" in self._entities:
+            self._entities["daily_charge_energy"].schedule_update_ha_state()
+        if "daily_discharge_energy" in self._entities:
+            self._entities["daily_discharge_energy"].schedule_update_ha_state()
 
     async def handle_cmd(self, cmd: int, value: Any) -> None:
         """Handle writes."""

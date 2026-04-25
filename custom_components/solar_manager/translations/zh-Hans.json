@@ -954,6 +954,12 @@
             "daily_energy": {
                 "name": "日用电量"
             },
+            "daily_charge_energy": {
+                "name": "日充电量"
+            },
+            "daily_discharge_energy": {
+                "name": "日放电量"
+            },
             "frequency": {
                 "name": "频率"
             },
