@@ -12,6 +12,7 @@ from custom_components.solar_manager.plugins.MakeSkyBlueIoTrix import MakeSkyBlu
 from custom_components.solar_manager.plugins.MakeSkyBlueMppt import MakeSkyBlueMppt
 from custom_components.solar_manager.plugins.Megarevo import Megarevo
 from custom_components.solar_manager.plugins.PZemV04 import PZemV04
+from custom_components.solar_manager.plugins.Switches import SwitchesDevice
 
 # Unified device configuration
 DEVICE_CONFIG = {
@@ -42,6 +43,10 @@ DEVICE_CONFIG = {
     "PZEMV04": {
         "protocol": "pzem_v04",
         "device_class": PZemV04,
+    },
+    "Switches": {
+        "protocol": "switches",
+        "device_class": SwitchesDevice,
     },
 }
 

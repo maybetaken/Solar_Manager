@@ -168,3 +168,10 @@ async def async_setup_entry(
             )
         switches.append(switch)
     async_add_entities(switches)
+
+    # Expose the platform's add-entities callback to any device that opts
+    # in (e.g. ``SwitchesDevice``) so it can grow the entity set later
+    # when a new ``switch_count`` is reported on the ``online`` topic.
+    for device in hass.data[DOMAIN][serial].get("devices", []):
+        if hasattr(device, "set_add_entities_callback"):
+            device.set_add_entities_callback(async_add_entities)

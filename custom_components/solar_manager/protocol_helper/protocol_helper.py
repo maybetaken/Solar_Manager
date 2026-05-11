@@ -54,17 +54,31 @@ class ProtocolHelper(ABC):
         """Register a callback function to send data through mqtt."""
 
     @abstractmethod
-    async def read_data(self, register_name: str) -> Any:
-        """Read data from the device for a specific register."""
-
-    @abstractmethod
     async def write_data(self, register_name: str, value: Any) -> None:
         """Write data to the device for a specific register."""
 
-    @abstractmethod
-    def pack_data(self, slave_id: int, address: int, value: int) -> bytes:
-        """Pack data according to the protocol."""
+    async def read_data(self, register_name: str) -> Any:
+        """Read data from the device for a specific register.
 
-    @abstractmethod
+        Optional. Only protocols that poll the device from Home Assistant
+        need to implement this; push-based protocols (e.g. MQTT JSON)
+        can leave it unimplemented.
+        """
+        raise NotImplementedError
+
+    def pack_data(self, slave_id: int, address: int, value: int) -> bytes:
+        """Pack data according to the protocol.
+
+        Optional. Only protocols that emit framed binary commands
+        (e.g. Modbus) need to implement this.
+        """
+        raise NotImplementedError
+
     async def send_data(self, hass: HomeAssistant, url: str, data: bytes) -> bytes:
-        """Send data to the device and return the response."""
+        """Send data to the device and return the response.
+
+        Optional. Only transport-aware protocols need to implement this;
+        MQTT-based protocols publish via the integration's MQTT manager
+        rather than through the helper.
+        """
+        raise NotImplementedError
