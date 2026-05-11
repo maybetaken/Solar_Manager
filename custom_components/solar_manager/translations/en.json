@@ -47,6 +47,54 @@
             "led": {
                 "name": "LED Indicator"
             },
+            "switch_01": {
+                "name": "Switch 1"
+            },
+            "switch_02": {
+                "name": "Switch 2"
+            },
+            "switch_03": {
+                "name": "Switch 3"
+            },
+            "switch_04": {
+                "name": "Switch 4"
+            },
+            "switch_05": {
+                "name": "Switch 5"
+            },
+            "switch_06": {
+                "name": "Switch 6"
+            },
+            "switch_07": {
+                "name": "Switch 7"
+            },
+            "switch_08": {
+                "name": "Switch 8"
+            },
+            "switch_09": {
+                "name": "Switch 9"
+            },
+            "switch_10": {
+                "name": "Switch 10"
+            },
+            "switch_11": {
+                "name": "Switch 11"
+            },
+            "switch_12": {
+                "name": "Switch 12"
+            },
+            "switch_13": {
+                "name": "Switch 13"
+            },
+            "switch_14": {
+                "name": "Switch 14"
+            },
+            "switch_15": {
+                "name": "Switch 15"
+            },
+            "switch_16": {
+                "name": "Switch 16"
+            },
             "anti_backflow_mode": {
                 "name": "Grid-Tied Anti-Backflow Status [d16]"
             },

@@ -47,6 +47,54 @@
             "led": {
                 "name": "LED 指示灯"
             },
+            "switch_01": {
+                "name": "开关 1"
+            },
+            "switch_02": {
+                "name": "开关 2"
+            },
+            "switch_03": {
+                "name": "开关 3"
+            },
+            "switch_04": {
+                "name": "开关 4"
+            },
+            "switch_05": {
+                "name": "开关 5"
+            },
+            "switch_06": {
+                "name": "开关 6"
+            },
+            "switch_07": {
+                "name": "开关 7"
+            },
+            "switch_08": {
+                "name": "开关 8"
+            },
+            "switch_09": {
+                "name": "开关 9"
+            },
+            "switch_10": {
+                "name": "开关 10"
+            },
+            "switch_11": {
+                "name": "开关 11"
+            },
+            "switch_12": {
+                "name": "开关 12"
+            },
+            "switch_13": {
+                "name": "开关 13"
+            },
+            "switch_14": {
+                "name": "开关 14"
+            },
+            "switch_15": {
+                "name": "开关 15"
+            },
+            "switch_16": {
+                "name": "开关 16"
+            },
             "anti_backflow_mode": {
                 "name": "并网防逆流状态 [d16]"
             },
