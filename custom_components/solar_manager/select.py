@@ -14,9 +14,10 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
+from .entity import BaseEntity
 
 
-class SolarManagerSelect(SelectEntity):
+class SolarManagerSelect(BaseEntity, SelectEntity):
     """Representation of a Solar Manager select."""
 
     def __init__(
@@ -71,17 +72,6 @@ class SolarManagerSelect(SelectEntity):
     def available(self) -> bool:
         """Return if the select entity is available."""
         return self.current_option is not None
-
-    @property
-    def device_info(self):
-        """Return device information about this entity."""
-        return {
-            "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"{self._model} {self._device_id}",
-            "manufacturer": "@maybetaken",
-            "model": self._model,
-            "sw_version": "1.0",
-        }
 
 
 async def async_setup_entry(

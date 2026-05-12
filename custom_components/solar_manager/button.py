@@ -15,9 +15,10 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
+from .entity import BaseEntity
 
 
-class SolarManagerActionButton(ButtonEntity):
+class SolarManagerActionButton(BaseEntity, ButtonEntity):
     """Representation of a Solar Manager action button."""
 
     def __init__(
@@ -43,17 +44,6 @@ class SolarManagerActionButton(ButtonEntity):
     async def async_press(self) -> None:
         """Handle the button press."""
         await self._device.perform_action(self._action_name)
-
-    @property
-    def device_info(self):
-        """Return device information about this entity."""
-        return {
-            "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"{self._model} {self._device_id}",
-            "manufacturer": "@maybetaken",
-            "model": self._model,
-            "sw_version": "1.0",
-        }
 
 
 class SolarManagerCommandButton(SolarManagerActionButton):

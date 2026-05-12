@@ -15,9 +15,10 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.util import dt as dt_util
 
 from .const import _LOGGER, CONF_MODEL, CONF_SERIAL, DOMAIN
+from .entity import BaseEntity
 
 
-class SolarManagerTime(TimeEntity):
+class SolarManagerTime(BaseEntity, TimeEntity):
     """Representation of a Solar Manager time entity (e.g., scheduled times)."""
 
     def __init__(
@@ -89,17 +90,6 @@ class SolarManagerTime(TimeEntity):
         if not valid:
             _LOGGER.debug("Entity %s unavailable: no time set", self._name)
         return valid
-
-    @property
-    def device_info(self):
-        """Return device information about this entity."""
-        return {
-            "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"{self._model} {self._device_id}",
-            "manufacturer": "@maybetaken",
-            "model": self._model,
-            "sw_version": "1.0",
-        }
 
 
 async def async_setup_entry(

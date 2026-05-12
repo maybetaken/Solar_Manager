@@ -15,9 +15,10 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
+from .entity import BaseEntity
 
 
-class SolarManagerSwitch(SwitchEntity):
+class SolarManagerSwitch(BaseEntity, SwitchEntity):
     """Representation of a Solar Manager switch."""
 
     def __init__(
@@ -70,19 +71,8 @@ class SolarManagerSwitch(SwitchEntity):
         """Return if the switch is available."""
         return self._device.get_dict(self._name) is not None
 
-    @property
-    def device_info(self):
-        """Return device information about this entity."""
-        return {
-            "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"{self._model} {self._device_id}",
-            "manufacturer": "@maybetaken",
-            "model": self._model,
-            "sw_version": "1.0",
-        }
 
-
-class SolarManagerDiagnosticSwitch(SwitchEntity):
+class SolarManagerDiagnosticSwitch(BaseEntity, SwitchEntity):
     """Representation of a Solar Manager diagnostic switch."""
 
     def __init__(
@@ -125,17 +115,6 @@ class SolarManagerDiagnosticSwitch(SwitchEntity):
     def available(self) -> bool:
         """Return if the switch is available."""
         return self._device.get_diagnostics().get("led") is not None
-
-    @property
-    def device_info(self):
-        """Return device information about this entity."""
-        return {
-            "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"{self._model} {self._device_id}",
-            "manufacturer": "@maybetaken",
-            "model": self._model,
-            "sw_version": "1.0",
-        }
 
 
 async def async_setup_entry(

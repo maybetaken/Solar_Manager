@@ -59,6 +59,8 @@ class BaseDevice(ABC):
         self._heartbeat_task = None
         self._heartbeat_interval = timedelta(seconds=5)
 
+        self._sw_version: str | None = None
+
         self._diagnostics = (
             {"ssid": None, "rssi": None, "led": None} if enable_diagnostics else {}
         )
@@ -101,9 +103,79 @@ class BaseDevice(ABC):
 
         self._start_heartbeat()
 
+    @property
+    def sw_version(self) -> str:
+        """Return the firmware version string, or '1.0' if not yet received."""
+        return self._sw_version if self._sw_version is not None else "1.0"
+
+    def _parse_firmware_version(self, payload: bytes) -> None:
+        """Extract and store firmware version from online payload.
+
+        Handles two payload formats:
+        1. JSON dict with "version" field (SwitchesDevice)
+        2. Plain text version string (all other devices)
+
+        Strategy: try JSON first. If it's a valid dict, extract the
+        "version" field. If JSON fails or result is not a dict, treat
+        the entire payload as a plain version string.
+        """
+        version_raw: str | None = None
+
+        # Step 1: Try JSON decode
+        try:
+            data = json.loads(payload)
+            if isinstance(data, dict):
+                # JSON dict path — extract "version" field
+                candidate = data.get("version")
+                if isinstance(candidate, str):
+                    version_raw = candidate
+                # If "version" missing or not a string, do NOT fall through
+                # to plain-text (prevents misinterpreting JSON as version)
+                else:
+                    return
+            else:
+                # JSON decoded but not a dict (e.g., JSON string, array)
+                # Fall through to plain text path
+                version_raw = (
+                    payload.decode("utf-8", errors="replace")
+                    if isinstance(payload, bytes)
+                    else str(payload)
+                )
+        except (json.JSONDecodeError, TypeError, ValueError):
+            # Step 2: Not JSON — treat entire payload as plain version string
+            try:
+                version_raw = (
+                    payload.decode("utf-8", errors="replace")
+                    if isinstance(payload, bytes)
+                    else str(payload)
+                )
+            except (AttributeError, TypeError):
+                return
+
+        # Step 3: Extract version from raw string
+        if version_raw is None:
+            return
+
+        version_raw = version_raw.strip()
+        if not version_raw:
+            return
+
+        # Split on first '-' delimiter
+        # "v1.2.3-0045" → "v1.2.3"
+        # "v0.10" → "v0.10"
+        version = version_raw.split("-", 1)[0]
+
+        if version:  # Guard against "-0045" → empty prefix
+            self._sw_version = version
+
     async def handle_online(self, topic: str, payload: bytes) -> None:
         """Handle device online message."""
-        _LOGGER.info("Device %s is online, sending configuration", self.sn)
+        self._parse_firmware_version(payload)
+        _LOGGER.info(
+            "Device %s is online (fw: %s), sending configuration",
+            self.sn,
+            self.sw_version,
+        )
         await self.send_config()
 
     @abstractmethod

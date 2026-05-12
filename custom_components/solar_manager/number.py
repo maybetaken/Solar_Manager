@@ -23,6 +23,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
+from .entity import BaseEntity
 
 unit_mapping = {
     "AMPERE": UnitOfElectricCurrent.AMPERE,
@@ -40,7 +41,7 @@ unit_mapping = {
 }
 
 
-class SolarManagerNumber(NumberEntity):
+class SolarManagerNumber(BaseEntity, NumberEntity):
     """Representation of a Solar Manager number."""
 
     def __init__(
@@ -107,17 +108,6 @@ class SolarManagerNumber(NumberEntity):
     def available(self) -> bool:
         """Return if the number entity is available."""
         return self.native_value is not None
-
-    @property
-    def device_info(self):
-        """Return device information about this entity."""
-        return {
-            "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"{self._model} {self._device_id}",
-            "manufacturer": "@maybetaken",
-            "model": self._model,
-            "sw_version": "1.0",
-        }
 
 
 async def async_setup_entry(

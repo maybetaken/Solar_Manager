@@ -28,6 +28,7 @@ from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 from .const import CONF_MODEL, CONF_SERIAL, DOMAIN
+from .entity import BaseEntity
 
 unit_mapping = {
     "AMPERE": UnitOfElectricCurrent.AMPERE,
@@ -67,7 +68,7 @@ state_class_mapping = {
 }
 
 
-class SolarManagerSensor(SensorEntity):
+class SolarManagerSensor(BaseEntity, SensorEntity):
     """Representation of a Solar Manager sensor."""
 
     def __init__(
@@ -123,17 +124,6 @@ class SolarManagerSensor(SensorEntity):
         """Return if the sensor is available."""
         return self.native_value is not None
 
-    @property
-    def device_info(self):
-        """Return device information about this entity."""
-        return {
-            "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"{self._model} {self._device_id}",
-            "manufacturer": "@maybetaken",
-            "model": self._model,
-            "sw_version": "1.0",
-        }
-
 
 class SolarManagerEnumSensor(SolarManagerSensor):
     """Representation of a Solar Manager sensor with enum mapping."""
@@ -178,7 +168,7 @@ class SolarManagerEnumSensor(SolarManagerSensor):
             return None
 
 
-class SolarManagerDiagnosticSensor(SensorEntity):
+class SolarManagerDiagnosticSensor(BaseEntity, SensorEntity):
     """Representation of a Solar Manager diagnostic sensor."""
 
     def __init__(
@@ -218,17 +208,6 @@ class SolarManagerDiagnosticSensor(SensorEntity):
     def available(self) -> bool:
         """Return if the sensor is available."""
         return self.native_value is not None
-
-    @property
-    def device_info(self):
-        """Return device information about this entity."""
-        return {
-            "identifiers": {(DOMAIN, self._device_id)},
-            "name": f"{self._model} {self._device_id}",
-            "manufacturer": "@maybetaken",
-            "model": self._model,
-            "sw_version": "1.0",
-        }
 
 
 async def async_setup_entry(
