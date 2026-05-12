@@ -14,8 +14,10 @@ import json
 import logging
 from typing import Optional
 
+from custom_components.solar_manager.const import DOMAIN
 from custom_components.solar_manager.mqtt_helper import mqtt_global
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.event import async_track_time_interval
 
 _LOGGER = logging.getLogger(__name__)
@@ -170,13 +172,43 @@ class BaseDevice(ABC):
 
     async def handle_online(self, topic: str, payload: bytes) -> None:
         """Handle device online message."""
+        old_version = self._sw_version
         self._parse_firmware_version(payload)
+        new_version = self._sw_version
+
         _LOGGER.info(
             "Device %s is online (fw: %s), sending configuration",
             self.sn,
             self.sw_version,
         )
         await self.send_config()
+
+        if old_version != new_version and new_version is not None:
+            _LOGGER.info(
+                "Firmware version changed for %s: %s -> %s",
+                self.sn,
+                old_version or "unknown",
+                new_version,
+            )
+            await self._update_device_registry()
+
+    async def _update_device_registry(self) -> None:
+        """Update device registry with new firmware version."""
+        device_registry = dr.async_get(self.hass)
+        device_entry = device_registry.async_get_device(
+            identifiers={(DOMAIN, self.sn)}
+        )
+
+        if device_entry and device_entry.sw_version != self.sw_version:
+            device_registry.async_update_device(
+                device_entry.id,
+                sw_version=self.sw_version,
+            )
+            _LOGGER.info(
+                "Updated device registry for %s to firmware version %s",
+                self.sn,
+                self.sw_version,
+            )
 
     @abstractmethod
     async def send_config(self) -> None:
@@ -196,10 +228,12 @@ class BaseDevice(ABC):
     def register_diagnostic_entity(self, sensor_name: str, entity: any) -> None:
         """Register a diagnostic entity if enabled."""
         if not self._enable_diagnostics:
-            _LOGGER.debug("Diagnostic entity registration disabled for %s", self.sn)
+            _LOGGER.debug(
+                "Diagnostic entity registration disabled for %s", self.sn)
             return
         self._diagnostic_entities[sensor_name] = entity
-        _LOGGER.debug("Registered diagnostic entity %s for %s", sensor_name, self.sn)
+        _LOGGER.debug("Registered diagnostic entity %s for %s",
+                      sensor_name, self.sn)
 
     def unregister_diagnostic_entity(self, sensor_name: str) -> None:
         """Unregister a diagnostic entity if enabled."""
@@ -254,7 +288,8 @@ class BaseDevice(ABC):
         for name, entity in self._entities.items():
             if entity is not None:
                 entity.schedule_update_ha_state()
-                _LOGGER.debug("Directly updated entity %s for %s", name, self.sn)
+                _LOGGER.debug(
+                    "Directly updated entity %s for %s", name, self.sn)
 
     async def handle_diagnostics(self, topic: str, payload: str) -> None:
         """Handle diagnostics JSON data from MQTT if enabled."""
@@ -264,7 +299,8 @@ class BaseDevice(ABC):
             data = json.loads(payload)
             await self.update_diagnostics(data)
         except json.JSONDecodeError as e:
-            _LOGGER.error("Invalid JSON payload for diagnostics %s: %s", self.sn, e)
+            _LOGGER.error(
+                "Invalid JSON payload for diagnostics %s: %s", self.sn, e)
         except (KeyError, TypeError, ValueError) as e:
             _LOGGER.error("Error handling diagnostics for %s: %s", self.sn, e)
 
@@ -280,7 +316,8 @@ class BaseDevice(ABC):
                     "led": data.get("led") == "on",
                 }
             )
-            _LOGGER.debug("Diagnostics updated for %s: %s", self.sn, self._diagnostics)
+            _LOGGER.debug("Diagnostics updated for %s: %s",
+                          self.sn, self._diagnostics)
             self._reset_diagnostics_clear_timer()
             for sensor_name, entity in self._diagnostic_entities.items():
                 if entity is not None:
@@ -291,7 +328,8 @@ class BaseDevice(ABC):
                         self.sn,
                     )
         except (KeyError, TypeError) as e:
-            _LOGGER.error("Error in diagnostics data for device %s: %s", self.sn, e)
+            _LOGGER.error(
+                "Error in diagnostics data for device %s: %s", self.sn, e)
 
     def get_diagnostics(self) -> dict[str, any]:
         """Return diagnostics information if enabled."""
@@ -405,7 +443,8 @@ class BaseDevice(ABC):
     def cleanup(self) -> None:
         """Cleanup device resources."""
         if self._enable_diagnostics:
-            self.mqtt_manager.unregister_callback(self._build_topic("diagnostics"))
+            self.mqtt_manager.unregister_callback(
+                self._build_topic("diagnostics"))
         self.mqtt_manager.unregister_callback(self._build_topic("notify"))
         self.mqtt_manager.unregister_callback(self._build_topic("online"))
 
