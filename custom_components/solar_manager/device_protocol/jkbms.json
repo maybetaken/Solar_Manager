@@ -1049,7 +1049,7 @@
         "0x3012BC": {
             "name": "uptime",
             "type": "UINT32",
-            "unit": "SECONDS",
+            "unit": "DURATION",
             "display_precision" : 0,
             "sensor_type": "sensor",
             "icon": "mdi:clock-outline"
@@ -1072,38 +1072,38 @@
         "0x3012C4": {
             "name": "time_discharge_oc_release",
             "type": "UINT16",
-            "unit": "SECONDS",
+            "unit": "DURATION",
             "display_precision" : 0,
             "sensor_type": "sensor"
         },
         "0x3012C6": {
             "name": "time_discharge_sc_release",
             "type": "UINT16",
-            "unit": "SECONDS",
+            "unit": "DURATION",
             "sensor_type": "sensor"
         },
         "0x3012C8": {
             "name": "time_charge_oc_release",
             "type": "UINT16",
-            "unit": "SECONDS",
+            "unit": "DURATION",
             "sensor_type": "sensor"
         },
         "0x3012CA": {
             "name": "time_charge_sc_release",
             "type": "UINT16",
-            "unit": "SECONDS",
+            "unit": "DURATION",
             "sensor_type": "sensor"
         },
         "0x3012CC": {
             "name": "time_uv_release",
             "type": "UINT16",
-            "unit": "SECONDS",
+            "unit": "DURATION",
             "sensor_type": "sensor"
         },
         "0x3012CE": {
             "name": "time_ov_release",
             "type": "UINT16",
-            "unit": "SECONDS",
+            "unit": "DURATION",
             "sensor_type": "sensor"
         },
         "0x3012D0": {
@@ -1122,7 +1122,7 @@
         "0x3012D4": {
             "name": "time_emergency",
             "type": "UINT16",
-            "unit": "SECONDS",
+            "unit": "DURATION",
             "sensor_type": "sensor"
         },
         "0x3012D6": {
@@ -1193,14 +1193,14 @@
             "name": "sys_ticks",
             "type": "UINT32",
             "scale": 0.1,
-            "unit": "SECONDS",
+            "unit": "DURATION",
             "sensor_type": "sensor"
         },
         "0x3012F4": {
             "name": "pvd_timestamp",
             "type": "UINT32",
             "scale": 0.1,
-            "unit": "SECONDS",
+            "unit": "DURATION",
             "sensor_type": "sensor",
             "display_precision": 0
         },
@@ -1231,14 +1231,14 @@
         "0x301300": {
             "name": "rtc_ticks",
             "type": "UINT32",
-            "unit": "SECONDS",
+            "unit": "DURATION",
             "sensor_type": "sensor",
             "display_precision": 0
         },
         "0x301308": {
             "name": "time_enter_sleep",
             "type": "UINT32",
-            "unit": "SECONDS",
+            "unit": "DURATION",
             "sensor_type": "sensor",
             "display_precision": 0
         },
@@ -1273,7 +1273,7 @@
         "0x301420": {
             "name": "total_runtime",
             "type": "UINT32",
-            "unit": "SECONDS",
+            "unit": "DURATION",
             "sensor_type": "sensor",
             "icon": "mdi:clock-time-eight-outline"
         },

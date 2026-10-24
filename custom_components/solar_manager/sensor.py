@@ -67,6 +67,39 @@ state_class_mapping = {
     "None": None,
 }
 
+_DURATION_UNITS = (
+    (365 * 86400, "y"),
+    (30 * 86400, "m"),
+    (86400, "d"),
+    (3600, "h"),
+    (1, "s"),
+)
+
+
+def format_duration(seconds: float | None) -> str | None:
+    """Format seconds as a compact duration like 1y2m3d4h5s.
+
+    Leading zero units are dropped (0y0m3d0h5s -> 3d0h5s); minutes are
+    folded into the seconds part. Everything below one second reads 0s.
+    """
+    if seconds is None:
+        return None
+    try:
+        total = int(seconds)
+    except (ValueError, TypeError, OverflowError):
+        return None
+    if total <= 0:
+        return "0s"
+
+    parts = []
+    for step, suffix in _DURATION_UNITS:
+        value, total = divmod(total, step)
+        parts.append((value, suffix))
+
+    while len(parts) > 1 and parts[0][0] == 0:
+        parts.pop(0)
+    return "".join(f"{value}{suffix}" for value, suffix in parts)
+
 
 class SolarManagerSensor(BaseEntity, SensorEntity):
     """Representation of a Solar Manager sensor."""
@@ -123,6 +156,47 @@ class SolarManagerSensor(BaseEntity, SensorEntity):
     def available(self) -> bool:
         """Return if the sensor is available."""
         return self.native_value is not None
+
+
+class SolarManagerDurationSensor(SolarManagerSensor):
+    """Sensor rendering a seconds value as a duration like 1y2m3d4h5s."""
+
+    def __init__(
+        self,
+        name: str,
+        model: str,
+        device: Any,
+        unique_id: str,
+        device_id: str,
+        scale_factor: float = 1.0,
+        icon: str | None = None,
+        offset: int = 0,
+    ) -> None:
+        """Initialize the duration sensor (no unit, it is baked into the value)."""
+        super().__init__(
+            name,
+            model,
+            device,
+            unique_id,
+            device_id,
+            unit=None,
+            scale_factor=scale_factor,
+            display_precision=None,
+            icon=icon,
+            offset=offset,
+        )
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        value = self._device.get_dict(self._name)
+        if value is None:
+            return None
+        try:
+            seconds = (float(value) - self._offset) * self._scale_factor
+        except (ValueError, TypeError):
+            return None
+        return format_duration(seconds)
 
 
 class SolarManagerEnumSensor(SolarManagerSensor):
@@ -228,6 +302,17 @@ async def async_setup_entry(
                 device_id=serial,
                 unit=device.get("unit"),
                 icon=device.get("icon"),
+            )
+        elif device.get("unit") == "DURATION":
+            sensor = SolarManagerDurationSensor(
+                name=device["name"],
+                model=model,
+                device=device["device"],
+                unique_id=unique_id,
+                device_id=serial,
+                scale_factor=device.get("scale", 1.0),
+                icon=device.get("icon"),
+                offset=device.get("offset", 0),
             )
         elif "enum_mapping" in device:
             sensor = SolarManagerEnumSensor(
