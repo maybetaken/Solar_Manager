@@ -129,8 +129,8 @@
                 "24V_platform": "20V-23.5V",
                 "12V_platform": "10V-11.7V"
             },
-            "min_value": 10.0,
-            "max_value": 100.0,
+            "min_value": 5.0,
+            "max_value": 120.0,
             "unit": "VOLT",
             "step": 0.1,
             "display_precision": 1,
@@ -149,7 +149,7 @@
                 "24V_platform": "24V-28V",
                 "12V_platform": "12V-14V"
             },
-            "min_value": 12.0,
+            "min_value": 5.0,
             "max_value": 120.0,
             "unit": "VOLT",
             "step": 0.1,

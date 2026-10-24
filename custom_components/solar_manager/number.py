@@ -79,11 +79,6 @@ class SolarManagerNumber(BaseEntity, NumberEntity):
         self._scale_factor = scale_factor
         self._device.register_entity(name, self)
 
-    def set_platform_limits(self, min_value: float, max_value: float) -> None:
-        """Update the allowed range once the device platform is detected."""
-        self._attr_native_min_value = min_value
-        self._attr_native_max_value = max_value
-
     @property
     def native_value(self):
         """Return the state of the number."""
