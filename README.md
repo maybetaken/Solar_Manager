@@ -22,7 +22,7 @@ It supports multiple device protocols, providing real-time data collection, devi
 - [x] **Megarevo （迈格瑞能）**
 - [x] **JK BMS (极空BMS)**
 - [x] **CHINT (正泰电表)**
-- [ ] **Sungery (晟格锐)** - ongoing
+- [x] **Sungrey (晟格锐)**
 
 ## Installationion
 

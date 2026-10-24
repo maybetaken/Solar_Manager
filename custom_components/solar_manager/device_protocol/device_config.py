@@ -21,6 +21,7 @@ from custom_components.solar_manager.plugins.MakeSkyBlue import MakeSkyBlueDevic
 from custom_components.solar_manager.plugins.MakeSkyBlueMppt import MakeSkyBlueMppt
 from custom_components.solar_manager.plugins.Megarevo import Megarevo
 from custom_components.solar_manager.plugins.PZemV04 import PZemV04
+from custom_components.solar_manager.plugins.Sungrey import SungreyDevice
 from custom_components.solar_manager.plugins.Switches import SwitchesDevice
 
 # Unified device configuration
@@ -44,6 +45,10 @@ DEVICE_CONFIG = {
     "Megarevo": {
         "protocol": "megarevo",
         "device_class": Megarevo,
+    },
+    "Sungrey": {
+        "protocol": "sungrey",
+        "device_class": SungreyDevice,
     },
     "PZEMV04": {
         "protocol": "pzem_v04",

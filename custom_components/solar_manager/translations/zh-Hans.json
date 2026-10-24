@@ -1400,6 +1400,39 @@
             },
             "apparent_power": {
                 "name": "视在功率"
+            },
+            "dsp_alarm_1": {
+                "name": "DSP 告警字 1"
+            },
+            "dsp_alarm_2": {
+                "name": "DSP 告警字 2"
+            },
+            "dsp_fault_1": {
+                "name": "DSP 故障字 1"
+            },
+            "dsp_fault_2": {
+                "name": "DSP 故障字 2"
+            },
+            "dsp_state": {
+                "name": "DSP 状态字"
+            },
+            "arm_alarm_1": {
+                "name": "ARM 告警字 1"
+            },
+            "arm_alarm_2": {
+                "name": "ARM 告警字 2"
+            },
+            "arm_fault_1": {
+                "name": "ARM 故障字 1"
+            },
+            "arm_fault_2": {
+                "name": "ARM 故障字 2"
+            },
+            "arm_state": {
+                "name": "ARM 状态字"
+            },
+            "pv_total_power": {
+                "name": "光伏总功率"
             }
         },
         "select": {

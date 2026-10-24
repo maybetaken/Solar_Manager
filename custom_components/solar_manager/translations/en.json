@@ -1374,6 +1374,39 @@
             },
             "apparent_power": {
                 "name": "Apparent Power"
+            },
+            "dsp_alarm_1": {
+                "name": "DSP Alarm 1"
+            },
+            "dsp_alarm_2": {
+                "name": "DSP Alarm 2"
+            },
+            "dsp_fault_1": {
+                "name": "DSP Fault 1"
+            },
+            "dsp_fault_2": {
+                "name": "DSP Fault 2"
+            },
+            "dsp_state": {
+                "name": "DSP State"
+            },
+            "arm_alarm_1": {
+                "name": "ARM Alarm 1"
+            },
+            "arm_alarm_2": {
+                "name": "ARM Alarm 2"
+            },
+            "arm_fault_1": {
+                "name": "ARM Fault 1"
+            },
+            "arm_fault_2": {
+                "name": "ARM Fault 2"
+            },
+            "arm_state": {
+                "name": "ARM State"
+            },
+            "pv_total_power": {
+                "name": "PV Total Power"
             }
         },
         "select": {
