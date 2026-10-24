@@ -99,7 +99,7 @@
                 "name": "并网防逆流状态 [d16]"
             },
             "energy_saving_mode": {
-                "name": "节能模式 [d05]"
+                "name": "使用SOC充放电 [d05]"
             },
             "system_switch": {
                 "name": "系统电源开关"

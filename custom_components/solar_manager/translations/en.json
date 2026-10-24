@@ -99,7 +99,7 @@
                 "name": "Grid-Tied Anti-Backflow Status [d16]"
             },
             "energy_saving_mode": {
-                "name": "Energy-Saving Mode [d05]"
+                "name": "Use SOC for Charge/Discharge [d05]"
             },
             "system_switch": {
                 "name": "System Power Switch"
