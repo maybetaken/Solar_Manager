@@ -27,6 +27,9 @@
             "reconfig": {
                 "name": "Reset Device"
             },
+            "sync_rtc_time": {
+                "name": "Sync RTC Time"
+            },
             "restore_factory_setting": {
                 "name": "Restore Factory Setting"
             },

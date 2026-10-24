@@ -7,7 +7,7 @@ Attribution-NonCommercial-NoDerivatives 4.0 International.
 
 import json
 import logging
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 from typing import Any
 import asyncio
 
@@ -21,6 +21,13 @@ from homeassistant.helpers.event import async_track_time_change
 from .base_device import BaseDevice
 
 _LOGGER = logging.getLogger(__name__)
+
+# RTC tick counter (0x1200 block + 0x100): seconds since the device epoch.
+RTC_TICKS_REGISTER = 0x301300
+RTC_EPOCH = datetime(2020, 1, 1)
+# Time calibration command (0x1600 block + 0x12, "对时 Timecalibration", UINT32).
+# The payload uses the same basis as RTCTicks: seconds since 2020-01-01.
+RTC_CALIBRATION_REGISTER = 0x301612
 
 
 class JkBms(BaseDevice):
@@ -152,6 +159,15 @@ class JkBms(BaseDevice):
         # Initialize daily energy tracking and setup timer
         self._setup_daily_energy()
 
+        # Diagnostic-only action: push the current system time into the BMS RTC
+        device_info["button"].append(
+            {
+                "name": "sync_rtc_time",
+                "diagnostic": True,
+                "icon": "mdi:clock-check-outline",
+            }
+        )
+
         return device_info
 
     def _setup_daily_energy(self) -> None:
@@ -172,6 +188,19 @@ class JkBms(BaseDevice):
         """Handle incoming data."""
         parsed_data = self.parser.parse_data(payload)
         changed_entities = set()
+
+        # Render the RTC tick counter as the device's current clock so the
+        # drift against real time is visible.
+        rtc_ticks = parsed_data.pop(RTC_TICKS_REGISTER, None)
+        if rtc_ticks is not None:
+            name = self._register_to_name.get(RTC_TICKS_REGISTER)
+            if name and isinstance(rtc_ticks, (int, float)):
+                device_time = RTC_EPOCH + timedelta(seconds=int(rtc_ticks))
+                value = device_time.strftime("%Y-%m-%d %H:%M:%S")
+                if self._data_dict.get(name) != value:
+                    self._data_dict[name] = value
+                    if name in self._entities:
+                        changed_entities.add(name)
 
         for register, value in parsed_data.items():
             name = self._register_to_name.get(register)
@@ -248,6 +277,30 @@ class JkBms(BaseDevice):
             self._entities["daily_charge_energy"].schedule_update_ha_state()
         if "daily_discharge_energy" in self._entities:
             self._entities["daily_discharge_energy"].schedule_update_ha_state()
+
+    async def perform_action(self, action_name: str) -> None:
+        """Handle device-specific actions."""
+        if action_name == "sync_rtc_time":
+            await self._sync_rtc_time()
+            return
+        await super().perform_action(action_name)
+
+    async def _sync_rtc_time(self) -> None:
+        """Push the current local time into the BMS RTC via 0x1612 (对时)."""
+        now = datetime.now()
+        ticks = int((now - RTC_EPOCH).total_seconds())
+        value_high = (ticks >> 16) & 0xFFFF
+        value_low = ticks & 0xFFFF
+        data = self.parser.pack_data(
+            self.slave_id,
+            RTC_CALIBRATION_REGISTER,
+            [value_high, value_low],
+            16,
+        )
+        await self.mqtt_manager.publish(self.cmd_topic, data)
+        _LOGGER.info(
+            "Synced RTC for %s to %s (ticks %s)", self.sn, now, ticks
+        )
 
     async def handle_cmd(self, cmd: int, value: Any) -> None:
         """Handle writes."""

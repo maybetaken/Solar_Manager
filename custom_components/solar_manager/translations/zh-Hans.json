@@ -27,6 +27,9 @@
             "reconfig": {
                 "name": "重置设备"
             },
+            "sync_rtc_time": {
+                "name": "RTC对时"
+            },
             "restore_factory_setting": {
                 "name": "恢复出厂设置"
             },

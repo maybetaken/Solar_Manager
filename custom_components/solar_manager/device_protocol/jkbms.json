@@ -1231,9 +1231,7 @@
         "0x301300": {
             "name": "rtc_ticks",
             "type": "UINT32",
-            "unit": "DURATION",
-            "sensor_type": "sensor",
-            "display_precision": 0
+            "sensor_type": "sensor"
         },
         "0x301308": {
             "name": "time_enter_sleep",
