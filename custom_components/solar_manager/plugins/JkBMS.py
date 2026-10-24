@@ -26,6 +26,7 @@ from custom_components.solar_manager.protocol_helper.modbus_protocol_helper impo
 )
 
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.event import async_track_time_change
 
 from .base_device import BaseDevice
@@ -38,6 +39,13 @@ RTC_EPOCH = datetime(2020, 1, 1)
 # Time calibration command (0x1600 block + 0x12, "对时 Timecalibration", UINT32).
 # The payload uses the same basis as RTCTicks: seconds since 2020-01-01.
 RTC_CALIBRATION_REGISTER = 0x301612
+
+# Cell existence bitmap ("BIT[n]为1表示该电池存在"): tells how many cells the
+# pack currently has. DIY packs get rebuilt with different cell counts, so the
+# 32 fixed cell-voltage entities are enabled/disabled in the entity registry
+# to match.
+CELL_EXIST_MASK_REGISTER = 0x301240
+CELL_ENTITY_PREFIX = "cell_voltage_"
 
 
 class JkBms(BaseDevice):
@@ -53,6 +61,8 @@ class JkBms(BaseDevice):
         self.setup_protocol()
         self._register_to_name = {}
         self._unknown_registers = set()
+        self._active_cell_count = None
+        self._hidden_cell_entities: set[str] = set()
         
         # Daily energy tracking variables
         self._daily_charge_energy = 0.0  # Daily charge energy in kWh
@@ -233,10 +243,16 @@ class JkBms(BaseDevice):
         # Update daily energy calculations
         self._update_daily_energy()
 
+        # Match the cell-voltage entities to the cells the pack reports
+        mask = self._data_dict.get("cell_exist_mask")
+        if isinstance(mask, (int, float)) and int(mask) > 0:
+            self._apply_cell_exist_mask(int(mask))
+
         for name in changed_entities:
             entity = self._entities.get(name)
-            if entity is not None:
-                entity.schedule_update_ha_state()
+            if entity is None or name in self._hidden_cell_entities:
+                continue
+            entity.schedule_update_ha_state()
 
         # Update daily energy entities if they exist
         if "daily_charge_energy" in self._entities:
@@ -311,6 +327,56 @@ class JkBms(BaseDevice):
         _LOGGER.info(
             "Synced RTC for %s to %s (ticks %s)", self.sn, now, ticks
         )
+
+    def _apply_cell_exist_mask(self, mask: int) -> None:
+        """Enable/disable cell entities to match the cells the pack reports.
+
+        The cell count is the highest set bit of the existence bitmap (cells
+        are wired sequentially). Entities beyond it are disabled in the
+        entity registry - they disappear from dashboards but the user can
+        still re-enable them by hand. Entities that were not added to HA
+        yet are retried on the next notify.
+        """
+        count = mask.bit_length()
+        if count == self._active_cell_count:
+            return
+        if self.hass is None:
+            return
+        if self._sync_cell_entities(count):
+            self._active_cell_count = count
+            _LOGGER.debug("Cell count for %s: %s", self.sn, count)
+
+    def _sync_cell_entities(self, count: int) -> bool:
+        """Sync registry state of cell entities; return True when all synced.
+
+        Only entities this integration disabled itself are re-enabled;
+        entries the user disabled manually are left alone.
+        """
+        registry = er.async_get(self.hass)
+        complete = True
+        for name, entity in self._entities.items():
+            if not name.startswith(CELL_ENTITY_PREFIX):
+                continue
+            try:
+                index = int(name[len(CELL_ENTITY_PREFIX):])
+            except ValueError:
+                continue
+            entry = registry.async_get(entity.entity_id) if entity.entity_id else None
+            if entry is None:
+                complete = False
+                continue
+            wanted_enabled = index < count
+            if wanted_enabled and entry.disabled and entry.disabled_by == er.RegistryEntryDisabler.INTEGRATION:
+                er.async_update_entity(self.hass, entity.entity_id, disabled_by=None)
+                self._hidden_cell_entities.discard(name)
+            elif not wanted_enabled and not entry.disabled:
+                er.async_update_entity(
+                    self.hass,
+                    entity.entity_id,
+                    disabled_by=er.RegistryEntryDisabler.INTEGRATION,
+                )
+                self._hidden_cell_entities.add(name)
+        return complete
 
     async def handle_cmd(self, cmd: int, value: Any) -> None:
         """Handle writes."""
