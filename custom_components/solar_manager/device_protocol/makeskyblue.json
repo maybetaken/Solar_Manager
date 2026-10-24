@@ -122,13 +122,14 @@
             "sensor_type": "number",
             "write_command": 6,
             "range": {
+                "96V_platform": "80V-96V",
                 "72V_platform": "60V-70.5V",
                 "48V_platform": "40V-48V",
                 "24V_platform": "20V-23.5V",
                 "12V_platform": "10V-11.7V"
             },
-            "min_value": 40.0,
-            "max_value": 48.0,
+            "min_value": 10.0,
+            "max_value": 100.0,
             "unit": "VOLT",
             "step": 0.1,
             "display_precision": 1,
@@ -141,13 +142,14 @@
             "sensor_type": "number",
             "write_command": 6,
             "range": {
+                "96V_platform": "96V-112V",
                 "72V_platform": "72V-84V",
                 "48V_platform": "48V-56V",
                 "24V_platform": "24V-28V",
                 "12V_platform": "12V-14V"
             },
-            "min_value": 48.0,
-            "max_value": 56.0,
+            "min_value": 12.0,
+            "max_value": 120.0,
             "unit": "VOLT",
             "step": 0.1,
             "display_precision": 1,
