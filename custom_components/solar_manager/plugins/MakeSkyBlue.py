@@ -7,6 +7,7 @@ Attribution-NonCommercial-NoDerivatives 4.0 International.
 
 import json
 import logging
+import re
 from typing import Any
 
 from custom_components.solar_manager.protocol_helper.modbus_protocol_helper import (
@@ -33,24 +34,10 @@ PSEUDO_REGISTERS: dict[int, tuple[str, int]] = {
     0x10022: ("force_discharge_interval", 0x300022),  # Maps to real register 0x22
 }
 
-voltage_ranges = {
-    "72v": {
-        0x300008: (60.0, 70.5),
-        0x300009: (72.0, 88.0),
-    },
-    "48v": {
-        0x300008: (40.0, 48.0),
-        0x300009: (48.0, 56.0),
-    },
-    "24v": {
-        0x300008: (20.0, 23.5),
-        0x300009: (24.0, 28.0),
-    },
-    "12v": {
-        0x300008: (10.0, 11.7),
-        0x300009: (12.0, 14.0),
-    },
-}
+# Per-platform number limits come from the protocol JSON `range` docs,
+# e.g. "96V_platform": "80V-96V" or "76V~84V".
+_PLATFORM_KEY_RE = re.compile(r"^(\d+)V_platform$", re.IGNORECASE)
+_PLATFORM_RANGE_RE = re.compile(r"^\s*([\d.]+)\s*V?\s*[-~]\s*([\d.]+)", re.IGNORECASE)
 
 
 class MakeSkyBlueDevice(BaseDevice):
@@ -68,6 +55,7 @@ class MakeSkyBlueDevice(BaseDevice):
         self._unknown_registers = set()
         self._rate_voltage_factory = None
         self._inverter_ac_voltage_initial = None
+        self._platform_ranges = None
 
     async def send_config(self) -> None:
         """Send MakeSkyBlue-specific configuration to the device."""
@@ -283,6 +271,26 @@ class MakeSkyBlueDevice(BaseDevice):
         )
         return device_info
 
+    def _load_platform_ranges(self) -> dict[str, dict[int, tuple[float, float]]]:
+        """Parse per-platform `range` docs into numeric limits keyed by entity name."""
+        ranges: dict[str, dict[int, tuple[float, float]]] = {}
+        for details in self.parser.protocol_data.get("registers", {}).values():
+            name = details.get("name")
+            range_doc = details.get("range")
+            if not isinstance(name, str) or not isinstance(range_doc, dict):
+                continue
+            for key, text in range_doc.items():
+                key_match = _PLATFORM_KEY_RE.match(str(key))
+                value_match = _PLATFORM_RANGE_RE.match(str(text))
+                if not key_match or not value_match:
+                    continue
+                bounds = (
+                    float(value_match.group(1)),
+                    float(value_match.group(2)),
+                )
+                ranges.setdefault(name, {})[int(key_match.group(1))] = bounds
+        return ranges
+
     async def handle_notify(self, topic: str, payload: bytes) -> None:
         """Handle MQTT notifications for Modbus data in TLD format."""
         changed_entities = set()
@@ -302,42 +310,29 @@ class MakeSkyBlueDevice(BaseDevice):
             rated_voltage_raw = parsed_data[register_7]
             if rated_voltage_raw != self._rate_voltage_factory:
                 self._rate_voltage_factory = rated_voltage_raw
-                # Map raw value to voltage using enum
-                enum_mapping = self.parser.protocol_data["registers"][register_7][
-                    "enum"
-                ]
-                rated_voltage = None
-                for key, value in enum_mapping.items():
-                    if (
-                        int(key, 16)
-                        == rated_voltage_raw
-                        * self.parser.protocol_data["registers"][register_7]["scale"]
-                    ):
-                        rated_voltage = value
-                        break
-                if rated_voltage is None:
-                    _LOGGER.error("Invalid rated voltage value: %s", rated_voltage_raw)
-                else:
-                    _LOGGER.debug("Detected rated voltage: %s", rated_voltage)
-                    # Update ranges for registers 8 and 9
-                    for reg, entity_name in [
-                        (0x300008, "battery_discharge_min_voltage"),
-                        (0x300009, "battery_start_discharge_voltage"),
-                    ]:
-                        entity = self._entities.get(entity_name)
-                        if entity and rated_voltage in voltage_ranges:
-                            min_value, max_value = voltage_ranges[rated_voltage][reg]
-                            # Update entity attributes (assuming entity supports dynamic range updates)
-                            entity._attr_native_min_value = min_value
-                            entity._attr_native_max_value = max_value
-                            _LOGGER.debug(
-                                "Updated range for %s (register %s): min=%s, max=%s",
-                                entity_name,
-                                reg,
-                                min_value,
-                                max_value,
-                            )
-                            changed_entities.add(entity_name)
+                if self._platform_ranges is None:
+                    self._platform_ranges = self._load_platform_ranges()
+                rated_voltage = round(
+                    rated_voltage_raw
+                    * self.parser.protocol_data["registers"][register_7].get(
+                        "scale", 1.0
+                    )
+                )
+                _LOGGER.debug("Detected rated voltage: %sv", rated_voltage)
+                # Tighten number limits to the detected machine platform
+                for entity_name, platform_limits in self._platform_ranges.items():
+                    bounds = platform_limits.get(rated_voltage)
+                    entity = self._entities.get(entity_name)
+                    if entity is None or bounds is None:
+                        continue
+                    entity.set_platform_limits(*bounds)
+                    changed_entities.add(entity_name)
+                    _LOGGER.debug(
+                        "Updated range for %s: min=%s, max=%s",
+                        entity_name,
+                        bounds[0],
+                        bounds[1],
+                    )
 
         register_145 = 0x300091
         if register_145 in parsed_data:

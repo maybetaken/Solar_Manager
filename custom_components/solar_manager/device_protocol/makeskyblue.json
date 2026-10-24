@@ -106,6 +106,7 @@
             "scale": 0.1,
             "sensor_type": "sensor",
             "enum": {
+                "0x60": "96v",
                 "0x48": "72v",
                 "0x30": "48v",
                 "0x18": "24v",
@@ -333,6 +334,7 @@
             "sensor_type": "number",
             "write_command": 6,
             "range": {
+                "96V_platform": "102V~118V",
                 "72V_platform": "76V~84V",
                 "48V_platform": "51V~59V",
                 "24V_platform": "25.5V~29.5V",
