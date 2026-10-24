@@ -72,15 +72,17 @@ _DURATION_UNITS = (
     (30 * 86400, "m"),
     (86400, "d"),
     (3600, "h"),
+    (60, "m"),
     (1, "s"),
 )
 
 
 def format_duration(seconds: float | None) -> str | None:
-    """Format seconds as a compact duration like 1y2m3d4h5s.
+    """Format seconds as a compact duration like 1y2m3d4h5m6s.
 
-    Leading zero units are dropped (0y0m3d0h5s -> 3d0h5s); minutes are
-    folded into the seconds part. Everything below one second reads 0s.
+    Leading zero units are dropped (0y0m3d0h5m0s -> 3d0h5m0s); month and
+    minute both use "m", disambiguated by position. Everything below one
+    second reads 0s.
     """
     if seconds is None:
         return None
