@@ -8,7 +8,6 @@ Attribution-NonCommercial-NoDerivatives 4.0 International.
 from custom_components.solar_manager.plugins.DDSU666 import ChintDDSU666
 from custom_components.solar_manager.plugins.JkBMS import JkBms
 from custom_components.solar_manager.plugins.MakeSkyBlue import MakeSkyBlueDevice
-from custom_components.solar_manager.plugins.MakeSkyBlueIoTrix import MakeSkyBlueIoTrix
 from custom_components.solar_manager.plugins.MakeSkyBlueMppt import MakeSkyBlueMppt
 from custom_components.solar_manager.plugins.Megarevo import Megarevo
 from custom_components.solar_manager.plugins.PZemV04 import PZemV04
@@ -31,10 +30,6 @@ DEVICE_CONFIG = {
     "DDSU666": {
         "protocol": "ddsu666",
         "device_class": ChintDDSU666,
-    },
-    "MakeSkyBlue IoTrix": {
-        "protocol": "makeskyblue",
-        "device_class": MakeSkyBlueIoTrix,
     },
     "Megarevo": {
         "protocol": "megarevo",
