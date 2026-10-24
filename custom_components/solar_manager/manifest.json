@@ -11,5 +11,5 @@
   "issue_tracker": "https://github.com/maybetaken/Solar_Manager/issues",
   "quality_scale": "bronze",
   "requirements": ["crcmod>=1.7", "aiofiles>=24.1.0"],
-  "version": "0.3.2"
+  "version": "0.3.3"
 }
