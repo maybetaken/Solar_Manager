@@ -2,9 +2,8 @@
     "endianness": "BE",
     "control_type": "MODBUS",
     "segments": [
-        {"slave_id": 1, "start_address": 0, "length": 24, "read_command": 3},
-        {"slave_id": 1, "start_address": 32, "length": 5, "read_command": 3},
-        {"slave_id": 1, "start_address": 100, "length": 46, "read_command": 3},
+        {"slave_id": 1, "start_address": 0, "length": 61, "read_command": 3},
+        {"slave_id": 1, "start_address": 100, "length": 51, "read_command": 3},
         {"slave_id": 1, "start_address": 201, "length": 16, "read_command": 3}
     ],
     "registers": {

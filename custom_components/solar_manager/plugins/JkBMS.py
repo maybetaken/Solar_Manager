@@ -207,6 +207,9 @@ class JkBms(BaseDevice):
     async def handle_notify(self, topic: str, payload: bytes) -> None:
         """Handle incoming data."""
         parsed_data = self.parser.parse_data(payload)
+        # A frame is proof of freshness on its own; keeping this past a throw below
+        # turned every such throw into a 120 s availability blackout.
+        self._reset_notify_clear_timer()
         changed_entities = set()
 
         # Render the RTC tick counter as the device's current clock so the
@@ -259,8 +262,6 @@ class JkBms(BaseDevice):
             self._entities["daily_charge_energy"].schedule_update_ha_state()
         if "daily_discharge_energy" in self._entities:
             self._entities["daily_discharge_energy"].schedule_update_ha_state()
-
-        self._reset_notify_clear_timer()
 
     def _update_daily_energy(self) -> None:
         """Update daily charge and discharge energy based on power consumption."""
@@ -367,11 +368,10 @@ class JkBms(BaseDevice):
                 continue
             wanted_enabled = index < count
             if wanted_enabled and entry.disabled and entry.disabled_by == er.RegistryEntryDisabler.INTEGRATION:
-                er.async_update_entity(self.hass, entity.entity_id, disabled_by=None)
+                registry.async_update_entity(entity.entity_id, disabled_by=None)
                 self._hidden_cell_entities.discard(name)
             elif not wanted_enabled and not entry.disabled:
-                er.async_update_entity(
-                    self.hass,
+                registry.async_update_entity(
                     entity.entity_id,
                     disabled_by=er.RegistryEntryDisabler.INTEGRATION,
                 )
