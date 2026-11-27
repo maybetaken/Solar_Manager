@@ -42,10 +42,26 @@ RTC_CALIBRATION_REGISTER = 0x301612
 
 # Cell existence bitmap ("BIT[n]为1表示该电池存在"): tells how many cells the
 # pack currently has. DIY packs get rebuilt with different cell counts, so the
-# 32 fixed cell-voltage entities are enabled/disabled in the entity registry
-# to match.
+# 32 fixed per-cell entities are enabled/disabled in the entity registry to
+# match.
 CELL_EXIST_MASK_REGISTER = 0x301240
 CELL_ENTITY_PREFIX = "cell_voltage_"
+WIRE_RES_ENTITY_PREFIX = "wire_res_"
+# Both sets are numbered from 1 (jkbms.json: cell_voltage_01..32, wire_res_1..32)
+# while the mask is one bit per cell counting from 0, so a mask holding N cells
+# labels them 1..N. Comparing the label with < against N hides the last cell.
+CELL_ENTITY_PREFIXES = (CELL_ENTITY_PREFIX, WIRE_RES_ENTITY_PREFIX)
+
+
+def _cell_number(name: str) -> int | None:
+    """The 1-based cell number a per-cell entity name stands for, or None."""
+    for prefix in CELL_ENTITY_PREFIXES:
+        if name.startswith(prefix):
+            try:
+                return int(name[len(prefix):])
+            except ValueError:
+                return None
+    return None
 
 
 class JkBms(BaseDevice):
@@ -246,7 +262,7 @@ class JkBms(BaseDevice):
         # Update daily energy calculations
         self._update_daily_energy()
 
-        # Match the cell-voltage entities to the cells the pack reports
+        # Match the per-cell entities to the cells the pack reports
         mask = self._data_dict.get("cell_exist_mask")
         if isinstance(mask, (int, float)) and int(mask) > 0:
             self._apply_cell_exist_mask(int(mask))
@@ -330,13 +346,15 @@ class JkBms(BaseDevice):
         )
 
     def _apply_cell_exist_mask(self, mask: int) -> None:
-        """Enable/disable cell entities to match the cells the pack reports.
+        """Enable/disable the per-cell entities to match the cells the pack reports.
 
         The cell count is the highest set bit of the existence bitmap (cells
-        are wired sequentially). Entities beyond it are disabled in the
-        entity registry - they disappear from dashboards but the user can
-        still re-enable them by hand. Entities that were not added to HA
-        yet are retried on the next notify.
+        are wired sequentially), and it bounds both numbered sets - the
+        voltages and the balance-wire resistances, which are measured one per
+        cell. Entities beyond it are disabled in the entity registry - they
+        disappear from dashboards but the user can still re-enable them by
+        hand. Entities that were not added to HA yet are retried on the next
+        notify.
         """
         count = mask.bit_length()
         if count == self._active_cell_count:
@@ -348,7 +366,7 @@ class JkBms(BaseDevice):
             _LOGGER.debug("Cell count for %s: %s", self.sn, count)
 
     def _sync_cell_entities(self, count: int) -> bool:
-        """Sync registry state of cell entities; return True when all synced.
+        """Sync registry state of the per-cell entities; True when all synced.
 
         Only entities this integration disabled itself are re-enabled;
         entries the user disabled manually are left alone.
@@ -356,17 +374,14 @@ class JkBms(BaseDevice):
         registry = er.async_get(self.hass)
         complete = True
         for name, entity in self._entities.items():
-            if not name.startswith(CELL_ENTITY_PREFIX):
-                continue
-            try:
-                index = int(name[len(CELL_ENTITY_PREFIX):])
-            except ValueError:
+            index = _cell_number(name)
+            if index is None:
                 continue
             entry = registry.async_get(entity.entity_id) if entity.entity_id else None
             if entry is None:
                 complete = False
                 continue
-            wanted_enabled = index < count
+            wanted_enabled = index <= count
             if wanted_enabled and entry.disabled and entry.disabled_by == er.RegistryEntryDisabler.INTEGRATION:
                 registry.async_update_entity(entity.entity_id, disabled_by=None)
                 self._hidden_cell_entities.discard(name)
